@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import VimsLogin from './pages/VimsLogin';
 import RemediationCenter from './pages/RemediationCenter';
 import SimulatorTab from './pages/SimulatorTab';
 import AuditTrailTab from './pages/AuditTrailTab';
@@ -127,6 +128,7 @@ function buildInitialComplianceData() {
 }
 
 export default function App() {
+  const [currentView, setCurrentView] = useState<'dashboard' | 'login'>('dashboard');
   const [activeTab, setActiveTab] = useState('Home');
   const [chatbotOpen, setChatbotOpen] = useState(false);
   const [dashboardData, setDashboardData] = useState<any>(() => buildInitialComplianceData());
@@ -210,6 +212,11 @@ export default function App() {
       console.error('API Sync:', err);
     });
   }, []);
+
+  if (currentView === 'login') {
+    return <VimsLogin onLoginSuccess={() => setCurrentView('dashboard')} />;
+  }
+
   return (
     <div className="flex h-screen font-sans overflow-hidden" style={{ background: 'linear-gradient(135deg, #f0f7ff 0%, #e8f3ff 40%, #eef6ff 70%, #f5f9ff 100%)' }}>
 
@@ -329,7 +336,7 @@ export default function App() {
               
               <button 
                 onClick={() => {
-                  window.location.reload();
+                  setCurrentView('login');
                 }} 
                 title="Logout / Sign Out" 
                 className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 rounded-xl transition-all cursor-pointer flex-shrink-0 shadow-2xs"

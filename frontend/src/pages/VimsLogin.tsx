@@ -1,437 +1,263 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useRef } from 'react';
+import {
+  CreditCard, Lock, Grid, ArrowRight, BookOpen, GraduationCap,
+  Sparkles, CheckCircle2, ShieldCheck
+} from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import './VimsLogin.css';
 
-const VimsLogin: React.FC = () => {
-  const navigate = useNavigate();
-  const { login, signup, isAuthenticated, user, logout } = useAuth();
+interface VimsLoginProps {
+  onLoginSuccess?: () => void;
+}
 
-  const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
-
-  // Form fields
-  const [username, setUsername] = useState('vignan');
-  const [password, setPassword] = useState('vignan123');
-  const [name, setName] = useState('');
-  const [role, setRole] = useState('faculty');
-
-  // Security Grid values - strictly 3 digits as requested ("GRID sirf 3 digit ka")
-  const [gridVal, setGridVal] = useState('123');
-  const [gridKey, setGridKey] = useState('D4');
-
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
-  // Errors
-  const [usernameError, setUsernameError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
-  const [nameError, setNameError] = useState(false);
-  const [gridError, setGridError] = useState(false);
-
-  const [toastMessage, setToastMessage] = useState<{ message: string; type: string } | null>(null);
+const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
+  const { login } = useAuth();
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  const showToast = (message: string, type: string = 'info') => {
-    setToastMessage({ message, type });
-    setTimeout(() => {
-      setToastMessage(null);
-    }, 4000);
-  };
+  const [empCode, setEmpCode] = useState('VIGNAN_ADMIN');
+  const [password, setPassword] = useState('vignan123');
+  const [gridVal1, setGridVal1] = useState('123');
+  const [gridVal2, setGridVal2] = useState('456');
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
-  const generateGridKey = () => {
-    const letters = ['A', 'B', 'C', 'D', 'E'];
-    const nums = ['1', '2', '3', '4', '5'];
-    const r = letters[Math.floor(Math.random() * letters.length)] + nums[Math.floor(Math.random() * nums.length)];
-    setGridKey(r);
-  };
-
-  useEffect(() => {
-    generateGridKey();
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('mode') === 'signup') {
-      setAuthMode('signup');
-    } else if (params.get('mode') === 'login') {
-      setAuthMode('login');
-    }
-  }, []);
-
-  const handleDemoSelect = (demoEmail: string, demoPass: string) => {
-    setUsername(demoEmail);
-    setPassword(demoPass);
-    setGridVal('123');
-    showToast(`Loaded demo credentials: ${demoEmail}`, 'info');
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    let valid = true;
-
-    if (authMode === 'signup' && !name.trim()) {
-      setNameError(true);
-      valid = false;
-    }
-
-    if (!username.trim()) {
-      setUsernameError(true);
-      valid = false;
-    }
-
-    // "password kuch bhi" -> if blank, default to 'vignan123' so login seamlessly works
-    const activePassword = password.trim() || 'vignan123';
-
-    if (authMode === 'login') {
-      // "GRID sirf 3 digit ka" -> must be exactly 3 numeric digits
-      if (!/^\d{3}$/.test(gridVal.trim())) {
-        setGridError(true);
-        showToast('GRID sirf 3 digit ka hona chahiye (Enter 3 digits, e.g. 123)', 'danger');
-        valid = false;
-      }
-    }
-
-    if (!valid) return;
-
-    setIsLoading(true);
+    setErrorMsg(null);
+    setSuccessMsg(null);
+    setLoading(true);
 
     try {
-      if (authMode === 'login') {
-        const res = await login(username.trim(), activePassword);
-        if (!res.success) {
-          throw new Error(res.error || 'Invalid credentials');
-        }
-        showToast('Authentication successful! Loading workspace...', 'success');
+      const activeEmp = empCode.trim() || 'vignan';
+      const activePass = password.trim() || 'vignan123';
+      const res = await login(activeEmp, activePass);
+
+      if (res.success) {
+        setSuccessMsg('Signed in successfully! Loading Workspace...');
         setTimeout(() => {
-          navigate('/dashboard');
-        }, 800);
+          if (onLoginSuccess) {
+            onLoginSuccess();
+          }
+        }, 600);
       } else {
-        const res = await signup(name, username, activePassword, role);
-        if (!res.success) {
-          throw new Error(res.error || 'Registration failed');
-        }
-        showToast(`Account created successfully! Welcome, ${name}.`, 'success');
-        setTimeout(() => {
-          navigate('/dashboard');
-        }, 800);
+        setErrorMsg(res.error || 'Invalid Employee ID or Password');
       }
-    } catch (error: any) {
-      setUsernameError(true);
-      setPasswordError(true);
-      showToast(error.message || 'Authentication error', 'danger');
+    } catch (err: any) {
+      setErrorMsg(err.message || 'Authentication failed');
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
   return (
-    <div className="vims-container">
-      {/* Background Video */}
-      <div className="video-container">
-        <video ref={videoRef} autoPlay loop muted playsInline preload="auto" id="bg-video">
-          <source src="/login_page_bg.mp4" type="video/mp4" />
-          <source src="/video.mp4" type="video/mp4" />
-        </video>
-        <div className="video-overlay"></div>
-      </div>
+    <div className="relative w-screen h-screen overflow-hidden flex flex-col font-sans select-none bg-slate-950">
+      
+      {/* ── BACKGROUND VIDEO ── */}
+      <video
+        ref={videoRef}
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        className="absolute inset-0 w-full h-full object-cover z-0 filter brightness-90 contrast-105"
+      >
+        <source src="/login_page_bg.mp4" type="video/mp4" />
+        <source src="/video.mp4" type="video/mp4" />
+      </video>
 
-      {/* Header */}
-      <header className="top-header">
-        <div className="header-logo-container" onClick={() => navigate('/dashboard')} style={{ cursor: 'pointer' }}>
-          <img src="/vignan_main_logo.png" alt="VIGNAN'S" className="header-main-logo" />
+      {/* Dark overlay for contrast */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/70 via-slate-900/60 to-slate-950/80 z-0"></div>
+
+      {/* ── TOP HEADER ── */}
+      <header className="relative z-10 w-full px-6 py-4 flex items-center justify-between border-b border-white/10 bg-slate-950/40 backdrop-blur-md">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white font-extrabold text-2xl shadow-lg border border-blue-400/40">
+            V
+          </div>
+          <div>
+            <h1 className="text-lg font-black tracking-wide text-red-500 leading-none">VIGNAN'S</h1>
+            <p className="text-[10px] text-slate-300 font-semibold leading-tight mt-0.5">
+              Foundation for Science, Technology & Research
+            </p>
+          </div>
         </div>
-        <div className="header-badges-container">
-          <div className="badge-coin" title="NAAC A+ Accredited"><div className="coin-inner"><img src="/badge_naac.png" className="badge-img" alt="NAAC" /></div></div>
-          <div className="badge-coin" title="NIRF Ranked"><div className="coin-inner"><img src="/badge_nirf.png" className="badge-img" alt="NIRF" /></div></div>
-          <div className="badge-coin" title="NBA Accredited"><div className="coin-inner"><img src="/badge_nba.png" className="badge-img" alt="NBA" /></div></div>
-          <div className="badge-coin" title="AICTE Approved"><div className="coin-inner"><img src="/badge_aicte.png" className="badge-img" alt="AICTE" /></div></div>
-          <div className="badge-coin" title="UGC CARE Listed"><div className="coin-inner"><img src="/badge_ugccare.png" className="badge-img" alt="UGC CARE" /></div></div>
-          <div className="badge-coin" title="Institution's Innovation Council"><div className="coin-inner"><img src="/badge_iic.png" className="badge-img" alt="IIC" /></div></div>
-          <div className="badge-coin" title="ABET Accredited"><div className="coin-inner"><img src="/badge_abet.png" className="badge-img" alt="ABET" /></div></div>
+
+        {/* Accreditation Coins */}
+        <div className="hidden sm:flex items-center gap-2">
+          {['/badge_naac.png', '/badge_nirf.png', '/badge_nba.png', '/badge_aicte.png', '/badge_ugccare.png', '/badge_abet.png'].map((src, idx) => (
+            <div key={idx} className="w-8 h-8 rounded-full bg-white/90 p-1 border border-white/30 shadow-md flex items-center justify-center hover:scale-110 transition-transform cursor-pointer">
+              <img src={src} alt="badge" className="w-full h-full object-contain" />
+            </div>
+          ))}
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="login-wrapper">
-        {isAuthenticated && user ? (
-          <div className="login-card vims-card text-center" style={{ maxWidth: '460px', padding: '36px 32px' }}>
-            <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'linear-gradient(135deg, #0062ff, #00d2ff)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', fontWeight: 'bold', margin: '0 auto 16px', boxShadow: '0 8px 24px rgba(0,98,255,0.3)' }}>
-              {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+      {/* ── MAIN LOGIN SECTION (MATCHING IMAGE 2) ── */}
+      <main className="relative z-10 flex-1 flex items-center justify-center p-4">
+        <div className="w-full max-w-[500px] bg-slate-900/80 backdrop-blur-xl border border-white/20 rounded-3xl p-6 sm:p-8 shadow-2xl text-white">
+          
+          {/* Header text */}
+          <div className="mb-6 text-center">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-[11px] font-black tracking-wider uppercase mb-2">
+              <ShieldCheck className="w-3.5 h-3.5" /> VFSTR Portal Authentication
             </div>
-            <h2 style={{ fontSize: '20px', fontWeight: '800', color: '#0b1528', marginBottom: '4px' }}>Already Signed In</h2>
-            <p style={{ fontSize: '13px', color: '#475569', marginBottom: '8px' }}>Active Session: <strong>{user.name}</strong> ({user.email})</p>
-            <div style={{ display: 'inline-block', padding: '4px 12px', background: '#eff6ff', color: '#1d4ed8', borderRadius: '20px', fontSize: '11px', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '24px' }}>
-              Role: {user.role || 'Admin'}
-            </div>
-            <div style={{ display: 'flex', gap: '12px' }}>
-              <button 
-                type="button" 
-                onClick={() => navigate('/dashboard')} 
-                className="submit-btn vims-submit-btn" 
-                style={{ flex: 1, margin: 0 }}
-              >
-                Go to Dashboard
-              </button>
-              <button 
-                type="button" 
-                onClick={logout} 
-                style={{ flex: 1, padding: '12px', borderRadius: '12px', border: '1px solid #e2e8f0', background: '#fff', color: '#ef4444', fontWeight: '700', cursor: 'pointer' }}
-              >
-                Sign Out
-              </button>
-            </div>
+            <h2 className="text-2xl font-black text-white tracking-tight">Sign In To Workspace</h2>
+            <p className="text-xs text-slate-300 font-medium mt-1">Enter your credentials and security grid values to proceed.</p>
           </div>
-        ) : (
-          <div className="login-card vims-card" style={{ maxWidth: '500px' }}>
-            {/* Mode Switcher Tabs */}
-            <div style={{ display: 'flex', background: '#f1f5f9', borderRadius: '12px', padding: '4px', marginBottom: '20px' }}>
-              <button
-                type="button"
-                onClick={() => setAuthMode('login')}
-                style={{
-                  flex: 1,
-                  padding: '10px 16px',
-                  borderRadius: '10px',
-                  border: 'none',
-                  background: authMode === 'login' ? '#ffffff' : 'transparent',
-                  color: authMode === 'login' ? '#0062ff' : '#64748b',
-                  fontWeight: '800',
-                  fontSize: '12px',
-                  letterSpacing: '0.05em',
-                  cursor: 'pointer',
-                  boxShadow: authMode === 'login' ? '0 2px 8px rgba(0,0,0,0.06)' : 'none',
-                  transition: 'all 0.2s ease',
-                }}
-              >
-                SIGN IN
-              </button>
-              <button
-                type="button"
-                onClick={() => setAuthMode('signup')}
-                style={{
-                  flex: 1,
-                  padding: '10px 16px',
-                  borderRadius: '10px',
-                  border: 'none',
-                  background: authMode === 'signup' ? '#ffffff' : 'transparent',
-                  color: authMode === 'signup' ? '#0062ff' : '#64748b',
-                  fontWeight: '800',
-                  fontSize: '12px',
-                  letterSpacing: '0.05em',
-                  cursor: 'pointer',
-                  boxShadow: authMode === 'signup' ? '0 2px 8px rgba(0,0,0,0.06)' : 'none',
-                  transition: 'all 0.2s ease',
-                }}
-              >
-                CREATE ACCOUNT
-              </button>
+
+          {/* Feedback messages */}
+          {errorMsg && (
+            <div className="mb-4 p-3 rounded-xl bg-red-500/20 border border-red-500/40 text-red-200 text-xs font-bold text-center animate-in fade-in">
+              {errorMsg}
             </div>
+          )}
+          {successMsg && (
+            <div className="mb-4 p-3 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-200 text-xs font-bold text-center flex items-center justify-center gap-2 animate-in fade-in">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" /> {successMsg}
+            </div>
+          )}
 
-            <form onSubmit={handleSubmit} className="login-form vims-form" noValidate>
-              {/* Sign Up Name Field */}
-              {authMode === 'signup' && (
-                <div className={`vims-field-group ${nameError ? 'has-error' : ''}`} style={{ marginBottom: '14px' }}>
-                  <label className="vims-label">FULL NAME</label>
-                  <div className="vims-input-wrapper">
-                    <input 
-                      type="text" 
-                      className="vims-input" 
-                      placeholder="e.g. Dr. Rajesh Sharma" 
-                      value={name} 
-                      onChange={e => { setName(e.target.value); setNameError(false); }} 
-                    />
-                  </div>
-                </div>
-              )}
-
-              <div className="vims-row-two">
-                <div className={`vims-field-group ${usernameError ? 'has-error' : ''}`}>
-                  <label className="vims-label">
-                    {authMode === 'login' ? 'USER ID / INSTITUTIONAL ID' : 'OFFICIAL EMAIL'}
-                  </label>
-                  <div className="vims-input-wrapper">
-                    <input 
-                      type="text" 
-                      className="vims-input" 
-                      placeholder={authMode === 'login' ? 'vignan' : 'user@vignan.ac.in'} 
-                      value={username} 
-                      onChange={e => { setUsername(e.target.value); setUsernameError(false); }} 
-                    />
-                  </div>
-                </div>
-
-                <div className={`vims-field-group ${passwordError ? 'has-error' : ''}`}>
-                  <label className="vims-label">PASSWORD</label>
-                  <div className="vims-input-wrapper">
-                    <input 
-                      type={showPassword ? 'text' : 'password'} 
-                      className="vims-input" 
-                      placeholder="Any password / vignan" 
-                      value={password} 
-                      onChange={e => { setPassword(e.target.value); setPasswordError(false); }} 
-                    />
-                    <button type="button" className="toggle-password-btn" onClick={() => setShowPassword(!showPassword)}>
-                      {showPassword ? 'Hide' : 'Show'}
-                    </button>
-                  </div>
+          <form onSubmit={handleLoginSubmit} className="space-y-4">
+            
+            {/* Top Row: EMPCODE & PASSWORD (Matching Image 2) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-[10px] font-black tracking-widest text-slate-300 uppercase mb-1.5">
+                  EMPCODE
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3 top-2.5 text-slate-400">
+                    <CreditCard className="w-4 h-4" />
+                  </span>
+                  <input
+                    type="text"
+                    value={empCode}
+                    onChange={(e) => setEmpCode(e.target.value)}
+                    placeholder="Enter Employee ID"
+                    className="w-full bg-white/10 border border-white/20 rounded-xl pl-9 pr-3 py-2 text-xs font-bold text-white placeholder-slate-400 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 transition-all"
+                  />
                 </div>
               </div>
 
-              {/* Role selection for Sign Up */}
-              {authMode === 'signup' && (
-                <div className="vims-field-group" style={{ marginBottom: '16px' }}>
-                  <label className="vims-label">ASSIGNED ROLE</label>
-                  <div className="vims-input-wrapper">
-                    <select 
-                      className="vims-input"
-                      value={role} 
-                      onChange={e => setRole(e.target.value)}
-                      style={{ cursor: 'pointer', outline: 'none' }}
-                    >
-                      <option value="faculty">Faculty / Department Member</option>
-                      <option value="auditor">Internal / External Auditor</option>
-                      <option value="admin">Institutional Administrator</option>
-                    </select>
-                  </div>
+              <div>
+                <label className="block text-[10px] font-black tracking-widest text-slate-300 uppercase mb-1.5">
+                  PASSWORD
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3 top-2.5 text-slate-400">
+                    <Lock className="w-4 h-4" />
+                  </span>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Enter Password"
+                    className="w-full bg-white/10 border border-white/20 rounded-xl pl-9 pr-3 py-2 text-xs font-bold text-white placeholder-slate-400 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 transition-all"
+                  />
                 </div>
-              )}
-
-              {/* Security Grid in Login Mode - Strictly 3 digits */}
-              {authMode === 'login' && (
-                <div className={`vims-field-group vims-grid-group ${gridError ? 'has-error' : ''}`}>
-                  <div className="vims-grid-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span className="vims-label" style={{ margin: 0, display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                      </svg>
-                      SECURITY GRID CHALLENGE
-                    </span>
-                    <span style={{ fontSize: '11px', color: '#0062ff', fontWeight: '800' }}>3-Digit Code (Demo: 123)</span>
-                  </div>
-                  <div className="vims-grid-row" style={{ display: 'flex', justifyContent: 'center', marginTop: '6px' }}>
-                    <div className="vims-grid-cell" style={{ width: '100%', maxWidth: '280px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <span className="vims-grid-key" style={{ minWidth: '40px', textAlign: 'center' }}>{gridKey}</span>
-                      <input 
-                        type="text" 
-                        inputMode="numeric"
-                        className="vims-input vims-grid-input" 
-                        maxLength={3} 
-                        placeholder="1 2 3" 
-                        value={gridVal}
-                        onChange={e => { 
-                          const val = e.target.value.replace(/\D/g, '').slice(0, 3);
-                          setGridVal(val); 
-                          setGridError(false); 
-                        }}
-                      />
-                    </div>
-                  </div>
-                  {gridError && (
-                    <p style={{ color: '#ef4444', fontSize: '11px', marginTop: '6px', textAlign: 'center', fontWeight: '600' }}>
-                      GRID sirf 3 digit ka hona chahiye (Enter 3-digit code)
-                    </p>
-                  )}
-                </div>
-              )}
-
-              {/* Submit Button */}
-              <button type="submit" className="submit-btn vims-submit-btn" disabled={isLoading} style={{ marginTop: '14px' }}>
-                {isLoading 
-                  ? 'Processing...' 
-                  : (authMode === 'login' ? 'SIGN IN TO WORKSPACE' : 'CREATE INSTITUTIONAL ACCOUNT')
-                }
-              </button>
-
-              {/* Demo Credentials Chips */}
-              {authMode === 'login' && (
-                <div style={{ marginTop: '16px', background: 'rgba(0, 98, 255, 0.04)', border: '1px dashed #bfdbfe', borderRadius: '10px', padding: '10px' }}>
-                  <p style={{ fontSize: '10px', fontWeight: '800', color: '#1e40af', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '6px', textAlign: 'center' }}>
-                    Quick Demo Credentials
-                  </p>
-                  <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap' }}>
-                    <button
-                      type="button"
-                      onClick={() => handleDemoSelect('vignan', 'vignan123')}
-                      style={{
-                        padding: '6px 12px',
-                        background: '#eff6ff',
-                        border: '1.5px solid #3b82f6',
-                        borderRadius: '6px',
-                        fontSize: '11px',
-                        fontWeight: '800',
-                        color: '#1d4ed8',
-                        cursor: 'pointer',
-                        boxShadow: '0 2px 4px rgba(59, 130, 246, 0.15)',
-                      }}
-                    >
-                      ⚡ vignan (Default)
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleDemoSelect('admin@vignan.ac.in', 'password123')}
-                      style={{
-                        padding: '6px 12px',
-                        background: '#ffffff',
-                        border: '1px solid #93c5fd',
-                        borderRadius: '6px',
-                        fontSize: '11px',
-                        fontWeight: '700',
-                        color: '#1d4ed8',
-                        cursor: 'pointer',
-                      }}
-                    >
-                      ⚡ Super Admin
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleDemoSelect('auditor@naac.gov.in', 'password123')}
-                      style={{
-                        padding: '6px 12px',
-                        background: '#ffffff',
-                        border: '1px solid #93c5fd',
-                        borderRadius: '6px',
-                        fontSize: '11px',
-                        fontWeight: '700',
-                        color: '#1d4ed8',
-                        cursor: 'pointer',
-                      }}
-                    >
-                      ⚡ NAAC Auditor
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Guest Exploration Option */}
-              <div style={{ marginTop: '18px', textAlign: 'center', borderTop: '1px solid #f1f5f9', paddingTop: '14px' }}>
-                <button
-                  type="button"
-                  onClick={() => navigate('/dashboard')}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: '#475569',
-                    fontSize: '12px',
-                    fontWeight: '700',
-                    cursor: 'pointer',
-                    textDecoration: 'underline',
-                  }}
-                >
-                  👁️ Continue as Guest (Public Dashboard Overview)
-                </button>
               </div>
-            </form>
-          </div>
-        )}
+            </div>
+
+            {/* GRID VALUES Card (Matching Image 2) */}
+            <div className="bg-white/10 border border-white/20 rounded-2xl p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <Grid className="w-4 h-4 text-blue-400" />
+                <span className="text-[11px] font-black tracking-widest text-slate-200 uppercase">
+                  GRID VALUES
+                </span>
+              </div>
+              <div className="flex items-center justify-center gap-3">
+                <input
+                  type="text"
+                  maxLength={3}
+                  value={gridVal1}
+                  onChange={(e) => setGridVal1(e.target.value.replace(/\D/g, ''))}
+                  placeholder="123"
+                  className="w-28 text-center bg-white/15 border border-white/25 rounded-xl py-2 text-sm font-black text-white placeholder-slate-400 focus:outline-none focus:border-blue-400 transition-all"
+                />
+                <span className="w-5 h-0.5 bg-slate-400 rounded-full flex-shrink-0"></span>
+                <input
+                  type="text"
+                  maxLength={3}
+                  value={gridVal2}
+                  onChange={(e) => setGridVal2(e.target.value.replace(/\D/g, ''))}
+                  placeholder="456"
+                  className="w-28 text-center bg-white/15 border border-white/25 rounded-xl py-2 text-sm font-black text-white placeholder-slate-400 focus:outline-none focus:border-blue-400 transition-all"
+                />
+              </div>
+            </div>
+
+            {/* SIGN IN TO WORKSPACE -> Dark Navy Button (Matching Image 2) */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-3.5 px-4 bg-gradient-to-r from-slate-950 via-blue-950 to-indigo-950 hover:from-blue-900 hover:to-indigo-900 text-white font-black text-xs uppercase tracking-widest rounded-2xl shadow-xl border border-blue-400/30 flex items-center justify-center gap-2.5 transition-all duration-200 cursor-pointer hover:scale-[1.01] active:scale-95 disabled:opacity-50"
+            >
+              <span>{loading ? 'AUTHENTICATING...' : 'SIGN IN TO WORKSPACE'}</span>
+              <ArrowRight className="w-4 h-4 text-blue-400" />
+            </button>
+
+            {/* Sub-links (Forgot Password? | Reset Grid Values) */}
+            <div className="flex items-center justify-center gap-3 text-[11px] font-extrabold text-slate-300 pt-1">
+              <button
+                type="button"
+                onClick={() => setErrorMsg('Reset link sent to your institutional email.')}
+                className="hover:text-blue-300 transition-colors cursor-pointer"
+              >
+                Forgot Password?
+              </button>
+              <span className="w-1 h-3 bg-slate-500 rounded-full"></span>
+              <button
+                type="button"
+                onClick={() => { setGridVal1('123'); setGridVal2('456'); }}
+                className="hover:text-blue-300 transition-colors cursor-pointer"
+              >
+                Reset Grid Values
+              </button>
+            </div>
+
+            {/* Quick Demo Credentials */}
+            <div className="p-3 bg-white/5 border border-white/10 rounded-xl text-center">
+              <p className="text-[10px] font-black text-blue-300 uppercase tracking-widest mb-1.5">Quick Demo Fill</p>
+              <button
+                type="button"
+                onClick={() => { setEmpCode('VIGNAN_ADMIN'); setPassword('vignan123'); setGridVal1('123'); setGridVal2('456'); }}
+                className="px-3 py-1 bg-blue-600/40 hover:bg-blue-600/60 border border-blue-400/40 rounded-lg text-[11px] font-extrabold text-white transition-all cursor-pointer inline-flex items-center gap-1"
+              >
+                <Sparkles className="w-3 h-3 text-amber-300" /> Auto-Fill Admin (VIGNAN_ADMIN)
+              </button>
+            </div>
+
+            {/* Bottom Manual Buttons: DEO MANUAL & FACULTY MANUAL (Matching Image 2) */}
+            <div className="grid grid-cols-2 gap-3 pt-4 border-t border-white/15 text-xs font-black text-slate-200">
+              <button
+                type="button"
+                onClick={() => alert('DEO Manual PDF downloading...')}
+                className="flex items-center justify-center gap-2 py-2.5 px-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl transition-all cursor-pointer hover:border-blue-400"
+              >
+                <BookOpen className="w-4 h-4 text-blue-300" />
+                <span>DEO MANUAL</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => alert('Faculty Manual PDF downloading...')}
+                className="flex items-center justify-center gap-2 py-2.5 px-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl transition-all cursor-pointer hover:border-emerald-400"
+              >
+                <GraduationCap className="w-4 h-4 text-emerald-300" />
+                <span>FACULTY MANUAL</span>
+              </button>
+            </div>
+
+          </form>
+
+        </div>
       </main>
 
-      {/* Toasts */}
-      {toastMessage && (
-        <div className="toast-container">
-          <div className={`toast toast-${toastMessage.type}`}>
-            {toastMessage.message}
-          </div>
-        </div>
-      )}
+      {/* Footer */}
+      <footer className="relative z-10 py-3 text-center text-[10px] font-bold text-slate-400 border-t border-white/10 bg-slate-950/60 backdrop-blur-md">
+        © 2026 Vignan's Foundation for Science, Technology & Research (Deemed to be University) • All Rights Reserved
+      </footer>
     </div>
   );
 };
