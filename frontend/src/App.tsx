@@ -128,8 +128,21 @@ function buildInitialComplianceData() {
 }
 
 export default function App() {
-  const [currentView, setCurrentView] = useState<'dashboard' | 'login'>('dashboard');
-  const [activeTab, setActiveTab] = useState('Home');
+  const [currentView, setCurrentView] = useState<'dashboard' | 'login'>(() => {
+    const saved = localStorage.getItem('current_view');
+    return (saved === 'login' || saved === 'dashboard') ? saved : 'dashboard';
+  });
+  const [activeTab, setActiveTab] = useState(() => {
+    return localStorage.getItem('active_tab') || 'Home';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('current_view', currentView);
+  }, [currentView]);
+
+  useEffect(() => {
+    localStorage.setItem('active_tab', activeTab);
+  }, [activeTab]);
   const [chatbotOpen, setChatbotOpen] = useState(false);
   const [dashboardData, setDashboardData] = useState<any>(() => buildInitialComplianceData());
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
