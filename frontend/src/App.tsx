@@ -5,11 +5,12 @@ import AuditTrailTab from './pages/AuditTrailTab';
 import RegulationsTab from './pages/RegulationsTab';
 import IntegrationsTab from './pages/IntegrationsTab';
 import ReadinessReportTab from './pages/ReadinessReportTab';
+import Agent54Chatbot from './components/Agent54Chatbot';
 import {
   Home, FileText, CheckCircle, AlertTriangle, Settings, RotateCw,
   Clock, Activity, BarChart2, Shield, PlayCircle,
   Cpu, Database, ShieldCheck, Check, Search, Filter,
-  ExternalLink, Sparkles
+  ExternalLink, Sparkles, Bot, ChevronRight, LogOut
 } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
@@ -127,6 +128,7 @@ function buildInitialComplianceData() {
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('Home');
+  const [chatbotOpen, setChatbotOpen] = useState(false);
   const [dashboardData, setDashboardData] = useState<any>(() => buildInitialComplianceData());
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
   const [sweepRunning, setSweepRunning] = useState(false);
@@ -212,60 +214,129 @@ export default function App() {
     <div className="flex h-screen font-sans overflow-hidden" style={{ background: 'linear-gradient(135deg, #f0f7ff 0%, #e8f3ff 40%, #eef6ff 70%, #f5f9ff 100%)' }}>
 
       {/* ── SIDEBAR ── */}
-      <aside className="w-[260px] min-w-[260px] bg-white flex flex-col border-r border-slate-200 shadow-sm relative z-10">
+      <aside className="w-[270px] min-w-[270px] bg-white flex flex-col border-r border-slate-200 shadow-sm relative z-10">
 
         {/* Vignan Logo */}
-        <div className="px-4 py-3 border-b border-slate-100">
-          <div className="flex items-center gap-2.5 mb-2">
-            <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg flex items-center justify-center text-white font-black text-base shadow-md flex-shrink-0">V</div>
-            <div>
-              <p className="text-[13px] font-black text-red-600 leading-none tracking-wide">VIGNAN'S</p>
-              <p className="text-[8px] text-slate-500 leading-tight mt-0.5 font-semibold">Foundation for Science,<br/>Technology & Research</p>
+        <div className="px-4 py-3.5 border-b border-slate-100 bg-gradient-to-b from-slate-50/70 to-white">
+          <div className="flex items-center gap-3 mb-2.5">
+            <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white font-extrabold text-2xl shadow-md flex-shrink-0 border border-blue-500/40">
+              V
+            </div>
+            <div className="min-w-0">
+              <p className="text-[14px] font-black text-red-600 leading-none tracking-wide">VIGNAN'S</p>
+              <p className="text-[10px] text-slate-500 leading-tight mt-1 font-semibold">Foundation for Science,<br/>Technology & Research</p>
             </div>
           </div>
-          <div className="bg-blue-600 text-[7px] px-2 py-0.5 rounded text-white font-bold w-fit tracking-wide">
+          <div className="bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-700 text-[8.5px] px-2.5 py-1 rounded-md text-white font-bold w-full text-center tracking-wide shadow-2xs">
             Deemed to be University | Estd. u/s 3 of UGC Act 1956
           </div>
         </div>
 
         {/* Brand */}
-        <div className="px-4 py-3 border-b border-slate-100">
-          <div className="flex items-center gap-2">
-            <div className="p-1.5 bg-blue-50 rounded-lg border border-blue-100">
+        <div className="px-4 py-2.5 border-b border-slate-100 flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 bg-blue-50 rounded-xl border border-blue-100/80 shadow-2xs">
               <Cpu className="w-4 h-4 text-blue-600" />
             </div>
             <div>
-              <span className="font-black text-[14px] tracking-wide text-slate-800">Agent54</span>
-              <p className="text-[8px] font-black text-blue-500 uppercase tracking-[0.2em] -mt-0.5">Compliance Platform</p>
+              <span className="font-black text-[15px] tracking-wide text-slate-900">Agent54</span>
+              <p className="text-[9px] font-black text-blue-600 uppercase tracking-[0.2em] -mt-0.5">Compliance Platform</p>
             </div>
           </div>
+          <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200/60 shadow-2xs">
+            v2.6
+          </span>
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 py-3 px-2 space-y-0.5">
-          {NAV_ITEMS.map(({ id, label, icon: Icon }) => (
-            <button
-              key={id}
-              onClick={() => setActiveTab(id)}
-              className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[12px] font-semibold transition-all duration-200 text-left relative
-                ${activeTab === id
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
-                }`}
-            >
-              <Icon className={`w-4 h-4 flex-shrink-0`} />
-              {label}
-            </button>
-          ))}
+        <nav className="flex-1 py-4 px-3 flex flex-col gap-2.5 overflow-y-auto overflow-x-hidden select-none bg-slate-50/30">
+          <div className="px-1.5 pb-1 flex items-center justify-between mb-1">
+            <span className="text-[11px] font-black uppercase tracking-widest text-slate-400">Navigation Modules</span>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-200/70 text-slate-600">9 Tabs</span>
+          </div>
+          {NAV_ITEMS.map(({ id, label, icon: Icon }) => {
+            const isActive = activeTab === id;
+            return (
+              <button
+                key={id}
+                onClick={() => setActiveTab(id)}
+                className={`relative w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-left transition-all duration-200 cursor-pointer group border-2
+                  ${isActive
+                    ? 'bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-500/30 z-10 scale-[1.02]'
+                    : 'bg-white text-slate-700 hover:text-blue-700 border-slate-200/80 hover:border-blue-300 shadow-xs hover:shadow-md hover:-translate-y-0.5'
+                  }`}
+              >
+                <div className="flex items-center gap-3.5 min-w-0">
+                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all shadow-sm
+                    ${isActive
+                      ? 'bg-white text-blue-600'
+                      : 'bg-slate-100 border border-slate-200/80 group-hover:bg-blue-50 text-slate-500 group-hover:text-blue-600'
+                    }`}
+                  >
+                    <Icon className="w-4 h-4" />
+                  </div>
+                  <span className={`text-[14.5px] tracking-tight truncate
+                    ${isActive ? 'font-black text-white' : 'font-extrabold text-slate-800 group-hover:text-blue-700'}`}
+                  >
+                    {label}
+                  </span>
+                </div>
+                {isActive ? (
+                  <span className="w-2.5 h-2.5 rounded-full bg-white shadow-sm animate-pulse flex-shrink-0"></span>
+                ) : (
+                  <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-blue-500 transition-all flex-shrink-0" />
+                )}
+              </button>
+            );
+          })}
         </nav>
 
-        {/* Admin */}
-        <div className="p-3 border-t border-slate-100">
-          <div className="flex items-center gap-2.5 bg-slate-50 rounded-lg p-2.5 border border-slate-100">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center font-black text-sm flex-shrink-0 text-white shadow-sm">A</div>
-            <div>
-              <p className="text-[12px] font-bold text-slate-800 leading-tight">Admin</p>
-              <p className="text-[10px] text-blue-500 font-medium">University Operations</p>
+        {/* Agent54 AI Chatbot Pill - Directly above Admin section */}
+        <div className="px-3.5 py-2.5 border-t border-slate-100 bg-white">
+          <button
+            onClick={() => setChatbotOpen(true)}
+            className="w-full group flex items-center gap-2.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white px-3.5 py-2.5 rounded-2xl shadow-md hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all duration-300 border border-white/20 cursor-pointer"
+            title="Ask Agent54 AI Platform Copilot"
+          >
+            <div className="relative flex-shrink-0">
+              <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center">
+                <Bot className="w-4 h-4 text-white" />
+              </div>
+              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-blue-700 animate-pulse"></span>
+            </div>
+            <div className="text-left min-w-0">
+              <p className="text-xs font-black tracking-wide leading-tight flex items-center gap-1 truncate text-white">
+                Ask Agent54 AI <Sparkles className="w-3 h-3 text-amber-300 flex-shrink-0 animate-spin" style={{ animationDuration: '4s' }} />
+              </p>
+              <p className="text-[10px] text-blue-100 font-medium leading-tight truncate">Platform Copilot & Guide</p>
+            </div>
+          </button>
+        </div>
+
+        {/* User Card / Admin & Auth Bar */}
+        <div className="px-3.5 pb-3.5 bg-white">
+          <div className="bg-gradient-to-r from-slate-50 to-blue-50/40 rounded-2xl p-3 border border-slate-200/90 hover:border-blue-400 hover:shadow-md transition-all duration-200">
+            <div className="flex items-center justify-between cursor-pointer group">
+              <div className="flex items-center gap-2.5 overflow-hidden min-w-0">
+                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 group-hover:from-blue-700 group-hover:to-indigo-800 flex items-center justify-center font-black text-sm flex-shrink-0 text-white shadow-sm transition-all">
+                  A
+                </div>
+                <div className="truncate min-w-0">
+                  <p className="text-[13px] font-black text-slate-900 leading-tight truncate">Admin</p>
+                  <p className="text-[10px] text-blue-600 font-bold truncate leading-tight mt-0.5">University Operations</p>
+                </div>
+              </div>
+              
+              <button 
+                onClick={() => {
+                  window.location.reload();
+                }} 
+                title="Logout / Sign Out" 
+                className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 rounded-xl transition-all cursor-pointer flex-shrink-0 shadow-2xs"
+              >
+                <LogOut className="w-4 h-4 text-red-600" />
+                <span className="text-[11px] font-black text-red-600">Logout</span>
+              </button>
             </div>
           </div>
         </div>
@@ -1281,6 +1352,16 @@ export default function App() {
 
         </main>
       </div>
+
+      {/* ── AGENT54 AI CHATBOT / SYSTEM COPILOT ── */}
+      <Agent54Chatbot
+        isOpen={chatbotOpen}
+        onOpenChange={setChatbotOpen}
+        hideDefaultTrigger={true}
+        onNavigateTab={(tab) => setActiveTab(tab)}
+        activeTab={activeTab}
+        dashboardData={dashboardData}
+      />
     </div>
   );
 }
