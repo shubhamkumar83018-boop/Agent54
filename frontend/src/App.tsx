@@ -229,7 +229,7 @@ export default function App() {
             <img
               src="/vignan_crest_large.png"
               alt="Vignan Crest Emblem"
-              className="w-11 h-11 object-contain flex-shrink-0 filter drop-shadow-sm hover:scale-105 transition-transform"
+              className="w-11 h-11 object-contain flex-shrink-0 mix-blend-multiply filter drop-shadow-sm hover:scale-105 transition-transform"
             />
             <div className="min-w-0">
               <p className="text-[14px] font-black text-red-600 leading-none tracking-wide">VIGNAN'S</p>
