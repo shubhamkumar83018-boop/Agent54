@@ -130,7 +130,7 @@ function buildInitialComplianceData() {
 export default function App() {
   const [currentView, setCurrentView] = useState<'dashboard' | 'login'>(() => {
     const saved = localStorage.getItem('current_view');
-    return (saved === 'login' || saved === 'dashboard') ? saved : 'dashboard';
+    return (saved === 'login' || saved === 'dashboard') ? saved : 'login';
   });
   const [activeTab, setActiveTab] = useState(() => {
     return localStorage.getItem('active_tab') || 'Home';
