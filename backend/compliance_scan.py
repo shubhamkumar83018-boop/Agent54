@@ -47,6 +47,7 @@ def _evaluate_single(req: Dict) -> Dict:
         "authority":         req.get("authority", ""),
         "severity":          req.get("severity", "HIGH"),
         "clause":            req.get("clause", ""),
+        "condition_operator": req.get("condition_operator", "=="),
         "source_document":   req.get("source_document", ""),
         "evidence_source":   req.get("evidence_source", ""),
         "evidence_required": req.get("evidence_required", ""),

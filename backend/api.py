@@ -100,10 +100,11 @@ def get_compliance_results(db: Session = Depends(get_db)):
             "requirement_id": r.get("requirement_id"),
             "department_id": 1,
             "requirement_title": r.get("requirement_name"),
-            "department_name": r.get("department", "University Wide"),
+            "department_name": r.get("owner") or r.get("department_name", "University Wide"),
             "authority": r.get("authority", "VFSTR"),
             "category": r.get("category", "General"),
             "severity": r.get("severity", "MEDIUM"),
+            "condition_operator": r.get("condition_operator", "=="),
             "actual_value": r.get("actual_value") or "Verified",
             "required_value": r.get("required_value") or "Standard",
             "gap": r.get("gap") or "0",
@@ -115,6 +116,10 @@ def get_compliance_results(db: Session = Depends(get_db)):
             "lead_time_days": r.get("lead_time_days", 30),
             "source_document": r.get("source_document", "VFSTR Regulations"),
             "clause": r.get("clause", ""),
+            "evidence_source": r.get("evidence_source", ""),
+            "evidence_required": r.get("evidence_required", ""),
+            "source_url": r.get("source_url", ""),
+            "notes": r.get("notes", ""),
             "checked_at": r.get("checked_at")
         })
     return output

@@ -9,7 +9,7 @@ import {
   Home, FileText, CheckCircle, AlertTriangle, Settings, RotateCw,
   Clock, Activity, BarChart2, Shield, PlayCircle,
   Cpu, Database, ShieldCheck, Check, Search, Filter,
-  ArrowRight, Sparkles
+  ExternalLink, Sparkles
 } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
@@ -692,21 +692,24 @@ export default function App() {
           {/* ── COMPLIANCE TAB ── */}
           {activeTab === 'Compliance' && dashboardData && (() => {
             const rawResults = dashboardData.resultsList || [];
+            const dynamicAuthorities = ['ALL', ...Array.from(new Set(rawResults.map((r: any) => r.authority).filter(Boolean)))];
             
             // Filter by search, status, and authority
             const filteredResults = rawResults.filter((res: any) => {
               const matchesStatus = complianceFilter === 'ALL' || res.status === complianceFilter;
-              const matchesAuthority = complianceAuthority === 'ALL' || (res.authority && res.authority.toUpperCase().includes(complianceAuthority.toUpperCase()));
+              const matchesAuthority = complianceAuthority === 'ALL' || (res.authority && res.authority.toUpperCase() === complianceAuthority.toUpperCase());
               const matchesSearch = complianceSearch === '' || 
                 (res.requirement_title && res.requirement_title.toLowerCase().includes(complianceSearch.toLowerCase())) ||
                 (res.requirement_id && res.requirement_id.toLowerCase().includes(complianceSearch.toLowerCase())) ||
                 (res.department_name && res.department_name.toLowerCase().includes(complianceSearch.toLowerCase())) ||
-                (res.category && res.category.toLowerCase().includes(complianceSearch.toLowerCase()));
+                (res.category && res.category.toLowerCase().includes(complianceSearch.toLowerCase())) ||
+                (res.notes && res.notes.toLowerCase().includes(complianceSearch.toLowerCase())) ||
+                (res.source_document && res.source_document.toLowerCase().includes(complianceSearch.toLowerCase()));
               return matchesStatus && matchesAuthority && matchesSearch;
             });
 
             const compliantCount = rawResults.filter((r: any) => r.status === 'COMPLIANT').length;
-            const atRiskCount = rawResults.filter((r: any) => r.status === 'AT_RISK').length;
+            const pendingCount = rawResults.filter((r: any) => r.status === 'EVIDENCE_PENDING').length;
             const nonCompliantCount = rawResults.filter((r: any) => r.status === 'NON_COMPLIANT').length;
 
             return (
@@ -718,8 +721,8 @@ export default function App() {
                       <CheckCircle className="w-5 h-5" />
                     </div>
                     <div>
-                      <h2 className="text-2xl font-black text-slate-800 tracking-tight">Deep Compliance Verification</h2>
-                      <p className="text-xs text-slate-400 font-semibold mt-0.5">Continuous automated audit across all 26 VFSTR, AICTE, UGC, NBA & NAAC regulation norms</p>
+                      <h2 className="text-2xl font-black text-slate-800 tracking-tight">Deep Compliance Verification Register</h2>
+                      <p className="text-xs text-slate-400 font-semibold mt-0.5">Continuous automated audit across all 26 VFSTR, AICTE, UGC, NBA & NAAC statutory rules</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
@@ -740,9 +743,9 @@ export default function App() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   {[
                     { label: 'Total Regulations Scanned', filterKey: 'ALL', count: rawResults.length, color: 'border-blue-200 bg-blue-50/50', text: 'text-blue-700', badge: 'bg-blue-100 text-blue-800', icon: FileText },
-                    { label: 'Total Compliant', filterKey: 'COMPLIANT', count: compliantCount, color: 'border-emerald-200 bg-emerald-50/50', text: 'text-emerald-700', badge: 'bg-emerald-100 text-emerald-800', icon: CheckCircle },
-                    { label: 'At Risk (Action Advised)', filterKey: 'AT_RISK', count: atRiskCount, color: 'border-orange-200 bg-orange-50/50', text: 'text-orange-700', badge: 'bg-orange-100 text-orange-800', icon: AlertTriangle },
-                    { label: 'Non-Compliant (Critical)', filterKey: 'NON_COMPLIANT', count: nonCompliantCount, color: 'border-red-200 bg-red-50/50', text: 'text-red-700', badge: 'bg-red-100 text-red-800', icon: Shield },
+                    { label: 'Verified Evidence (Compliant)', filterKey: 'COMPLIANT', count: compliantCount, color: 'border-emerald-200 bg-emerald-50/50', text: 'text-emerald-700', badge: 'bg-emerald-100 text-emerald-800', icon: CheckCircle },
+                    { label: 'Evidence Pending Audit', filterKey: 'EVIDENCE_PENDING', count: pendingCount, color: 'border-amber-200 bg-amber-50/50', text: 'text-amber-700', badge: 'bg-amber-100 text-amber-800', icon: Clock },
+                    { label: 'Critical Non-Compliance', filterKey: 'NON_COMPLIANT', count: nonCompliantCount, color: 'border-red-200 bg-red-50/50', text: 'text-red-700', badge: 'bg-red-100 text-red-800', icon: Shield },
                   ].map((s, i) => (
                     <div 
                       key={i} 
@@ -772,7 +775,7 @@ export default function App() {
                     <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                     <input 
                       type="text"
-                      placeholder="Search by regulation, department, keyword (e.g. FSR, Credits, NBA, Library)..."
+                      placeholder="Search regulation, clause, notes, owner (e.g. R26, FSR, NBA, Library)..."
                       value={complianceSearch}
                       onChange={(e) => setComplianceSearch(e.target.value)}
                       className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
@@ -784,7 +787,7 @@ export default function App() {
                     <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mr-1 flex items-center gap-1">
                       <Filter className="w-3 h-3" /> Authority:
                     </span>
-                    {['ALL', 'VFSTR', 'AICTE', 'UGC', 'NBA', 'NAAC'].map((auth) => (
+                    {dynamicAuthorities.map((auth: any) => (
                       <button
                         key={auth}
                         onClick={() => setComplianceAuthority(auth)}
@@ -807,7 +810,7 @@ export default function App() {
                       Compliance Inspection Register ({filteredResults.length} records)
                     </h3>
                     <span className="text-[11px] font-bold text-slate-500">
-                      Live VFSTR Deemed University Dataset
+                      Vignan Foundation for Science, Technology and Research (VFSTR)
                     </span>
                   </div>
 
@@ -827,10 +830,11 @@ export default function App() {
                   {filteredResults.map((res: any, i: number) => {
                     const isNC = res.status === 'NON_COMPLIANT';
                     const isAR = res.status === 'AT_RISK';
+                    const isC  = res.status === 'COMPLIANT';
 
-                    const statusStyle = isNC ? 'border-red-200 bg-white hover:border-red-300' : isAR ? 'border-orange-200 bg-white hover:border-orange-300' : 'border-slate-100 bg-white hover:border-blue-200';
-                    const badgeStyle = isNC ? 'bg-red-100 text-red-700 border-red-200' : isAR ? 'bg-orange-100 text-orange-700 border-orange-200' : 'bg-emerald-100 text-emerald-700 border-emerald-200';
-                    const leftBorder = isNC ? 'border-l-4 border-l-red-500' : isAR ? 'border-l-4 border-l-orange-500' : 'border-l-4 border-l-emerald-500';
+                    const statusStyle = isNC ? 'border-red-200 bg-white hover:border-red-300' : isAR ? 'border-orange-200 bg-white hover:border-orange-300' : isC ? 'border-emerald-200 bg-white hover:border-emerald-300' : 'border-slate-200 bg-white hover:border-blue-200';
+                    const badgeStyle = isNC ? 'bg-red-100 text-red-700 border-red-200' : isAR ? 'bg-orange-100 text-orange-700 border-orange-200' : isC ? 'bg-emerald-100 text-emerald-700 border-emerald-200' : 'bg-amber-100 text-amber-800 border-amber-200';
+                    const leftBorder = isNC ? 'border-l-4 border-l-red-500' : isAR ? 'border-l-4 border-l-orange-500' : isC ? 'border-l-4 border-l-emerald-500' : 'border-l-4 border-l-amber-500';
 
                     return (
                       <div key={i} className={`rounded-2xl border p-5 shadow-sm transition-all duration-200 hover:shadow-md ${statusStyle} ${leftBorder}`}>
@@ -845,31 +849,49 @@ export default function App() {
                               <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-100">
                                 {res.authority} • {res.category}
                               </span>
+                              {res.severity && (
+                                <span className={`text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded ${
+                                  res.severity === 'CRITICAL' ? 'bg-red-50 text-red-700 border border-red-200' :
+                                  res.severity === 'HIGH' ? 'bg-orange-50 text-orange-700 border border-orange-200' : 'bg-slate-100 text-slate-600'
+                                }`}>
+                                  {res.severity} Severity
+                                </span>
+                              )}
                               {res.clause && (
-                                <span className="text-[10px] font-semibold text-slate-400">
+                                <span className="text-[10px] font-semibold text-slate-500 bg-slate-50 px-2 py-0.5 rounded border border-slate-200">
                                   Clause {res.clause}
                                 </span>
                               )}
                             </div>
                             <h4 className="font-black text-slate-800 text-base leading-snug">{res.requirement_title}</h4>
-                            <p className="text-xs font-bold text-slate-500 mt-0.5 flex items-center gap-1.5">
-                              <span>Department / Scope:</span>
-                              <strong className="text-slate-700">{res.department_name}</strong>
-                            </p>
+                            <div className="flex items-center gap-3 text-xs font-bold text-slate-500 mt-1 flex-wrap">
+                              <span>Source: <strong className="text-slate-700">{res.source_document}</strong></span>
+                              <span>•</span>
+                              <span>Remediation Owner: <strong className="text-slate-700">{res.owner || res.department_name}</strong></span>
+                              {res.lead_time_days && (
+                                <>
+                                  <span>•</span>
+                                  <span>Target Lead Time: <strong className="text-blue-700">{res.lead_time_days} days</strong></span>
+                                </>
+                              )}
+                            </div>
                           </div>
 
                           <div className="flex items-center gap-2 flex-shrink-0">
                             <span className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest border ${badgeStyle}`}>
                               {res.status.replace('_', ' ')}
                             </span>
-                            {(isNC || isAR) && (
-                              <button
-                                onClick={() => handleOpenRecoveryPlan(res.requirement_title || res.requirement_id)}
-                                className="px-3 py-1.5 bg-slate-900 hover:bg-blue-600 text-white rounded-lg text-xs font-black shadow-sm transition-all flex items-center gap-1 cursor-pointer"
+                            {res.source_url && (
+                              <a
+                                href={res.source_url}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="px-2.5 py-1 bg-white hover:bg-slate-50 text-blue-600 border border-blue-200 rounded-lg text-xs font-bold transition-all flex items-center gap-1"
+                                title="Open Official Reference URL"
                               >
-                                <span>AI Plan</span>
-                                <ArrowRight className="w-3.5 h-3.5" />
-                              </button>
+                                <ExternalLink className="w-3.5 h-3.5" />
+                                <span>Official Source</span>
+                              </a>
                             )}
                           </div>
                         </div>
@@ -879,36 +901,40 @@ export default function App() {
                           
                           {/* Required Value */}
                           <div className="space-y-1">
-                            <span className="text-slate-400 font-black uppercase text-[9px] tracking-widest block">Required Standard</span>
+                            <span className="text-slate-400 font-black uppercase text-[9px] tracking-widest block">
+                              Measurable Norm {res.condition_operator ? `(${res.condition_operator})` : ''}
+                            </span>
                             <p className="font-bold text-slate-800 text-xs leading-relaxed">{res.required_value || 'Mandatory'}</p>
                           </div>
 
                           {/* Actual Value */}
                           <div className="space-y-1">
-                            <span className="text-slate-400 font-black uppercase text-[9px] tracking-widest block">Actual Evaluated Value</span>
-                            <p className="font-black text-blue-700 text-xs leading-relaxed">{res.actual_value || 'Verified'}</p>
+                            <span className="text-slate-400 font-black uppercase text-[9px] tracking-widest block">Evaluated Evidence</span>
+                            <p className={`font-black text-xs leading-relaxed ${isC ? 'text-emerald-700' : 'text-amber-800'}`}>
+                              {res.actual_value || 'Evidence Pending Submission'}
+                            </p>
                           </div>
 
-                          {/* Calculated Gap */}
+                          {/* Calculated Gap / Evidence Required */}
                           <div className="space-y-1">
-                            <span className="text-slate-400 font-black uppercase text-[9px] tracking-widest block">Calculated Gap</span>
-                            <p className={`font-black text-xs leading-relaxed ${res.gap && res.gap !== '0' && res.gap !== '0.0' ? 'text-red-600' : 'text-emerald-700'}`}>
-                              {res.gap && res.gap !== '0' && res.gap !== '0.0' ? res.gap : 'None (Compliant)'}
+                            <span className="text-slate-400 font-black uppercase text-[9px] tracking-widest block">Evidence & Gap Status</span>
+                            <p className={`font-bold text-xs leading-relaxed ${isC ? 'text-emerald-700' : 'text-amber-900'}`}>
+                              {res.gap || res.evidence_required || 'Verification pending'}
                             </p>
                           </div>
 
                           {/* Action Plan */}
                           <div className="space-y-1">
-                            <span className="text-slate-400 font-black uppercase text-[9px] tracking-widest block">Action Required</span>
+                            <span className="text-slate-400 font-black uppercase text-[9px] tracking-widest block">Remediation Directive</span>
                             <p className="font-bold text-slate-700 text-xs leading-relaxed">{res.action_required || 'Maintain standard compliance monitoring.'}</p>
                           </div>
                         </div>
 
-                        {/* Observation Footer */}
-                        {res.observation && (
+                        {/* Observation & Regulatory Notes Footer */}
+                        {(res.observation || res.notes) && (
                           <div className="mt-3 pt-3 border-t border-slate-100 flex items-start gap-2 text-xs">
-                            <span className="text-slate-400 font-black uppercase text-[9px] tracking-widest flex-shrink-0 pt-0.5">Observation:</span>
-                            <p className="text-slate-600 font-medium leading-relaxed">{res.observation}</p>
+                            <span className="text-slate-400 font-black uppercase text-[9px] tracking-widest flex-shrink-0 pt-0.5">Regulatory Context:</span>
+                            <p className="text-slate-600 font-medium leading-relaxed">{res.observation || res.notes}</p>
                           </div>
                         )}
 
