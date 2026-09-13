@@ -90,7 +90,7 @@ const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
           <img
             src="/vignan_logo.png"
             alt="Vignan's Foundation for Science, Technology & Research"
-            className="h-20 sm:h-24 md:h-28 lg:h-32 w-auto object-contain mix-blend-multiply filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] transition-all duration-500 hover:scale-110 hover:-translate-y-2.5 hover:drop-shadow-[0_30px_40px_rgba(0,0,0,0.85)] cursor-pointer"
+            className="h-20 sm:h-24 md:h-28 lg:h-32 w-auto object-contain filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] transition-all duration-500 hover:scale-110 hover:-translate-y-2.5 hover:drop-shadow-[0_30px_40px_rgba(0,0,0,0.85)] cursor-pointer"
           />
         </div>
 
