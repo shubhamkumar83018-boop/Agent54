@@ -68,7 +68,7 @@ export default function IntegrationsTab() {
   }
 
   return (
-    <div className="space-y-7">
+    <div className="space-y-6">
       {/* Header */}
       <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -106,9 +106,9 @@ export default function IntegrationsTab() {
       )}
 
       {/* Grid: 2 Columns (Inbound Consumes vs Outbound Feeds) */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
         {/* INBOUND (CONSUMES) */}
-        <div className="space-y-5">
+        <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="p-1.5 bg-blue-100 text-blue-800 rounded-lg">
@@ -121,7 +121,7 @@ export default function IntegrationsTab() {
             </span>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3">
             {inboundList.map(agent => (
               <div
                 key={agent.id}
@@ -178,7 +178,7 @@ export default function IntegrationsTab() {
         </div>
 
         {/* OUTBOUND (FEEDS) */}
-        <div className="space-y-5">
+        <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="p-1.5 bg-indigo-100 text-indigo-800 rounded-lg">
@@ -191,7 +191,7 @@ export default function IntegrationsTab() {
             </span>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3">
             {outboundList.map(agent => (
               <div
                 key={agent.id}

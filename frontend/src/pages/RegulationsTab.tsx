@@ -270,7 +270,7 @@ export default function RegulationsTab() {
           <p className="text-xs text-slate-400 mt-1">Try clearing search or changing the selected authority/category.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {filteredRecords.map((req, idx) => (
             <div
               key={req.requirement_id || idx}
@@ -282,7 +282,7 @@ export default function RegulationsTab() {
             >
               <div>
                 {/* Card Top: Badges */}
-                <div className="flex items-center justify-between gap-2 mb-3">
+                <div className="flex items-center justify-between gap-2 mb-2.5">
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <span className="font-mono text-[10px] font-black bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md border border-slate-200">
                       {req.requirement_id}
@@ -297,23 +297,23 @@ export default function RegulationsTab() {
                 </div>
 
                 {/* Title */}
-                <h3 className="font-bold text-slate-800 text-[14px] leading-snug group-hover:text-blue-600 transition-colors mb-3">
+                <h3 className="font-bold text-slate-800 text-sm leading-snug group-hover:text-blue-600 transition-colors mb-2">
                   {req.requirement_name}
                 </h3>
 
                 {/* Measurable Condition Box */}
-                <div className="bg-slate-50 border border-slate-200 rounded-xl p-3.5 mb-3.5">
+                <div className="bg-slate-50 border border-slate-200 rounded-xl p-2.5 mb-3">
                   <div className="flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
                     <span>Measurable Norm</span>
                     <span className="font-mono text-blue-600">{req.condition_operator}</span>
                   </div>
-                  <p className="text-[12px] font-black text-slate-800 font-mono">
+                  <p className="text-xs font-black text-slate-800 font-mono">
                     {req.required_value}
                   </p>
                 </div>
 
                 {/* Category & Clause */}
-                <div className="text-[12px] text-slate-500 font-medium space-y-2 mb-3">
+                <div className="text-[11px] text-slate-500 font-medium space-y-1 mb-3">
                   <div className="flex items-center gap-1.5">
                     <Layers className="w-3 h-3 text-slate-400" />
                     <span>Category: <strong>{req.category}</strong></span>
@@ -326,7 +326,7 @@ export default function RegulationsTab() {
               </div>
 
               {/* Card Footer */}
-              <div className="pt-3.5 border-t border-slate-100 flex items-center justify-between gap-2 mt-2">
+              <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2 mt-2">
                 <div className="flex items-center gap-1.5 text-slate-500">
                   <Clock className="w-3 h-3 text-slate-400" />
                   <span className="text-[10px] font-bold">
