@@ -129,20 +129,28 @@ function buildInitialComplianceData() {
 
 export default function App() {
   const [currentView, setCurrentView] = useState<'dashboard' | 'login'>(() => {
-    const saved = localStorage.getItem('current_view');
-    return (saved === 'login' || saved === 'dashboard') ? saved : 'login';
+    const isAuth = sessionStorage.getItem('is_authenticated');
+    return isAuth === 'true' ? 'dashboard' : 'login';
   });
+
   const [activeTab, setActiveTab] = useState(() => {
-    return localStorage.getItem('active_tab') || 'Home';
+    return sessionStorage.getItem('active_tab') || 'Home';
   });
 
   useEffect(() => {
-    localStorage.setItem('current_view', currentView);
-  }, [currentView]);
-
-  useEffect(() => {
-    localStorage.setItem('active_tab', activeTab);
+    sessionStorage.setItem('active_tab', activeTab);
   }, [activeTab]);
+
+  const handleLoginSuccess = () => {
+    sessionStorage.setItem('is_authenticated', 'true');
+    setCurrentView('dashboard');
+  };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('is_authenticated');
+    localStorage.removeItem('current_view');
+    setCurrentView('login');
+  };
   const [chatbotOpen, setChatbotOpen] = useState(false);
   const [dashboardData, setDashboardData] = useState<any>(() => buildInitialComplianceData());
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
@@ -227,7 +235,7 @@ export default function App() {
   }, []);
 
   if (currentView === 'login') {
-    return <VimsLogin onLoginSuccess={() => setCurrentView('dashboard')} />;
+    return <VimsLogin onLoginSuccess={handleLoginSuccess} />;
   }
 
   return (
@@ -350,9 +358,7 @@ export default function App() {
               </div>
               
               <button 
-                onClick={() => {
-                  setCurrentView('login');
-                }} 
+                onClick={handleLogout} 
                 title="Logout / Sign Out" 
                 className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 rounded-xl transition-all cursor-pointer flex-shrink-0 shadow-2xs"
               >
