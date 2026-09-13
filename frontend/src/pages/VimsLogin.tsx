@@ -85,13 +85,15 @@ const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
 
       {/* ── TOP HEADER (TOP LEFT VIGNAN LOGO [2ND IMAGE] & TOP RIGHT FLIPPING BADGES [1ST IMAGE]) ── */}
       <header className="relative z-10 w-full px-6 sm:px-10 py-6 flex items-center justify-between bg-transparent">
-        {/* Top Left: 2nd Image Logo with background removed (mix-blend-multiply), enlarged, deep hover effect */}
+        {/* Top Left: 2nd Image Logo with white text & frosted glass backdrop for 100% crystal clear visibility */}
         <div className="flex items-center group cursor-pointer">
-          <img
-            src="/vignan_logo.png"
-            alt="Vignan's Foundation for Science, Technology & Research"
-            className="h-20 sm:h-24 md:h-28 lg:h-32 w-auto object-contain filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] transition-all duration-500 hover:scale-110 hover:-translate-y-2.5 hover:drop-shadow-[0_30px_40px_rgba(0,0,0,0.85)] cursor-pointer"
-          />
+          <div className="bg-white/90 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/60 shadow-xl transition-all duration-500 hover:scale-105 hover:-translate-y-1.5 hover:shadow-[0_25px_35px_rgba(0,0,0,0.5)]">
+            <img
+              src="/vignan_logo.png"
+              alt="Vignan's Foundation for Science, Technology & Research"
+              className="h-16 sm:h-20 md:h-24 w-auto object-contain filter drop-shadow-md cursor-pointer"
+            />
+          </div>
         </div>
 
         {/* Top Right: Larger Accreditation Badges with Left-to-Right 3D Coin Flip Effect */}
