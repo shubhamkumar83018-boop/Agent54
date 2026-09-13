@@ -13,7 +13,7 @@ import {
   Home, FileText, CheckCircle, AlertTriangle, Settings, RotateCw,
   Clock, Activity, BarChart2, Shield, PlayCircle,
   Cpu, Database, BookOpen, ShieldCheck, Check,
-  LogIn, LogOut, Lock, X, UserPlus, Sparkles, Bot, ChevronRight
+  LogIn, LogOut, Lock, X, UserPlus, Sparkles, ChevronRight
 } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
@@ -323,12 +323,16 @@ export default function Dashboard() {
         <div className="px-3.5 py-2.5 border-t border-slate-100 bg-white">
           <button
             onClick={() => setChatbotOpen(true)}
-            className="w-full group flex items-center gap-2.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white px-3.5 py-2.5 rounded-2xl shadow-md hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all duration-300 border border-white/20 cursor-pointer"
+            className="w-full group flex items-center gap-2.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white px-3 py-2 rounded-2xl shadow-md hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all duration-300 border border-white/20 cursor-pointer"
             title="Ask Agent54 AI Platform Copilot"
           >
             <div className="relative flex-shrink-0">
-              <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center">
-                <Bot className="w-4 h-4 text-white" />
+              <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center overflow-hidden">
+                <img
+                  src="/chatbot_avatar.png"
+                  alt="Agent54 Robot"
+                  className="w-7 h-7 object-contain filter drop-shadow-md group-hover:scale-110 transition-transform duration-300"
+                />
               </div>
               <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-blue-700 animate-pulse"></span>
             </div>
@@ -336,7 +340,7 @@ export default function Dashboard() {
               <p className="text-xs font-black tracking-wide leading-tight flex items-center gap-1 truncate text-white">
                 Ask Agent54 AI <Sparkles className="w-3 h-3 text-amber-300 flex-shrink-0 animate-spin" style={{ animationDuration: '4s' }} />
               </p>
-              <p className="text-[10px] text-blue-100 font-medium leading-tight truncate">Platform Copilot & Guide</p>
+              <p className="text-[10px] text-blue-100 font-medium leading-tight truncate">Platform Copilot (22 Langs)</p>
             </div>
           </button>
         </div>

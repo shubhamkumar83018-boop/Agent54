@@ -380,22 +380,22 @@ export function generateMultilingualBotReply(
         actionLabel: 'Open Home Overview →'
       };
     }
-    // Default Hinglish
+    // Default English
     return {
-      detectedLang: 'hinglish',
-      langName: '🇮🇳 Hinglish',
-      text: `**Agent54 Platform ka Pura Map & 9 Modules:**\n\n` +
-            `1. 🏠 **Home**: Overall University Health Score (35%), 4 KPI counters, Live Regulation Scan summary, Category breakdown, aur 6 AI Swarm Agents status.\n` +
-            `2. 📑 **Regulations**: 26 statutory rules ka register (VFSTR R26, AICTE, UGC, NBA) with clause conditions (>=, <=) aur lead times.\n` +
+      detectedLang: 'en',
+      langName: '🌐 English',
+      text: `**Agent54 Platform Architecture & 9 Core Modules:**\n\n` +
+            `1. 🏠 **Home**: Overall University Health Score (35%), 4 KPI counters, Live Regulation Scan summary, Category breakdown, and 6 AI Swarm Agents status.\n` +
+            `2. 📑 **Regulations**: Register of 26 statutory clauses (VFSTR R26, AICTE, UGC, NBA) with conditions (>=, <=) & lead times.\n` +
             `3. 🛡️ **Compliance**: Live verification engine across departments.\n` +
-            `4. ⚠️ **Risks**: Institutional Risk Matrix, Critical/High/Medium severity distribution aur remediation priority.\n` +
-            `5. 📋 **Inspection Readiness**: Surprise inspection se bachne ke liye Pre-Inspection Dossier (27% readiness score), IQAC/Registrar sign-off, aur 4 authority meters.\n` +
-            `6. 🛠️ **Remediation**: 19 cases ka Compliance Recovery Center with 4-node flow (Req -> Actual -> Gap -> Correction) aur AI execution plans.\n` +
-            `7. 🌐 **Inter-Agent Mesh**: 4 Inbound upstream agents (1, 3, 53, 58) aur 3 Outbound downstream agents (9, 57, 71) ka real-time telemetry.\n` +
-            `8. ⚡ **Simulator**: "What-If" scenario sandbox (Faculty Hires, Student Intake, Budget Cuts, Infra Expansion) with neural prediction.\n` +
-            `9. ⏱️ **Audit Trail**: Cryptographically verified immutable event log (43+ runs).\n\nAap jis bhi feature par jana chahein, sidebar se click kar sakte hain ya niche button dabayein!`,
+            `4. ⚠️ **Risks**: Institutional Risk Matrix, severity distribution (Critical/High/Medium) & remediation priority.\n` +
+            `5. 📋 **Inspection Readiness**: Pre-Inspection Dossier (27% readiness score), IQAC/Registrar sign-offs, and authority meters.\n` +
+            `6. 🛠️ **Remediation**: 19 active cases in Compliance Recovery Center (Req -> Actual -> Gap -> Correction) & AI execution plans.\n` +
+            `7. 🌐 **Inter-Agent Mesh**: 4 Inbound (1, 3, 53, 58) & 3 Outbound (9, 57, 71) agents' real-time telemetry.\n` +
+            `8. ⚡ **Simulator**: "What-If" scenario sandbox (Faculty Hires, Student Intake, Budget Cuts) with neural prediction.\n` +
+            `9. ⏱️ **Audit Trail**: Cryptographically verified immutable event log (43+ runs).\n\nClick below to navigate directly to any section!`,
       actionTab: 'Home',
-      actionLabel: 'Home Tab Par Jayein →'
+      actionLabel: 'Open Home Tab →'
     };
   }
 

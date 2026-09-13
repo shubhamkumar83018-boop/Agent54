@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import {
-  X, Send, Bot, Sparkles, ChevronRight,
+  X, Send, Sparkles, ChevronRight,
   RotateCcw, Globe
 } from 'lucide-react';
 import {
@@ -46,15 +46,15 @@ export default function Agent54Chatbot({
     }
   };
 
-  const [selectedLanguage, setSelectedLanguage] = useState<string>('auto');
+  const [selectedLanguage, setSelectedLanguage] = useState<string>('en');
   const [inputMessage, setInputMessage] = useState('');
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 'welcome-1',
       sender: 'bot',
-      text: `Namaste / Welcome / నమస్కారం!\n\nMai **Agent54 AI Copilot** hu. Mai **22 Indian Scheduled Languages** (Telugu, Tamil, Hindi, Bengali, Marathi, Gujarati, etc.) aur **Hinglish** dono me train hu.\n\nAap mujhse kisi bhi bhasha me pooch sakte hain ki **kaun sa feature kahan hai**, **kaise kaam karta hai**, ya direct tab par navigate kar sakte hain!`,
-      detectedLang: 'hinglish',
-      langName: '🇮🇳 Hinglish + 22 Languages',
+      text: `Hello and Welcome! 👋\n\nI am **Agent54 AI Copilot** — your intelligent assistant for the VFSTR University Autonomous Compliance Platform.\n\nI am fully trained to explain every module and feature on this website:\n\n1. 🏠 **Home Overview**: Overall university score (35%), KPI metrics, & 6 Swarm Agents.\n2. 📑 **Regulations**: 26 statutory clauses (VFSTR R26, AICTE, UGC, NBA, NAAC).\n3. 🛡️ **Compliance**: Live audit verification engine across departments.\n4. ⚠️ **Risks**: Institutional Risk Matrix & penalty exposure.\n5. 📋 **Inspection Readiness**: Pre-Audit Dossier defense (27% readiness) & authority meters.\n6. 🛠️ **Remediation**: 19 active cases in Compliance Recovery Center.\n7. 🌐 **Inter-Agent Mesh**: Real-time telemetry between 7 swarm agents.\n8. ⚡ **Simulator**: "What-If" sandbox for faculty hires, intake, & budget scenarios.\n9. ⏱️ **Audit Trail**: Immutable cryptographic event ledger.\n10. 🔑 **Login & Manuals**: Security grid auth & custom PDF manual viewer/uploader.\n\nAsk me anything in **English** or any of the **22 Scheduled Indian Languages**!`,
+      detectedLang: 'en',
+      langName: '🌐 English (22 Langs Supported)',
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   ]);
@@ -128,16 +128,20 @@ export default function Agent54Chatbot({
 
   return (
     <>
-      {/* Optional Floating Trigger Button if not placed in sidebar */}
+      {/* Optional Floating Trigger Button */}
       {!hideDefaultTrigger && !isOpen && (
         <div className="fixed bottom-[110px] left-3 z-50 flex flex-col items-start gap-2 pointer-events-auto">
           <button
             onClick={() => setIsOpen(true)}
-            className="group flex items-center gap-2.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white pl-3.5 pr-4 py-2.5 rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 border border-white/20 cursor-pointer"
+            className="group flex items-center gap-2.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white pl-3 pr-4 py-2.5 rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 border border-white/20 cursor-pointer"
           >
             <div className="relative flex-shrink-0">
-              <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center">
-                <Bot className="w-5 h-5 text-white" />
+              <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center overflow-hidden">
+                <img
+                  src="/chatbot_avatar.png"
+                  alt="Agent54 Bot"
+                  className="w-7 h-7 object-contain filter drop-shadow-md group-hover:scale-110 transition-transform duration-300"
+                />
               </div>
               <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-white animate-pulse"></span>
             </div>
@@ -153,27 +157,31 @@ export default function Agent54Chatbot({
 
       {/* Floating Chat Modal on Left Side */}
       {isOpen && (
-        <div className="fixed bottom-6 left-4 lg:left-[272px] z-50 w-[92vw] sm:w-[430px] md:w-[470px] h-[590px] max-h-[85vh] bg-white rounded-3xl shadow-2xl border border-slate-200 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200 font-sans">
+        <div className="fixed bottom-6 left-4 lg:left-[272px] z-50 w-[92vw] sm:w-[450px] md:w-[490px] h-[610px] max-h-[88vh] bg-white rounded-3xl shadow-2xl border border-slate-300 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200 font-sans">
           
           {/* Header */}
-          <div className="bg-gradient-to-r from-slate-900 via-blue-950 to-indigo-950 text-white p-3.5 flex flex-col gap-2 flex-shrink-0 shadow-md">
+          <div className="bg-gradient-to-r from-slate-950 via-blue-950 to-indigo-950 text-white p-4 flex flex-col gap-2 flex-shrink-0 shadow-md border-b border-blue-900/50">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
+              <div className="flex items-center gap-3">
                 <div className="relative">
-                  <div className="w-9 h-9 rounded-2xl bg-blue-600 flex items-center justify-center text-white shadow-md shadow-blue-500/30">
-                    <Bot className="w-5 h-5" />
+                  <div className="w-10 h-10 rounded-2xl bg-blue-600/40 border border-blue-400/30 flex items-center justify-center p-1 shadow-md">
+                    <img
+                      src="/chatbot_avatar.png"
+                      alt="Agent54 Bot"
+                      className="w-8 h-8 object-contain filter drop-shadow-md"
+                    />
                   </div>
-                  <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-slate-900"></span>
+                  <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-400 rounded-full border-2 border-slate-900"></span>
                 </div>
                 <div>
-                  <div className="flex items-center gap-1.5">
-                    <h3 className="font-black text-xs tracking-wide text-white">Agent54 AI Copilot</h3>
-                    <span className="px-1.5 py-0.5 bg-emerald-500/30 border border-emerald-400/40 rounded text-[8px] font-black text-emerald-200 uppercase tracking-wider">
-                      22 Langs + Hinglish
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-black text-sm tracking-wide text-white">Agent54 AI Copilot</h3>
+                    <span className="px-2 py-0.5 bg-emerald-500/30 border border-emerald-400/40 rounded-full text-[9px] font-extrabold text-emerald-200 uppercase tracking-wider">
+                      22 Languages
                     </span>
                   </div>
-                  <p className="text-[9px] font-medium text-slate-300">
-                    Multilingual Autonomous Guide {activeTab ? `• Viewing ${activeTab}` : ''}
+                  <p className="text-[10.5px] font-semibold text-slate-300 mt-0.5">
+                    Platform Knowledge Guide {activeTab ? `• Viewing ${activeTab}` : ''}
                   </p>
                 </div>
               </div>
@@ -184,19 +192,19 @@ export default function Agent54Chatbot({
                     {
                       id: 'welcome-reset',
                       sender: 'bot',
-                      text: `Chat reset ho gaya hai. Aap mujhse kisi bhi bhasha (Hindi, Hinglish, Telugu, Tamil, Bengali, Marathi, English, etc.) me platform ke bare me pooch sakte hain!`,
+                      text: `Chat reset. I am ready to answer any questions about the platform, features, or how to navigate all 9 modules in 22 languages!`,
                       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
                     }
                   ])}
                   title="Reset Chat"
-                  className="p-1.5 text-slate-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors cursor-pointer"
+                  className="p-1.5 text-slate-300 hover:text-white hover:bg-white/10 rounded-xl transition-colors cursor-pointer"
                 >
-                  <RotateCcw className="w-3.5 h-3.5" />
+                  <RotateCcw className="w-4 h-4" />
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
                   title="Close"
-                  className="p-1.5 text-slate-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors cursor-pointer"
+                  className="p-1.5 text-slate-300 hover:text-white hover:bg-white/10 rounded-xl transition-colors cursor-pointer"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -204,14 +212,14 @@ export default function Agent54Chatbot({
             </div>
 
             {/* Language Selector Bar */}
-            <div className="flex items-center justify-between bg-white/10 px-2.5 py-1 rounded-xl border border-white/15 text-[10px]">
-              <span className="text-[10px] text-blue-200 font-bold flex items-center gap-1">
-                <Globe className="w-3 h-3 text-cyan-300" /> Language Mode:
+            <div className="flex items-center justify-between bg-white/10 px-3 py-1.5 rounded-xl border border-white/15 text-xs font-semibold">
+              <span className="text-[11px] text-blue-200 font-bold flex items-center gap-1.5">
+                <Globe className="w-3.5 h-3.5 text-cyan-300" /> Response Language:
               </span>
               <select
                 value={selectedLanguage}
                 onChange={(e) => setSelectedLanguage(e.target.value)}
-                className="bg-slate-900/90 text-white text-[10px] font-bold px-2 py-0.5 rounded-lg border border-white/20 focus:outline-none cursor-pointer max-w-[190px] truncate"
+                className="bg-slate-900 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg border border-white/20 focus:outline-none cursor-pointer max-w-[210px] truncate"
               >
                 {SUPPORTED_LANGUAGES.map(lang => (
                   <option key={lang.code} value={lang.code} className="bg-slate-900 text-white">
@@ -222,55 +230,59 @@ export default function Agent54Chatbot({
             </div>
           </div>
 
-          {/* Messages Area */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/70">
+          {/* Messages Area with Crisp High-Visibility Fonts */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-100/70">
             {messages.map((msg) => (
               <div
                 key={msg.id}
-                className={`flex gap-2.5 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                className={`flex gap-3 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 {msg.sender === 'bot' && (
-                  <div className="w-7 h-7 rounded-xl bg-blue-600 text-white flex items-center justify-center flex-shrink-0 mt-0.5 shadow-xs">
-                    <Bot className="w-4 h-4" />
+                  <div className="w-8 h-8 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-center flex-shrink-0 mt-0.5 overflow-hidden p-0.5">
+                    <img
+                      src="/chatbot_avatar.png"
+                      alt="Agent54 Bot"
+                      className="w-7 h-7 object-contain"
+                    />
                   </div>
                 )}
                 
-                <div className={`max-w-[85%] rounded-2xl p-3.5 text-xs shadow-xs leading-relaxed ${
+                <div className={`max-w-[85%] rounded-2xl p-4 text-xs sm:text-sm shadow-sm leading-relaxed ${
                   msg.sender === 'user'
-                    ? 'bg-blue-600 text-white rounded-tr-xs font-semibold'
-                    : 'bg-white text-slate-800 border border-slate-200/80 rounded-tl-xs'
+                    ? 'bg-blue-600 text-white rounded-tr-xs font-bold'
+                    : 'bg-white text-slate-900 border border-slate-300/90 rounded-tl-xs font-semibold'
                 }`}>
                   {msg.sender === 'bot' && msg.langName && (
                     <div className="mb-2">
-                      <span className="inline-flex items-center gap-1 text-[9px] font-black px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200/70">
+                      <span className="inline-flex items-center gap-1 text-[10px] font-black px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-800 border border-blue-200">
                         <span>🌐</span> {msg.langName}
                       </span>
                     </div>
                   )}
 
-                  <div className="whitespace-pre-line">
+                  <div className="whitespace-pre-line text-slate-900 leading-relaxed tracking-normal font-medium text-xs sm:text-[13px]">
                     {msg.text}
                   </div>
 
-                  {/* Direct Navigation Button if generated */}
+                  {/* Direct Navigation Button */}
                   {msg.actionTab && onNavigateTab && (
-                    <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between">
+                    <div className="mt-3 pt-2.5 border-t border-slate-200 flex items-center justify-between">
                       <button
                         onClick={() => {
                           onNavigateTab(msg.actionTab!);
                           setIsOpen(false);
                         }}
-                        className="inline-flex items-center gap-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold px-3 py-1.5 rounded-xl text-[11px] border border-blue-200 transition-all cursor-pointer shadow-2xs"
+                        className="inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white font-extrabold px-3.5 py-2 rounded-xl text-xs shadow-md transition-all cursor-pointer"
                       >
                         {msg.actionLabel || `Open ${msg.actionTab} Tab`}
-                        <ChevronRight className="w-3.5 h-3.5" />
+                        <ChevronRight className="w-4 h-4" />
                       </button>
-                      <span className="text-[9px] text-slate-400 font-medium">Click to navigate</span>
+                      <span className="text-[10px] text-slate-500 font-bold">Click to jump directly</span>
                     </div>
                   )}
 
-                  <div className={`text-[9px] mt-1.5 text-right font-medium ${
-                    msg.sender === 'user' ? 'text-blue-200' : 'text-slate-400'
+                  <div className={`text-[10px] mt-2 text-right font-extrabold ${
+                    msg.sender === 'user' ? 'text-blue-100' : 'text-slate-400'
                   }`}>
                     {msg.timestamp}
                   </div>
@@ -281,18 +293,19 @@ export default function Agent54Chatbot({
           </div>
 
           {/* Quick Suggestion Chips */}
-          <div className="p-2.5 bg-white border-t border-slate-100 flex items-center gap-1.5 overflow-x-auto text-[11px]">
+          <div className="p-2.5 bg-slate-50 border-t border-slate-200 flex items-center gap-1.5 overflow-x-auto">
             {[
-              'Kaun sa feature kahan hai?',
-              'సంసిద్ధత డోసియర్ ఎలా ఉంది?',
-              'निरीक्षण तत्परता क्या है?',
-              'Simulator What-If sandbox',
-              'Remediation Center kaise kaam karta hai?'
+              'What features are in this portal?',
+              'Where is Inspection Readiness Dossier?',
+              'How to use Simulator sandbox?',
+              'How does Remediation Center work?',
+              'Explain 26 statutory regulations',
+              ' How to add custom PDF manual?'
             ].map((chip, idx) => (
               <button
                 key={idx}
                 onClick={() => handleQuickQuestion(chip)}
-                className="whitespace-nowrap px-2.5 py-1 bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-700 font-semibold rounded-lg border border-slate-200/60 transition-all cursor-pointer flex-shrink-0 text-[10px]"
+                className="whitespace-nowrap px-3 py-1.5 bg-white hover:bg-blue-50 hover:text-blue-700 text-slate-800 font-bold rounded-xl border border-slate-300 transition-all cursor-pointer flex-shrink-0 text-xs shadow-2xs"
               >
                 {chip}
               </button>
@@ -310,8 +323,8 @@ export default function Agent54Chatbot({
                   handleSend();
                 }
               }}
-              placeholder="Ask in Hindi, Hinglish, Telugu, Tamil, English, etc..."
-              className="flex-1 bg-slate-100 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 placeholder-slate-400 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+              placeholder="Ask about features, navigation, or regulations..."
+              className="flex-1 bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-slate-900 placeholder:text-slate-500 font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all"
             />
             <button
               onClick={handleSend}
@@ -327,3 +340,4 @@ export default function Agent54Chatbot({
     </>
   );
 }
+
