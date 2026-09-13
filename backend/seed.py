@@ -3,11 +3,18 @@ import os
 from sqlalchemy.orm import Session
 from datetime import datetime, timezone
 from dateutil import parser
-from .database import SessionLocal, engine, Base
+from .database import SessionLocal, engine, Base, is_using_mongodb
 from . import models
 
 def seed_db():
-    print("Recreating database tables...")
+    if is_using_mongodb():
+        from .mongo_db import seed_mongo_from_files
+        print("[MongoDB Atlas] Seeding database collections...")
+        stats = seed_mongo_from_files(drop_existing=True)
+        print(f"[MongoDB Atlas] Seeding complete: {stats}")
+        return
+
+    print("Recreating database tables in SQLite...")
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
     db = SessionLocal()

@@ -237,6 +237,7 @@
           "version": "v1.0",
           "effective_date": "2022-01-01"
         }
+      ]
     },
     {
       "regulation_id": "REG-INTERNAL-001",
@@ -284,107 +285,145 @@
 
   "demo_gap_examples": [
     {
+      "requirement_id": "REQ-FSR-001",
+      "department_id": "DEPT-CSE",
+      "required_value": "<= 20 students per faculty",
+      "actual_value": "13.3",
+      "status": "COMPLIANT",
+      "gap": "0",
+      "note": "CSE: 80 students / 6 faculty = 13.3 — within AICTE 1:20 norm"
+    },
+    {
+      "requirement_id": "REQ-FSR-001",
+      "department_id": "DEPT-ECE",
+      "required_value": "<= 20 students per faculty",
+      "actual_value": "11.4",
+      "status": "COMPLIANT",
+      "gap": "0",
+      "note": "ECE: 80 students / 7 faculty = 11.4 — within AICTE 1:20 norm"
+    },
+    {
+      "requirement_id": "REQ-FSR-001",
+      "department_id": "DEPT-MECH",
+      "required_value": "<= 20 students per faculty",
+      "actual_value": "8.9",
+      "status": "COMPLIANT",
+      "gap": "0",
+      "note": "Mech: 80 students / 9 faculty = 8.9 — within AICTE 1:20 norm"
+    },
+    {
+      "requirement_id": "REQ-FSR-001",
+      "department_id": "DEPT-CIVIL",
+      "required_value": "<= 20 students per faculty",
+      "actual_value": "10.0",
+      "status": "COMPLIANT",
+      "gap": "0",
+      "note": "Civil: 80 students / 8 faculty = 10.0 — within AICTE 1:20 norm"
+    },
+    {
+      "requirement_id": "REQ-FSR-002",
+      "department_id": "DEPT-CSE",
+      "required_value": "<= 25 students per faculty (Amended 2026)",
+      "actual_value": "13.3",
+      "status": "COMPLIANT",
+      "gap": "0",
+      "note": "CSE: 13.3 students/faculty — compliant under the amended 1:25 norm"
+    },
+    {
+      "requirement_id": "REQ-QUAL-001",
+      "department_id": "DEPT-CSE",
+      "required_value": "40% PhD faculty",
+      "actual_value": "33.3",
+      "status": "NON_COMPLIANT",
+      "gap": "PhD ratio 33.3% (2/6) — 1 more PhD faculty needed to reach 40%",
+      "risk": "high",
+      "suggested_action": "Recruit 1 PhD-qualified faculty or sponsor existing faculty for PhD",
+      "owner": "HoD CSE / HR",
+      "priority": "High",
+      "estimated_lead_time": "60-90 days"
+    },
+    {
+      "requirement_id": "REQ-QUAL-001",
+      "department_id": "DEPT-ECE",
+      "required_value": "40% PhD faculty",
+      "actual_value": "28.6",
+      "status": "NON_COMPLIANT",
+      "gap": "PhD ratio 28.6% (2/7) — 1 more PhD faculty needed to reach 40%",
+      "risk": "high",
+      "suggested_action": "Recruit 1 PhD-qualified faculty",
+      "owner": "HoD ECE / HR",
+      "priority": "High",
+      "estimated_lead_time": "60-90 days"
+    },
+    {
       "requirement_id": "REQ-QUAL-001",
       "department_id": "DEPT-MECH",
-      "required_value": "40% PhD",
-      "actual_value": "22.2% PhD (2 of 9 faculty)",
+      "required_value": "40% PhD faculty",
+      "actual_value": "22.2",
       "status": "NON_COMPLIANT",
-      "gap": "Need 2 more PhD-qualified faculty to reach 40%",
+      "gap": "PhD ratio 22.2% (2/9) — need 2 more PhD faculty to reach 40%",
       "risk": "high",
       "suggested_action": "Recruit or upskill 2 faculty to PhD-qualified status",
-      "owner": "HoD, Mechanical / HR",
+      "owner": "HoD Mechanical / HR",
       "priority": "High",
-      "estimated_lead_time": "1 recruitment cycle (~90 days) or 2+ years for internal PhD completion"
+      "estimated_lead_time": "1 recruitment cycle (~90 days)"
+    },
+    {
+      "requirement_id": "REQ-QUAL-001",
+      "department_id": "DEPT-CIVIL",
+      "required_value": "40% PhD faculty",
+      "actual_value": "25.0",
+      "status": "NON_COMPLIANT",
+      "gap": "PhD ratio 25.0% (2/8) — need 2 more PhD faculty to reach 40%",
+      "risk": "high",
+      "suggested_action": "Recruit 2 PhD-qualified faculty",
+      "owner": "HoD Civil / HR",
+      "priority": "High",
+      "estimated_lead_time": "90-180 days"
     },
     {
       "requirement_id": "REQ-LIB-001",
-      "department_id": "INST-001",
-      "required_value": "1 title per 10 students",
-      "actual_value": "1 title per 7.8 students (2500 titles / 320 students) — actually exceeds requirement",
+      "department_id": "DEPT-CSE",
+      "required_value": "<= 10 students per library title",
+      "actual_value": "7.8",
       "status": "COMPLIANT",
       "gap": "0",
-      "note": "Included to show a compliant example alongside the non-compliant ones above"
+      "note": "Library: 2500 titles / 320 students = 7.8 students/title — meets NBA threshold"
     },
     {
       "requirement_id": "REQ-COMM-001",
-      "department_id": "INST-001",
+      "department_id": "DEPT-CSE",
       "required_value": "Active",
       "actual_value": "Lapsed 40 days ago",
       "status": "NON_COMPLIANT",
-      "gap": "Committee must be reconstituted immediately",
+      "gap": "Anti-Ragging Committee must be reconstituted immediately",
       "risk": "critical",
-      "suggested_action": "Issue reconstitution order and appoint members",
+      "suggested_action": "Issue reconstitution order and appoint members within 5 days",
       "owner": "Registrar",
       "priority": "Critical",
       "estimated_lead_time": "5 days"
     },
     {
-      "requirement_id": "LAB-INFRA-CHECK",
-      "department_id": "DEPT-ECE",
-      "title": "Laboratory Infrastructure Readiness",
-      "required_value": "All labs functional",
-      "actual_value": "1 of 2 ECE labs under maintenance (Communication Systems Lab)",
-      "status": "AT_RISK",
-      "gap": "Lab unavailable for practicals until restored",
-      "risk": "medium",
-      "suggested_action": "Expedite signal generator replacement",
-      "owner": "HoD, ECE / Maintenance",
-      "priority": "Medium",
-      "estimated_lead_time": "10 days"
-    },
-    {
       "requirement_id": "FSR-CSE-001",
       "department_id": "DEPT-CSE",
-      "title": "FSR-CSE-001",
-      "required_value": "1:20 Faculty-Student Ratio (60 faculty for 1200 students)",
-      "actual_value": "1:26.67 (45 faculty for 1200 students)",
-      "status": "NON_COMPLIANT",
-      "gap": "15 additional qualified faculty members required to meet 1:20 ratio",
-      "risk": "critical",
-      "suggested_action": "Recruit 15 qualified faculty members and assign temporary teaching support",
-      "owner": "HR Department / CSE Dean",
-      "priority": "Critical",
-      "estimated_lead_time": "8-12 weeks"
+      "required_value": "<= 20 students per faculty (Internal Norm)",
+      "actual_value": "13.3",
+      "status": "COMPLIANT",
+      "gap": "0",
+      "note": "CSE: 80 students / 6 faculty = 13.3 — within internal 1:20 departmental norm"
     },
     {
       "requirement_id": "CRED-ECE-001",
       "department_id": "DEPT-ECE",
-      "title": "CRED-ECE-001",
-      "required_value": "160 Credits (B.Tech ECE)",
-      "actual_value": "158 Credits assigned — 2-credit shortfall",
+      "required_value": "160 credits (B.Tech ECE)",
+      "actual_value": "158",
       "status": "AT_RISK",
-      "gap": "2-credit shortfall requires academic council credit realignment",
+      "gap": "2-credit shortfall — academic council credit realignment required",
       "risk": "medium",
       "suggested_action": "Approve 2-credit elective or mini-project module and update course credit matrix",
       "owner": "Board of Studies / Dean Academics",
       "priority": "Medium",
       "estimated_lead_time": "14-20 days"
-    },
-    {
-      "requirement_id": "REQ-FSR-001",
-      "department_id": "DEPT-CSE",
-      "required_value": "<= 20 students per faculty",
-      "actual_value": "1200 / 45 = 26.67 students per faculty",
-      "status": "NON_COMPLIANT",
-      "gap": "15 additional faculty needed to reach <= 20",
-      "risk": "critical",
-      "suggested_action": "Recruit 15 qualified faculty members",
-      "owner": "HoD, CSE",
-      "priority": "Critical",
-      "estimated_lead_time": "8-12 weeks"
-    },
-    {
-      "requirement_id": "REQ-FSR-002",
-      "department_id": "DEPT-CSE",
-      "required_value": "<= 25 students per faculty",
-      "actual_value": "1200 / 45 = 26.67 students per faculty",
-      "status": "NON_COMPLIANT",
-      "gap": "3 additional faculty needed to reach <= 25",
-      "risk": "high",
-      "suggested_action": "Recruit 3 qualified faculty members",
-      "owner": "HoD, CSE",
-      "priority": "High",
-      "estimated_lead_time": "4-8 weeks"
     }
   ],
 

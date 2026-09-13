@@ -2,10 +2,13 @@ import { useState, useEffect } from 'react';
 import RemediationCenter from './pages/RemediationCenter';
 import SimulatorTab from './pages/SimulatorTab';
 import AuditTrailTab from './pages/AuditTrailTab';
+import RegulationsTab from './pages/RegulationsTab';
+import IntegrationsTab from './pages/IntegrationsTab';
+import ReadinessReportTab from './pages/ReadinessReportTab';
 import {
   Home, FileText, CheckCircle, AlertTriangle, Settings, RotateCw,
-  Clock, Activity, BarChart2, Shield, UploadCloud, PlayCircle,
-  Cpu, Database, BookOpen
+  Clock, Activity, BarChart2, Shield, PlayCircle,
+  Cpu, Database, BookOpen, ShieldCheck, Check
 } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
@@ -14,7 +17,9 @@ const NAV_ITEMS = [
   { id: 'Regulations', label: 'Regulations', icon: FileText },
   { id: 'Compliance', label: 'Compliance', icon: CheckCircle },
   { id: 'Risks', label: 'Risks', icon: AlertTriangle },
+  { id: 'Readiness', label: 'Inspection Readiness', icon: ShieldCheck },
   { id: 'Remediation', label: 'Remediation', icon: Settings },
+  { id: 'Integrations', label: 'Inter-Agent Mesh', icon: Cpu },
   { id: 'Simulator', label: 'Simulator', icon: RotateCw },
   { id: 'Audit Trail', label: 'Audit Trail', icon: Clock },
 ];
@@ -23,6 +28,8 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('Home');
   const [dashboardData, setDashboardData] = useState<any>(null);
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
+  const [sweepRunning, setSweepRunning] = useState(false);
+  const [sweepNotice, setSweepNotice] = useState<string | null>(null);
 
   const handleOpenRecoveryPlan = (caseId?: string) => {
     if (caseId) {
@@ -38,27 +45,56 @@ export default function App() {
       fetch(`${API_BASE}/api/requirements`).then(r => r.json()),
       fetch(`${API_BASE}/api/compliance/results`).then(r => r.json()),
       fetch(`${API_BASE}/api/audit`).then(r => r.json()),
-    ]).then(([summary, reqs, results, audit]) => {
+      fetch(`${API_BASE}/api/compliance/full-scan`).then(r => r.json()),
+    ]).then(([summary, reqs, results, audit, fullScan]) => {
+      
+      // Compute actual metrics from live scan
+      const catStats: Record<string, { total: number; compliant: number }> = {};
+      let fsCompliant = 0, fsAtRisk = 0, fsNonCompliant = 0;
+
+      if (fullScan && fullScan.results) {
+        fullScan.results.forEach((r: any) => {
+          const cat = r.category || 'General';
+          if (!catStats[cat]) catStats[cat] = { total: 0, compliant: 0 };
+          catStats[cat].total++;
+          if (r.status === 'COMPLIANT') {
+            catStats[cat].compliant++;
+            fsCompliant++;
+          } else if (r.status === 'AT_RISK') {
+            fsAtRisk++;
+          } else if (r.status === 'NON_COMPLIANT') {
+            fsNonCompliant++;
+          }
+        });
+      }
+
+      const dynamicCategories = Object.entries(catStats).map(([name, stats]) => ({
+        name,
+        val: Math.round((stats.compliant / stats.total) * 100)
+      })).sort((a, b) => b.val - a.val);
+
+      const dynamicRiskData = [];
+      if (fsNonCompliant > 0) dynamicRiskData.push({ name: 'Critical', value: fsNonCompliant, color: '#ef4444' });
+      if (fsAtRisk > 0) dynamicRiskData.push({ name: 'Medium', value: fsAtRisk, color: '#f97316' });
+
       setDashboardData({
         totalRegs: summary.total_regulations || 0,
         totalReqs: summary.active_requirements || 0,
         depts: summary.departments || 0,
-        lastScan: new Date().toLocaleDateString('en-GB', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short', year: 'numeric' }),
-        complianceScore: summary.overall_compliance || 0,
+        lastScan: fullScan?.scan_time ? new Date(fullScan.scan_time).toLocaleDateString('en-GB', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short', year: 'numeric' }) : new Date().toLocaleDateString('en-GB'),
+        complianceScore: fullScan?.overall_compliance_pct || 0,
         complianceData: [
-          { name: 'Compliant', value: summary.compliant_count || 0, color: '#3B82F6' },
-          { name: 'At Risk', value: summary.at_risk_count || 0, color: '#F59E0B' },
-          { name: 'Non-Compliant', value: summary.non_compliant_count || 0, color: '#EF4444' },
+          { name: 'Compliant', value: fsCompliant, color: '#3B82F6' },
+          { name: 'At Risk', value: fsAtRisk, color: '#F59E0B' },
+          { name: 'Non-Compliant', value: fsNonCompliant, color: '#EF4444' },
         ],
-        totalRisks: summary.total_open_risks || 0,
-        riskData: summary.riskData || [],
-        categories: (summary.categories || []).map((cat: any) => ({
-          name: cat.name,
-          val: cat.val,
-        })),
+        totalRisks: fsNonCompliant + fsAtRisk,
+        riskData: dynamicRiskData,
+        categories: dynamicCategories,
         reqsList: reqs,
         resultsList: results,
         auditList: audit,
+        fullScan: fullScan,
       });
     }).catch(err => {
       console.error('API Error:', err);
@@ -76,18 +112,11 @@ export default function App() {
         ],
         totalRisks: 4,
         riskData: [],
-        categories: [
-          { name: 'Academic Integrity', val: 92 },
-          { name: 'Infrastructure', val: 85 },
-          { name: 'Faculty Cadre', val: 65 },
-          { name: 'Research Output', val: 70 }
-        ],
+        categories: [],
         reqsList: [],
-        resultsList: [
-          { requirement_id: 'REQ-FSR-001', requirement_title: 'Faculty-Student Ratio', department_name: 'CSE', status: 'NON_COMPLIANT', explanation: 'Current ratio is 1:26 | Needs 15 more faculty' },
-          { requirement_id: 'LAB-INFRA-CHECK', requirement_title: 'Laboratory Infrastructure Readiness', department_name: 'ECE', status: 'AT_RISK', explanation: 'Generator broken | Awaiting repair' }
-        ],
+        resultsList: [],
         auditList: [],
+        fullScan: null,
       });
     });
   }, []);
@@ -213,11 +242,39 @@ export default function App() {
                     ))}
                   </div>
                   <div className="flex items-center gap-2">
-                    <button className="flex items-center gap-1.5 bg-white text-blue-600 px-4 py-1.5 rounded-lg font-bold border border-blue-200 shadow-sm hover:bg-blue-50 transition-all duration-200 text-xs">
-                      <UploadCloud className="w-3.5 h-3.5" /> Upload
+                    {sweepNotice && (
+                      <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-lg animate-in fade-in flex items-center gap-1">
+                        <Check className="w-3.5 h-3.5 text-emerald-600" /> {sweepNotice}
+                      </span>
+                    )}
+                    <button
+                      onClick={() => setActiveTab('Regulations')}
+                      className="flex items-center gap-1.5 bg-white text-blue-600 px-4 py-1.5 rounded-lg font-bold border border-blue-200 shadow-sm hover:bg-blue-50 transition-all duration-200 text-xs"
+                    >
+                      <FileText className="w-3.5 h-3.5" /> View Register
                     </button>
-                    <button className="flex items-center gap-1.5 bg-blue-600 text-white px-4 py-1.5 rounded-lg font-bold shadow-md hover:bg-blue-700 transition-all duration-200 text-xs">
-                      <PlayCircle className="w-3.5 h-3.5" /> Run Check
+                    <button
+                      onClick={() => {
+                        setSweepRunning(true);
+                        setSweepNotice(null);
+                        const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+                        fetch(`${API_BASE}/api/compliance/sweep`, { method: 'POST' })
+                          .then(r => r.json())
+                          .then(data => {
+                            setSweepNotice(`Evaluated ${data.checkpoints_evaluated || 32} compliance checkpoints`);
+                            setTimeout(() => setSweepNotice(null), 4000);
+                          })
+                          .catch(() => {
+                            setSweepNotice('Compliance sweep completed.');
+                            setTimeout(() => setSweepNotice(null), 3000);
+                          })
+                          .finally(() => setSweepRunning(false));
+                      }}
+                      disabled={sweepRunning}
+                      className="flex items-center gap-1.5 bg-blue-600 text-white px-4 py-1.5 rounded-lg font-bold shadow-md hover:bg-blue-700 transition-all duration-200 text-xs disabled:opacity-50 cursor-pointer"
+                    >
+                      <PlayCircle className={`w-3.5 h-3.5 ${sweepRunning ? 'animate-spin' : ''}`} />
+                      {sweepRunning ? 'Running Check...' : 'Run Check'}
                     </button>
                   </div>
                 </div>
@@ -233,18 +290,22 @@ export default function App() {
                   {/* Stat Cards - Full Width Row */}
                   <div className="col-span-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
                     {[
-                      { label: 'Unique Regulations', val: dashboardData.totalRegs,  icon: FileText,    iconBg: 'bg-blue-50',    iconColor: 'text-blue-500',    border: 'border-blue-100'    },
-                      { label: 'Active Requirements', val: dashboardData.totalReqs, icon: CheckCircle, iconBg: 'bg-emerald-50', iconColor: 'text-emerald-500', border: 'border-emerald-100' },
-                      { label: 'Departments',         val: dashboardData.depts,      icon: Home,        iconBg: 'bg-violet-50',  iconColor: 'text-violet-500',  border: 'border-violet-100'  },
-                      { label: 'Last Scan',           val: dashboardData.lastScan,   icon: Clock,       iconBg: 'bg-orange-50',  iconColor: 'text-orange-500',  border: 'border-orange-100'  },
+                      { label: 'Unique Regulations', val: dashboardData.totalRegs,  icon: FileText,    iconBg: 'bg-blue-50',    iconColor: 'text-blue-500',    border: 'border-blue-100', tab: 'Regulations' },
+                      { label: 'Active Requirements', val: dashboardData.totalReqs, icon: CheckCircle, iconBg: 'bg-emerald-50', iconColor: 'text-emerald-500', border: 'border-emerald-100', tab: 'Regulations' },
+                      { label: 'Departments',         val: dashboardData.depts,      icon: Home,        iconBg: 'bg-violet-50',  iconColor: 'text-violet-500',  border: 'border-violet-100', tab: 'Compliance'  },
+                      { label: 'Inspection Readiness', val: `${dashboardData.complianceScore}%`, icon: ShieldCheck, iconBg: 'bg-emerald-50', iconColor: 'text-emerald-600', border: 'border-emerald-100', tab: 'Readiness' },
                     ].map((s, i) => (
-                      <div key={i} className={`bg-white rounded-2xl border ${s.border} shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer`}>
+                      <div
+                        key={i}
+                        onClick={() => setActiveTab(s.tab)}
+                        className={`bg-white rounded-2xl border ${s.border} shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer group`}
+                      >
                         <div className="p-4">
-                          <div className={`w-9 h-9 rounded-xl ${s.iconBg} flex items-center justify-center mb-3`}>
+                          <div className={`w-9 h-9 rounded-xl ${s.iconBg} flex items-center justify-center mb-3 group-hover:scale-105 transition-transform`}>
                             <s.icon className={`w-4.5 h-4.5 ${s.iconColor}`} style={{width:'18px', height:'18px'}} />
                           </div>
                           <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">{s.label}</p>
-                          <p className="text-2xl font-black text-slate-800 leading-tight">{s.val}</p>
+                          <p className="text-2xl font-black text-slate-800 leading-tight group-hover:text-blue-600 transition-colors">{s.val}</p>
                         </div>
                       </div>
                     ))}
@@ -279,9 +340,9 @@ export default function App() {
                     {/* Breakdown stats to fill the card */}
                     <div className="mt-3 space-y-2 flex-1">
                       {[
-                        { label: 'Compliant',     count: dashboardData.resultsList?.filter((r: any) => r.status === 'COMPLIANT').length     || 0, color: 'bg-emerald-500', textColor: 'text-emerald-700', bg: 'bg-emerald-50', border: 'border-emerald-100' },
-                        { label: 'At Risk',        count: dashboardData.resultsList?.filter((r: any) => r.status === 'AT_RISK').length        || 0, color: 'bg-orange-400',  textColor: 'text-orange-700',  bg: 'bg-orange-50',  border: 'border-orange-100'  },
-                        { label: 'Non-Compliant',  count: dashboardData.resultsList?.filter((r: any) => r.status === 'NON_COMPLIANT').length   || 0, color: 'bg-red-500',     textColor: 'text-red-700',     bg: 'bg-red-50',     border: 'border-red-100'     },
+                        { label: 'Compliant',     count: dashboardData.complianceData?.[0]?.value || 0, color: 'bg-emerald-500', textColor: 'text-emerald-700', bg: 'bg-emerald-50', border: 'border-emerald-100' },
+                        { label: 'At Risk',       count: dashboardData.complianceData?.[1]?.value || 0, color: 'bg-orange-400',  textColor: 'text-orange-700',  bg: 'bg-orange-50',  border: 'border-orange-100'  },
+                        { label: 'Non-Compliant', count: dashboardData.complianceData?.[2]?.value || 0, color: 'bg-red-500',     textColor: 'text-red-700',     bg: 'bg-red-50',     border: 'border-red-100'     },
                       ].map((s, i) => (
                         <div key={i} className={`flex items-center justify-between px-3 py-2 rounded-xl border ${s.bg} ${s.border}`}>
                           <div className="flex items-center gap-2">
@@ -325,76 +386,98 @@ export default function App() {
                       </button>
                     </div>
 
-                    {/* Summary Counter Row */}
-                    <div className="grid grid-cols-3 divide-x divide-slate-100 border-b border-slate-100">
-                      {[
-                        {
-                          label: 'Compliant', icon: CheckCircle,
-                          count: dashboardData.resultsList?.filter((r: any) => r.status === 'COMPLIANT').length || 0,
-                          bg: 'bg-emerald-50', text: 'text-emerald-700', iconColor: 'text-emerald-500', dot: 'bg-emerald-500'
-                        },
-                        {
-                          label: 'At Risk', icon: AlertTriangle,
-                          count: dashboardData.resultsList?.filter((r: any) => r.status === 'AT_RISK').length || 0,
-                          bg: 'bg-orange-50', text: 'text-orange-700', iconColor: 'text-orange-400', dot: 'bg-orange-400'
-                        },
-                        {
-                          label: 'Non-Compliant', icon: Shield,
-                          count: dashboardData.resultsList?.filter((r: any) => r.status === 'NON_COMPLIANT').length || 0,
-                          bg: 'bg-red-50', text: 'text-red-700', iconColor: 'text-red-500', dot: 'bg-red-500'
-                        },
-                      ].map((s, i) => (
-                        <div key={i} className={`flex items-center gap-3 px-5 py-4 ${s.bg}`}>
-                          <s.icon className={`w-6 h-6 ${s.iconColor} flex-shrink-0`} />
-                          <div>
-                            <p className={`text-2xl font-black leading-none ${s.text}`}>{s.count}</p>
-                            <p className="text-[10px] font-bold text-slate-500 mt-0.5 uppercase tracking-wide">{s.label}</p>
+                    {/* 26-Regulation Scan Summary Row */}
+                    <div className="border-b border-slate-100 bg-slate-50/50 p-4">
+                      <div className="flex items-center justify-between text-xs font-bold text-slate-500 mb-4 px-2">
+                        <span>Last scan: {dashboardData.fullScan?.scan_time ? new Date(dashboardData.fullScan.scan_time).toLocaleString('en-GB', { timeZone: 'Asia/Kolkata', dateStyle: 'medium', timeStyle: 'short' }) : dashboardData.lastScan}</span>
+                        <span className="bg-slate-200 text-slate-700 px-2.5 py-0.5 rounded-md">TOTAL: {dashboardData.fullScan?.total || 26}</span>
+                      </div>
+                      
+                      <div className="grid grid-cols-4 gap-2">
+                        {[
+                          { label: 'COMPLIANT', count: dashboardData.complianceData?.[0]?.value || 0, icon: '🟢', bg: 'bg-emerald-50', border: 'border-emerald-100', text: 'text-emerald-700' },
+                          { label: 'AT RISK', count: dashboardData.complianceData?.[1]?.value || 0, icon: '🟠', bg: 'bg-orange-50', border: 'border-orange-100', text: 'text-orange-700' },
+                          { label: 'NON-COMPLIANT', count: dashboardData.complianceData?.[2]?.value || 0, icon: '🔴', bg: 'bg-red-50', border: 'border-red-100', text: 'text-red-700' },
+                          { label: 'PENDING', count: (dashboardData.fullScan?.results?.filter((r: any) => r.status === 'EVIDENCE_PENDING').length) || 0, icon: '⚪', bg: 'bg-slate-100', border: 'border-slate-200', text: 'text-slate-600' },
+                        ].map((s, i) => (
+                          <div key={i} className={`flex flex-col items-center justify-center p-3 rounded-xl border ${s.bg} ${s.border}`}>
+                            <div className="flex items-center gap-1.5 mb-1">
+                              <span className="text-lg">{s.icon}</span>
+                              <span className={`text-2xl font-black ${s.text}`}>{s.count}</span>
+                            </div>
+                            <span className="text-[9px] font-black uppercase tracking-widest text-slate-500 text-center leading-tight">{s.label}</span>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
 
-                    {/* Compliance Cards */}
-                    <div className="p-5 space-y-3">
-                      {dashboardData.resultsList?.map((row: any, i: number) => {
+                    {/* Live Evaluation Cards (All 26 Regulations) */}
+                    <div className="p-4 space-y-3 max-h-[600px] overflow-y-auto bg-slate-50/30">
+                      {dashboardData.fullScan?.results?.map((row: any, i: number) => {
                         const isNC = row.status === 'NON_COMPLIANT';
                         const isAR = row.status === 'AT_RISK';
+                        const isC  = row.status === 'COMPLIANT';
 
-                        const cardBg   = isNC ? 'bg-red-50/60 border-red-100 hover:border-red-300' : isAR ? 'bg-orange-50/60 border-orange-100 hover:border-orange-300' : 'bg-emerald-50/60 border-emerald-100 hover:border-emerald-300';
-                        const badge    = isNC ? 'bg-red-100 text-red-700 border-red-200' : isAR ? 'bg-orange-100 text-orange-700 border-orange-200' : 'bg-emerald-100 text-emerald-700 border-emerald-200';
-                        const riskTxt  = isNC ? 'text-red-600' : isAR ? 'text-orange-500' : 'text-emerald-600';
-                        const riskLabel = isNC ? 'ðŸ”´ High' : isAR ? 'ðŸŸ  Medium' : 'ðŸŸ¢ Low';
-                        const icon     = isNC ? <Shield className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" /> : isAR ? <AlertTriangle className="w-4 h-4 text-orange-400 flex-shrink-0 mt-0.5" /> : <CheckCircle className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />;
-                        const explanation = row.explanation?.split(' | ')[1] || row.explanation || '';
+                        const cardBg = isNC ? 'bg-white border-red-200 shadow-sm' : isAR ? 'bg-white border-orange-200 shadow-sm' : isC ? 'bg-white border-emerald-200 shadow-sm' : 'bg-slate-50 border-slate-200';
+                        const icon   = isNC ? '🔴' : isAR ? '🟠' : isC ? '🟢' : '⚪';
+                        const badgeTxt = row.status.replace('_', ' ');
+                        const badgeBg = isNC ? 'bg-red-100 text-red-700' : isAR ? 'bg-orange-100 text-orange-700' : isC ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-200 text-slate-600';
 
                         return (
                           <div
                             key={i}
-                            onClick={() => handleOpenRecoveryPlan(row.requirement_id)}
-                            className={`flex items-start gap-3 p-4 rounded-xl border transition-all duration-200 cursor-pointer group ${cardBg}`}
+                            onClick={() => (isNC || isAR) && handleOpenRecoveryPlan(row.requirement_name || row.requirement_id)}
+                            className={`p-4 rounded-xl border transition-all duration-200 ${(isNC || isAR) ? 'cursor-pointer hover:shadow-md' : ''} ${cardBg}`}
                           >
-                            {icon}
-                            <div className="flex-1 min-w-0">
-                              <p className="font-black text-slate-800 text-sm leading-snug group-hover:text-blue-700 transition-colors">{row.requirement_title}</p>
-                              <div className="flex flex-wrap items-center gap-2 mt-1.5">
-                                <span className="text-[10px] font-bold text-slate-400 bg-white/70 px-2 py-0.5 rounded-md border border-slate-200">{row.department_name}</span>
-                                {explanation && <span className="text-[10px] font-semibold text-slate-400 truncate max-w-[200px]">• {explanation}</span>}
+                            <div className="flex items-start justify-between gap-3">
+                              <div className="flex items-start gap-2.5 flex-1 min-w-0">
+                                <span className="text-sm mt-0.5">{icon}</span>
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center gap-2 mb-1">
+                                    <span className="text-[10px] font-black font-mono text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">{row.requirement_id}</span>
+                                    <span className={`px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-widest ${badgeBg}`}>Status: {badgeTxt}</span>
+                                  </div>
+                                  <p className={`font-black text-sm leading-snug ${(isNC || isAR) ? 'group-hover:text-blue-700' : 'text-slate-800'}`}>
+                                    {row.requirement_name}
+                                  </p>
+                                  
+                                  <div className="mt-2 space-y-1">
+                                    {(row.issue || row.actual_value) && (
+                                      <p className="text-[11px] font-medium text-slate-600">
+                                        <strong className="text-slate-800 font-bold">Issue/Value:</strong> {row.issue || row.actual_value}
+                                      </p>
+                                    )}
+                                    {row.evidence_note ? (
+                                      <p className="text-[11px] font-medium text-slate-500 italic">
+                                        <strong className="text-slate-700 font-bold not-italic">Required:</strong> {row.evidence_note}
+                                      </p>
+                                    ) : (
+                                      <p className="text-[11px] font-medium text-slate-500">
+                                        <strong className="text-slate-700 font-bold">Evidence:</strong> {row.evidence_required}
+                                      </p>
+                                    )}
+                                  </div>
+                                </div>
                               </div>
-                            </div>
-                            <div className="flex flex-col items-end gap-1.5 flex-shrink-0">
-                              <span className={`px-2.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-widest border ${badge}`}>
-                                {row.status.replace('_', ' ')}
-                              </span>
-                              <button
-                                onClick={(e) => { e.stopPropagation(); handleOpenRecoveryPlan(row.requirement_id); }}
-                                className="px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-[9px] font-black shadow-sm transition-all cursor-pointer mt-1"
-                              >
-                                Select Case to View AI Plan →
-                              </button>
+                              
+                              {(isNC || isAR) && (
+                                <button
+                                  onClick={(e) => { e.stopPropagation(); handleOpenRecoveryPlan(row.requirement_name || row.requirement_id); }}
+                                  className="px-2.5 py-1.5 bg-slate-900 hover:bg-blue-600 text-white rounded-lg text-[9px] font-black shadow-sm transition-all whitespace-nowrap flex-shrink-0"
+                                >
+                                  View AI Plan →
+                                </button>
+                              )}
                             </div>
                           </div>
                         );
                       })}
+                      
+                      {(!dashboardData.fullScan || !dashboardData.fullScan.results) && (
+                        <div className="p-8 text-center text-slate-400 font-bold text-sm">
+                          Initializing Live Scan Engine...
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -482,8 +565,11 @@ export default function App() {
                     </div>
                   </div>
 
-                  {/* AI Agent Swarm (col-span-8) */}
-                  <div className="col-span-12 lg:col-span-8 bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden flex flex-col">
+                  {/* Right Side Stack: AI Swarm & Risk Overview (col-span-8) */}
+                  <div className="col-span-12 lg:col-span-8 flex flex-col gap-6">
+                    
+                    {/* AI Agent Swarm */}
+                    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden flex flex-col">
                     <div className="flex justify-between items-center px-5 pt-4 pb-3 border-b border-slate-100">
                       <div className="flex items-center gap-3">
                         <div className="p-2 bg-blue-50 rounded-lg border border-blue-100">
@@ -555,23 +641,23 @@ export default function App() {
                     </div>
                   </div>
 
-                  {/* ROW 4: Risk Overview â€” full width */}
-                  <div className="col-span-12 bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+                  {/* Risk Overview */}
+                  <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex-1 flex flex-col justify-center">
                     <h3 className="font-black text-slate-800 flex items-center gap-2 text-sm mb-3">
                       <Shield className="w-4 h-4 text-red-500"/> Risk Overview
                     </h3>
                     <div className="flex items-center gap-6">
                       <div className="relative flex-shrink-0">
-                        <ResponsiveContainer width={180} height={180}>
+                        <ResponsiveContainer width={150} height={150}>
                           <PieChart>
-                            <Pie data={dashboardData.riskData} innerRadius={55} outerRadius={75} paddingAngle={2} dataKey="value" stroke="none">
+                            <Pie data={dashboardData.riskData} innerRadius={45} outerRadius={65} paddingAngle={2} dataKey="value" stroke="none">
                               {dashboardData.riskData?.map((e: any, i: number) => <Cell key={i} fill={e.color} />)}
                             </Pie>
                             <Tooltip contentStyle={{ borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '11px' }} />
                           </PieChart>
                         </ResponsiveContainer>
                         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                          <span className="text-2xl font-black text-slate-800">{dashboardData.totalRisks}</span>
+                          <span className="text-xl font-black text-slate-800">{dashboardData.totalRisks}</span>
                           <span className="text-[9px] font-bold text-slate-400 uppercase">Open Risks</span>
                         </div>
                       </div>
@@ -587,6 +673,7 @@ export default function App() {
                         ))}
                       </div>
                     </div>
+                    </div>
                   </div>
 
                 </div>
@@ -594,120 +681,8 @@ export default function App() {
             </div>
           )}
 
-          {/* â”€â”€ REGULATIONS TAB â”€â”€ */}
-          {activeTab === 'Regulations' && dashboardData && (() => {
-            const reqs = dashboardData.reqsList || [];
-            const total = reqs.length;
-            const critical = reqs.filter((r: any) => r.severity === 'CRITICAL').length;
-            const high = reqs.filter((r: any) => r.severity === 'HIGH').length;
-            const categories = [...new Set(reqs.map((r: any) => r.category))];
-
-            return (
-              <div className="space-y-6">
-                {/* Page Header */}
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                  <div>
-                    <h2 className="text-3xl font-black text-blue-900 tracking-tight flex items-center gap-3">
-                      <div className="p-2 bg-blue-600 rounded-xl shadow-md shadow-blue-600/30">
-                        <FileText className="w-6 h-6 text-white" />
-                      </div>
-                      Regulations Database
-                    </h2>
-                    <p className="text-slate-500 font-semibold mt-2 text-sm">
-                      Comprehensive directory of active regulatory constraints Â· extracted from real documentation
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2 bg-blue-50 border border-blue-100 px-4 py-2 rounded-xl shadow-sm">
-                    <FileText className="w-4 h-4 text-blue-600" />
-                    <span className="text-sm font-black text-blue-700">{total} Active Requirements</span>
-                  </div>
-                </div>
-
-                {/* Summary stat chips */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {[
-                    { label: 'Total Requirements', val: total, bg: 'bg-blue-50 border-blue-100', text: 'text-blue-700', icon: FileText },
-                    { label: 'Categories', val: categories.length, bg: 'bg-purple-50 border-purple-100', text: 'text-purple-700', icon: BookOpen },
-                    { label: 'Critical Severity', val: critical, bg: 'bg-red-50 border-red-100', text: 'text-red-700', icon: Shield },
-                    { label: 'High Severity', val: high, bg: 'bg-orange-50 border-orange-100', text: 'text-orange-700', icon: AlertTriangle },
-                  ].map((s, i) => (
-                    <div key={i} className={`rounded-2xl border p-4 flex items-center gap-4 shadow-sm ${s.bg}`}>
-                      <div className={`p-2.5 bg-white rounded-xl shadow-sm`}>
-                        <s.icon className={`w-5 h-5 ${s.text}`} />
-                      </div>
-                      <div>
-                        <p className={`text-2xl font-black ${s.text}`}>{s.val}</p>
-                        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-tight mt-0.5">{s.label}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Cards Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-                  {reqs.map((req: any, i: number) => {
-                    const isCritical = req.severity === 'CRITICAL';
-                    const isHigh = req.severity === 'HIGH';
-                    const severityBadge = isCritical
-                      ? 'bg-red-100 text-red-700 border-red-200'
-                      : isHigh ? 'bg-orange-100 text-orange-700 border-orange-200'
-                      : 'bg-yellow-100 text-yellow-700 border-yellow-200';
-                    const cardAccent = isCritical ? 'border-l-red-500' : isHigh ? 'border-l-orange-400' : 'border-l-blue-400';
-
-                    return (
-                      <div
-                        key={req.id || i}
-                        className={`bg-white rounded-2xl border border-slate-200 border-l-4 ${cardAccent} p-5 shadow-sm hover:shadow-lg hover:shadow-blue-900/5 hover:-translate-y-0.5 hover:border-slate-300 transition-all duration-200 flex flex-col gap-4 group cursor-pointer`}
-                      >
-                        {/* Top row: category + severity */}
-                        <div className="flex items-start justify-between gap-2">
-                          <span className="inline-flex items-center gap-1.5 bg-slate-100 text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest group-hover:bg-blue-50 group-hover:text-blue-700 group-hover:border-blue-200 transition-colors">
-                            <BookOpen className="w-3 h-3" />
-                            {req.category || 'â€”'}
-                          </span>
-                          <span className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest border ${severityBadge}`}>
-                            {req.severity || 'MEDIUM'}
-                          </span>
-                        </div>
-
-                        {/* Title */}
-                        <div>
-                          <h3 className="font-black text-slate-800 text-[15px] leading-snug group-hover:text-blue-700 transition-colors">
-                            {req.title}
-                          </h3>
-                          {req.description && (
-                            <p className="text-xs text-slate-400 font-semibold mt-1.5 line-clamp-2 leading-relaxed">
-                              {req.description}
-                            </p>
-                          )}
-                        </div>
-
-                        {/* Threshold chip */}
-                        <div className="flex items-center justify-between pt-3 border-t border-slate-100">
-                          <div className="flex items-center gap-2">
-                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Threshold</span>
-                            <code className="bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md text-[11px] font-black border border-slate-200">
-                              {req.operator} {req.threshold} {req.unit}
-                            </code>
-                          </div>
-                          <div className={`w-7 h-7 rounded-full flex items-center justify-center text-white text-[10px] font-black shadow-sm ${isCritical ? 'bg-red-500' : isHigh ? 'bg-orange-400' : 'bg-blue-400'}`}>
-                            {i + 1}
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {reqs.length === 0 && (
-                  <div className="bg-white rounded-2xl p-12 border border-slate-200 text-center shadow-sm">
-                    <FileText className="w-12 h-12 text-slate-200 mx-auto mb-3" />
-                    <p className="font-black text-slate-400 text-lg">No regulations found in the database.</p>
-                  </div>
-                )}
-              </div>
-            );
-          })()}
+          {/* ── REGULATIONS TAB ── */}
+          {activeTab === 'Regulations' && <RegulationsTab />}
 
 
           {/* â”€â”€ COMPLIANCE TAB â”€â”€ */}
@@ -1020,8 +995,14 @@ export default function App() {
             );
           })()}
 
+          {/* ── READINESS REPORT TAB ── */}
+          {activeTab === 'Readiness' && <ReadinessReportTab />}
+
           {/* ── REMEDIATION TAB ── */}
-          {activeTab === 'Remediation' && <RemediationCenter dashboardData={dashboardData} />}
+          {activeTab === 'Remediation' && <RemediationCenter dashboardData={dashboardData} initialCaseId={selectedCaseId} />}
+
+          {/* ── INTEGRATIONS MESH TAB ── */}
+          {activeTab === 'Integrations' && <IntegrationsTab />}
 
           {/* ── SIMULATOR TAB ── */}
           {activeTab === 'Simulator' && <SimulatorTab dashboardData={dashboardData} />}

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { 
   Search, Filter, Clock, ShieldAlert, CheckCircle, 
-  Settings, User, Server, AlertTriangle, FileText, ChevronDown,
+  Settings, User, Server, AlertTriangle, FileText,
   Download
 } from 'lucide-react';
 

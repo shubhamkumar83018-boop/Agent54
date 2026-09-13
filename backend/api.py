@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import List, Optional, Any
 from datetime import datetime, timezone
 from .database import get_db
 from . import models, agents
@@ -128,6 +128,164 @@ def predict_simulation(req: InstitutionalSimulationRequest, db: Session = Depend
     return orchestrator.trigger_institutional_prediction(req)
 
 @router.get("/audit")
-def get_audit_trail(db: Session = Depends(get_db)):
+def get_audit_trail(db: Any = Depends(get_db)):
     events = db.query(models.AgentRun).order_by(models.AgentRun.timestamp.desc()).limit(50).all()
     return events
+
+@router.get("/db/status")
+def get_db_status():
+    """Return database status, active engine, MongoDB Atlas connectivity and collection statistics."""
+    from .database import is_using_mongodb, DATABASE_TYPE
+    from .mongo_db import test_mongo_connection, is_mongo_configured, get_collection_stats
+    
+    using_mongo = is_using_mongodb()
+    mongo_test = test_mongo_connection()
+    
+    stats = {}
+    if using_mongo and mongo_test.get("connected"):
+        try:
+            stats = get_collection_stats()
+        except Exception:
+            pass
+            
+    return {
+        "active_engine": "mongodb" if using_mongo else "sqlite",
+        "configured_database_type": DATABASE_TYPE,
+        "is_mongo_configured": is_mongo_configured(),
+        "mongodb_connection": mongo_test,
+        "collection_stats": stats
+    }
+
+@router.post("/db/seed")
+def trigger_seed():
+    """Trigger seeding of default data into the active database (MongoDB Atlas or SQLite)."""
+    from .database import is_using_mongodb
+    if is_using_mongodb():
+        from .mongo_db import seed_mongo_from_files
+        stats = seed_mongo_from_files(drop_existing=True)
+        return {"status": "ok", "message": "MongoDB Atlas seeded successfully", "stats": stats}
+    else:
+        from .seed import seed_db
+        seed_db()
+        return {"status": "ok", "message": "SQLite database seeded successfully"}
+
+@router.get("/regulations/dataset")
+def get_regulations_dataset():
+    """Retrieve full official regulations dataset (from regulations.json or MongoDB Atlas)."""
+    import os
+    import json
+    from .database import is_using_mongodb
+    if is_using_mongodb():
+        from .mongo_db import get_mongo_db
+        try:
+            db = get_mongo_db()
+            records = list(db.vignan_regulations.find({}, {"_id": 0}))
+            if records:
+                return {
+                    "source": "mongodb_atlas",
+                    "count": len(records),
+                    "records": records
+                }
+        except Exception:
+            pass
+            
+    # Fallback to local regulations.json file
+    data_path = os.path.join(os.path.dirname(__file__), "data", "regulations.json")
+    if os.path.exists(data_path):
+        with open(data_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            return {
+                "source": "local_file",
+                "count": len(data.get("records", [])),
+                "dataset_name": data.get("dataset_name"),
+                "institution": data.get("institution"),
+                "records": data.get("records", [])
+            }
+    return {"source": "none", "count": 0, "records": []}
+
+class RemediationUpdateRequest(BaseModel):
+    owner: Optional[str] = None
+    action: Optional[str] = None
+    lead_time_days: Optional[int] = None
+    status: Optional[str] = None
+
+class RegulatoryAmendmentRequest(BaseModel):
+    title: str
+    summary: str
+    impacted_clauses: str
+
+class SyncRequest(BaseModel):
+    agent_id: Optional[str] = None
+
+@router.get("/integrations/status")
+def get_integrations_status():
+    """Returns real-time mesh connectivity for Inbound (Agents 1, 3, 53, 58) and Outbound (Agents 9, 57, 71)."""
+    from .integrations import integration_hub
+    return integration_hub.get_status()
+
+@router.post("/integrations/sync")
+def sync_integrations(req: Optional[SyncRequest] = None):
+    """Triggers real-time sync with connected agents."""
+    from .integrations import integration_hub
+    agent_id = req.agent_id if req else None
+    return integration_hub.trigger_sync(agent_id)
+
+@router.get("/readiness/report")
+def get_readiness_report(db: Any = Depends(get_db)):
+    """Compiles Pre-Inspection Readiness Dossier across AICTE, UGC, NBA, and NAAC criteria."""
+    orchestrator = agents.OrchestratorAgent(db)
+    return orchestrator.trigger_readiness_report()
+
+@router.post("/compliance/sweep")
+def trigger_compliance_sweep(db: Any = Depends(get_db)):
+    """Executes automated campus-wide compliance check schedule."""
+    orchestrator = agents.OrchestratorAgent(db)
+    return orchestrator.trigger_scheduled_sweep()
+
+@router.post("/regulations/amend")
+def amend_regulation(req: RegulatoryAmendmentRequest, db: Any = Depends(get_db)):
+    """Simulates/detects statutory amendment, marks affected requirements, and re-evaluates."""
+    orchestrator = agents.OrchestratorAgent(db)
+    return orchestrator.trigger_regulatory_amendment(req.title, req.dict())
+
+@router.get("/gaps/prioritized")
+def get_prioritized_gaps(db: Any = Depends(get_db)):
+    """Returns quantified gaps prioritized by regulatory severity and lead time to fix."""
+    orchestrator = agents.OrchestratorAgent(db)
+    report = orchestrator.trigger_readiness_report()
+    return report.get("prioritized_lead_time_gaps", [])
+
+@router.put("/remediation/{result_id}")
+def update_remediation(result_id: int, req: RemediationUpdateRequest, db: Any = Depends(get_db)):
+    """Assigns remediation owner, updates target lead time, and tracks closure."""
+    plan = db.query(models.RemediationPlan).filter(models.RemediationPlan.result_id == result_id).first()
+    if not plan:
+        plan = models.RemediationPlan(
+            result_id=result_id,
+            action=req.action or "Remediation initiated",
+            owner=req.owner or "Unassigned",
+            lead_time_days=req.lead_time_days or 30,
+            status=req.status or "IN_PROGRESS"
+        )
+        db.add(plan)
+    else:
+        if req.owner: plan.owner = req.owner
+        if req.action: plan.action = req.action
+        if req.lead_time_days is not None: plan.lead_time_days = req.lead_time_days
+        if req.status: plan.status = req.status
+    db.commit()
+    db.refresh(plan)
+    return plan
+
+@router.get("/compliance/full-scan")
+def get_full_compliance_scan():
+    """
+    Run Agent 54 full regulation scan:
+    Evaluates all 26 regulations from regulations.json against live institutional data.
+    Returns COMPLIANT / AT_RISK / NON_COMPLIANT / EVIDENCE_PENDING for each requirement.
+    """
+    try:
+        from .compliance_scan import run_full_compliance_scan
+        return run_full_compliance_scan()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Scan engine error: {str(e)}")

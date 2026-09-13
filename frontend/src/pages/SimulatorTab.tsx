@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { 
   PlayCircle, Activity, TrendingUp, TrendingDown, 
   Settings, Save, AlertTriangle, ShieldCheck, Zap

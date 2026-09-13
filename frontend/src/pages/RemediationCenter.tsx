@@ -31,371 +31,89 @@ export default function RemediationCenter({ dashboardData, initialCaseId }: Reme
   const auditList = dashboardData?.auditList || [];
   const totalOpenRisks = dashboardData?.totalRisks || 4;
   const criticalCount = dashboardData?.complianceData?.find((c: any) => c.name === 'Non-Compliant')?.value || 2;
-  const atRiskCount = dashboardData?.complianceData?.find((c: any) => c.name === 'At Risk')?.value || 2;
 
-  // Build complete list of ALL 6 regulations and recovery cases
-  const allRecoveryItems = [
-    {
-      id: 'FSR-CSE-001',
-      title: 'FSR-CSE-001',
-      dept: 'CSE',
-      deptId: 'DEPT-CSE',
-      severity: 'CRITICAL',
-      riskBadge: '🔴 Critical Risk',
-      category: 'Critical',
-      riskScore: 92,
-      required: '1 : 20',
-      actual: '1 : 26.67',
-      students: 1200,
-      currentValue: 45,
-      requiredValue: 60,
-      gapCount: 15,
-      gapUnit: 'faculty members',
-      status: '🔴 NON-COMPLIANT',
-      formula: {
-        totalStudents: 1200,
-        targetRatio: '1 : 20',
-        requiredStaff: 60,
-        currentStaff: 45,
-        gap: 15
-      },
-      impact: '15 additional qualified faculty members are required to reach the regulatory 1:20 threshold.',
-      flow: {
-        req: '1 : 20',
-        actual: '1 : 26.67',
-        gap: '+6.67 overload',
-        correction: '+15 Faculty'
-      },
-      recoveryPlan: [
-        { step: '01', title: 'Recruit 15 qualified faculty', owner: 'HR Department', support: 'CSE Dean', lead: '8–12 weeks', priority: 'Critical', status: '🔴 In Progress' },
-        { step: '02', title: 'Assign temporary teaching support', owner: 'CSE Dean', support: 'Academic Council', lead: '1–2 weeks', priority: 'High', status: '🟡 In Progress' },
-        { step: '03', title: 'Verify appointment & qualification evidence', owner: 'Registrar', support: 'HR Team', lead: '3–5 days', priority: 'Medium', status: '🔵 Pending Verification' },
-        { step: '04', title: 'Re-run compliance verification', owner: 'Agent54 Engine', support: 'Compliance Officer', lead: 'Immediate', priority: 'Standard', status: '🟢 Target: 1:20' }
-      ],
-      whyText: 'The current CSE faculty strength (45) does not satisfy the required 1:20 ratio for 1,200 students. Adding 15 qualified faculty is the minimum correction required to reach compliance.',
-      evidence: [
-        'Faculty appointment records',
-        'Qualification certificates',
-        'Updated faculty database',
-        'Department approval'
-      ]
-    },
-    {
-      id: 'REQ-COMM-001',
-      title: 'Mandatory Anti-Ragging Committee Active Status',
-      dept: 'Institutional Governance',
-      deptId: 'INST-001',
-      severity: 'CRITICAL',
-      riskBadge: '🔴 Critical Risk',
-      category: 'Critical',
-      riskScore: 95,
-      required: 'Active Status',
-      actual: 'Lapsed 40 Days Ago',
-      students: 320,
-      currentValue: 0,
-      requiredValue: 1,
-      gapCount: 1,
-      gapUnit: 'reconstitution order',
-      status: '🔴 NON-COMPLIANT',
-      formula: {
-        totalStudents: 320,
-        targetRatio: 'Statutory Active',
-        requiredStaff: 1,
-        currentStaff: 0,
-        gap: 1
-      },
-      impact: 'Statutory mandate requires immediate committee reconstitution and member notification.',
-      flow: {
-        req: 'Active Status',
-        actual: 'Lapsed (40d)',
-        gap: 'Mandate Violation',
-        correction: 'Reconstitute Committee'
-      },
-      recoveryPlan: [
-        { step: '01', title: 'Draft committee reconstitution order', owner: 'Registrar', support: 'Legal Officer', lead: '2 days', priority: 'Critical', status: '🔴 In Progress' },
-        { step: '02', title: 'Appoint faculty & student members', owner: 'Principal / Vice Chancellor', support: 'Deans', lead: '3 days', priority: 'Critical', status: '🔴 In Progress' },
-        { step: '03', title: 'Upload signed notification & minutes', owner: 'Registrar Office', support: 'IQAC', lead: '1 day', priority: 'High', status: '🔵 Pending Verification' },
-        { step: '04', title: 'Re-verify committee compliance status', owner: 'Agent54 Engine', support: 'Compliance Team', lead: 'Immediate', priority: 'Standard', status: '🟢 Target: Active' }
-      ],
-      whyText: 'Statutory anti-ragging committee expired 40 days ago. Immediate reconstitution order is mandated by UGC/University Regulations.',
-      evidence: [
-        'Reconstitution order copy',
-        'Member appointment letters',
-        'Student representative list',
-        'Gazette / Portal notification'
-      ]
-    },
-    {
-      id: 'REQ-QUAL-001',
-      title: 'Minimum PhD Faculty Cadre Ratio',
-      dept: 'Mechanical Engineering',
-      deptId: 'DEPT-MECH',
-      severity: 'HIGH RISK',
-      riskBadge: '🟠 High Risk',
-      category: 'At Risk',
-      riskScore: 78,
-      required: '40% PhD Ratio',
-      actual: '22.2% PhD (2 of 9)',
-      students: 80,
-      currentValue: 2,
-      requiredValue: 4,
-      gapCount: 2,
-      gapUnit: 'PhD faculty',
-      status: '🔴 NON-COMPLIANT',
-      formula: {
-        totalStudents: 80,
-        targetRatio: '40% Cadre',
-        requiredStaff: 4,
-        currentStaff: 2,
-        gap: 2
-      },
-      impact: '2 additional PhD-qualified faculty are required in Mechanical Dept to satisfy the 40% cadre norm.',
-      flow: {
-        req: '40% PhD Cadre',
-        actual: '22.2% Actual',
-        gap: '-17.8% Cadre Gap',
-        correction: '+2 PhD Faculty'
-      },
-      recoveryPlan: [
-        { step: '01', title: 'Issue targeted recruitment call for PhD holders', owner: 'HoD Mechanical', support: 'HR Department', lead: '60 days', priority: 'High', status: '🟠 In Progress' },
-        { step: '02', title: 'Provide fast-track PhD completion support', owner: 'Dean Academics', support: 'Research Cell', lead: '90 days', priority: 'Medium', status: '🟡 In Progress' },
-        { step: '03', title: 'Verify doctoral degree certificates', owner: 'Academic Council', support: 'HR', lead: '5 days', priority: 'High', status: '🔵 Pending Verification' },
-        { step: '04', title: 'Recalculate PhD cadre percentage', owner: 'Agent54 Engine', support: 'IQAC Officer', lead: 'Immediate', priority: 'Standard', status: '🟢 Target: 40%' }
-      ],
-      whyText: 'Mechanical department has only 2 PhD faculty out of 9 (22.2%), below the mandatory 40% UGC cadre ratio.',
-      evidence: [
-        'Doctoral degree certificates',
-        'Relieving & Joining reports',
-        'Updated department roster',
-        'Academic Council approval'
-      ]
-    },
-    {
-      id: 'LAB-INFRA-CHECK',
-      title: 'Laboratory Infrastructure Readiness',
-      dept: 'ECE Department',
-      deptId: 'DEPT-ECE',
-      severity: 'MEDIUM RISK',
-      riskBadge: '🟡 Medium Risk',
-      category: 'At Risk',
-      riskScore: 55,
-      required: 'All Functional',
-      actual: '1 Lab Maintenance',
-      students: 80,
-      currentValue: 1,
-      requiredValue: 2,
-      gapCount: 1,
-      gapUnit: 'lab restoration',
-      status: '🟡 AT_RISK',
-      formula: {
-        totalStudents: 80,
-        targetRatio: '100% Functional',
-        requiredStaff: 2,
-        currentStaff: 1,
-        gap: 1
-      },
-      impact: 'Communication Systems Lab needs signal generator replacement to restore full practical session capacity.',
-      flow: {
-        req: '2 Functional Labs',
-        actual: '1 Under Repair',
-        gap: '1 Lab Capacity Gap',
-        correction: 'Replace Generator'
-      },
-      recoveryPlan: [
-        { step: '01', title: 'Expedite signal generator procurement & installation', owner: 'HoD ECE', support: 'Maintenance Cell', lead: '10 days', priority: 'Medium', status: '🟡 In Progress' },
-        { step: '02', title: 'Temporarily route sessions to Virtual Labs', owner: 'Lab In-Charge', support: 'IT Infra', lead: '1 day', priority: 'Low', status: '🟡 Active' },
-        { step: '03', title: 'Inspect equipment commissioning certificate', owner: 'Store Officer', support: 'ECE Tech', lead: '2 days', priority: 'Medium', status: '🔵 Pending Verification' },
-        { step: '04', title: 'Re-run lab infrastructure readiness check', owner: 'Agent54 Engine', support: 'Inspection Team', lead: 'Immediate', priority: 'Standard', status: '🟢 Target: Functional' }
-      ],
-      whyText: 'Communication Systems Lab in ECE is currently under maintenance for signal generator replacement, creating a temporary lab session bottleneck.',
-      evidence: [
-        'Equipment purchase order',
-        'Commissioning certificate',
-        'Lab inspection logbook',
-        'HoD handover report'
-      ]
-    },
-    {
-      id: 'CRED-ECE-001',
-      title: 'CRED-ECE-001',
-      dept: 'ECE Department',
-      deptId: 'DEPT-ECE',
-      severity: 'AT RISK',
-      riskBadge: '🟡 At Risk',
-      category: 'At Risk',
-      riskScore: 48,
-      required: '160 Credits',
-      actual: '158 Assigned',
-      students: 80,
-      currentValue: 158,
-      requiredValue: 160,
-      gapCount: 2,
-      gapUnit: 'credits shortfall',
-      status: '🟡 AT_RISK',
-      formula: {
-        totalStudents: 80,
-        targetRatio: '160 Credits',
-        requiredStaff: 160,
-        currentStaff: 158,
-        gap: 2
-      },
-      impact: '2-credit curriculum shortfall in B.Tech ECE program requires academic council credit realignment.',
-      flow: {
-        req: '160 Credits Norm',
-        actual: '158 Assigned',
-        gap: '-2 Credits Gap',
-        correction: '+2 Credit Elective'
-      },
-      recoveryPlan: [
-        { step: '01', title: 'Approve 2-credit elective / mini-project module', owner: 'Board of Studies', support: 'Academic Council', lead: '14 days', priority: 'Medium', status: '🟡 In Progress' },
-        { step: '02', title: 'Update course credit matrix in ERP', owner: 'Controller of Exams', support: 'IT Cell', lead: '3 days', priority: 'Medium', status: '🟡 In Progress' },
-        { step: '03', title: 'Verify gazette curriculum amendment', owner: 'Dean Academics', support: 'BOS Convener', lead: '2 days', priority: 'Medium', status: '🔵 Pending Verification' },
-        { step: '04', title: 'Re-evaluate program credit total', owner: 'Agent54 Engine', support: 'Academic Auditor', lead: 'Immediate', priority: 'Standard', status: '🟢 Target: 160 Credits' }
-      ],
-      whyText: 'B.Tech ECE curriculum schema currently assigns 158 credits, leaving a 2-credit shortfall against statutory 160-credit degree requirements.',
-      evidence: [
-        'Board of Studies resolution',
-        'Academic Council notification',
-        'Updated course catalog',
-        'ERP credit matrix dump'
-      ]
-    },
-    {
-      id: 'REQ-LIB-001',
-      title: 'Library Titles per Student',
-      dept: 'Library & Learning Resource',
-      deptId: 'LIB-001',
+  // Build complete list of recovery cases dynamically from the Live Scan!
+  const dynamicRecoveryItems = dashboardData?.fullScan?.results
+    ?.filter((r: any) => r.status === 'NON_COMPLIANT' || r.status === 'AT_RISK')
+    .map((r: any) => {
+      const isCritical = r.status === 'NON_COMPLIANT';
+      return {
+        id: r.requirement_id,
+        title: r.requirement_name || r.requirement_id,
+        dept: r.department || 'University Compliance',
+        deptId: 'DEPT-001',
+        severity: isCritical ? 'CRITICAL' : 'MEDIUM RISK',
+        riskBadge: isCritical ? '🔴 Critical Risk' : '🟡 Medium Risk',
+        category: isCritical ? 'Critical' : 'At Risk',
+        riskScore: isCritical ? 92 : 65,
+        required: r.required_value || 'Mandatory',
+        actual: r.actual_value || r.issue || 'Failed',
+        students: 0,
+        currentValue: 0,
+        requiredValue: 0,
+        gapCount: 1,
+        gapUnit: 'compliance gap',
+        status: isCritical ? '🔴 NON-COMPLIANT' : '🟡 AT_RISK',
+        formula: {
+          totalStudents: 0,
+          targetRatio: r.required_value || 'Compliance Target',
+          requiredStaff: 0,
+          currentStaff: 0,
+          gap: 1
+        },
+        impact: r.issue || 'Regulatory non-compliance detected requiring immediate remediation action.',
+        flow: {
+          req: r.required_value || 'Compliance',
+          actual: r.actual_value || 'Failed',
+          gap: 'Identified Gap',
+          correction: 'Apply Remediation'
+        },
+        recoveryPlan: [
+          { step: '01', title: `Analyze failure: ${r.issue || r.requirement_name}`, owner: r.owner || 'Compliance Officer', support: 'AI Agent Swarm', lead: '1 day', priority: 'High', status: '🔴 In Progress' },
+          { step: '02', title: `Submit evidence for: ${r.evidence_required || 'Verification'}`, owner: r.owner || 'Department Head', support: 'Registrar', lead: '3 days', priority: 'High', status: '🟡 Pending' },
+          { step: '03', title: 'Verify corrective action against regulation', owner: 'Agent54 Engine', support: 'IQAC', lead: '1 day', priority: 'Medium', status: '🔵 Pending Verification' },
+          { step: '04', title: 'Re-evaluate compliance status', owner: 'Agent54 Orchestrator', support: 'System', lead: 'Immediate', priority: 'Standard', status: '🟢 Target: Compliant' }
+        ],
+        whyText: r.issue || `The system detected that ${r.requirement_name} does not meet the regulatory standard.`,
+        evidence: [
+          r.evidence_required || 'Required compliance documentation',
+          'Approval records',
+          'System logs'
+        ]
+      };
+    }) || [];
+
+  // If there are no failed rules, provide a fallback "All Clear" item
+  if (dynamicRecoveryItems.length === 0) {
+    dynamicRecoveryItems.push({
+      id: 'ALL-CLEAR',
+      title: 'No Active Non-Compliances',
+      dept: 'University Wide',
+      deptId: 'UNI',
       severity: 'COMPLIANT',
       riskBadge: '🟢 Compliant / Safe',
       category: 'Compliant',
-      riskScore: 10,
-      required: '1 title per 10 students',
-      actual: '1 title per 7.8 students',
-      students: 320,
-      currentValue: 2500,
-      requiredValue: 2500,
+      riskScore: 0,
+      required: 'N/A',
+      actual: 'N/A',
+      students: 0,
+      currentValue: 0,
+      requiredValue: 0,
       gapCount: 0,
-      gapUnit: 'titles (Exceeds Target)',
+      gapUnit: 'N/A',
       status: '🟢 COMPLIANT',
-      formula: {
-        totalStudents: 320,
-        targetRatio: '1 : 10',
-        requiredStaff: 2500,
-        currentStaff: 2500,
-        gap: 0
-      },
-      impact: 'Library title capacity (2,500 titles for 320 students = 1:7.8) fully satisfies NBA Criterion 5 norms.',
-      flow: {
-        req: '1 : 10 Target',
-        actual: '1 : 7.8 Actual',
-        gap: '0 (Exceeds)',
-        correction: 'Maintain Status'
-      },
+      formula: { totalStudents: 0, targetRatio: 'N/A', requiredStaff: 0, currentStaff: 0, gap: 0 },
+      impact: 'All monitored systems are currently fully compliant. No active remediation plans required.',
+      flow: { req: 'N/A', actual: 'N/A', gap: '0', correction: 'Maintain' },
       recoveryPlan: [
-        { step: '01', title: 'Maintain quarterly journal & title acquisitions', owner: 'Librarian', support: 'Library Committee', lead: 'Ongoing', priority: 'Low', status: '🟢 Active' },
-        { step: '02', title: 'Verify e-journal digital access tokens', owner: 'Library Tech', support: 'NIC / Delnet', lead: 'Monthly', priority: 'Low', status: '🟢 Active' },
-        { step: '03', title: 'Inspect physical volume accession register', owner: 'Auditor', support: 'Library Team', lead: 'Quarterly', priority: 'Low', status: '🟢 Verified' },
-        { step: '04', title: 'Re-run NBA library adequacy check', owner: 'Agent54 Engine', support: 'IQAC Coordinator', lead: 'Immediate', priority: 'Standard', status: '🟢 Target Met' }
+        { step: '01', title: 'Continuous Monitoring Active', owner: 'Agent54 Engine', support: 'IQAC', lead: 'Ongoing', priority: 'Low', status: '🟢 Active' }
       ],
-      whyText: 'Library has 2,500 titles for 320 students (1:7.8 ratio), which comfortably exceeds the NBA statutory threshold of 1 title per 10 students.',
-      evidence: [
-        'Library accession register',
-        'E-journal subscription receipt',
-        'NBA audit compliance certificate',
-        'Physical inventory report'
-      ]
-    },
-    {
-      id: 'REQ-FSR-001',
-      title: 'Faculty-Student Ratio',
-      dept: 'CSE',
-      deptId: 'DEPT-CSE',
-      severity: 'CRITICAL',
-      riskBadge: '🔴 Critical Risk',
-      category: 'Critical',
-      riskScore: 92,
-      required: '<= 20 students per faculty',
-      actual: '1200 / 45 = 26.67 students',
-      students: 1200,
-      currentValue: 45,
-      requiredValue: 60,
-      gapCount: 15,
-      gapUnit: 'faculty members',
-      status: '🔴 NON-COMPLIANT',
-      formula: {
-        totalStudents: 1200,
-        targetRatio: '<= 20',
-        requiredStaff: 60,
-        currentStaff: 45,
-        gap: 15
-      },
-      impact: '15 additional qualified faculty members are required to reach the regulatory <= 20 threshold.',
-      flow: {
-        req: '<= 20 Target',
-        actual: '26.67 Actual',
-        gap: '+6.67 overload',
-        correction: '+15 Faculty'
-      },
-      recoveryPlan: [
-        { step: '01', title: 'Recruit 15 qualified faculty', owner: 'HR Department', support: 'CSE Dean', lead: '8–12 weeks', priority: 'Critical', status: '🔴 In Progress' },
-        { step: '02', title: 'Assign temporary teaching support', owner: 'CSE Dean', support: 'Academic Council', lead: '1–2 weeks', priority: 'High', status: '🟡 In Progress' },
-        { step: '03', title: 'Verify appointment & qualification evidence', owner: 'Registrar', support: 'HR Team', lead: '3–5 days', priority: 'Medium', status: '🔵 Pending Verification' },
-        { step: '04', title: 'Re-run compliance verification', owner: 'Agent54 Engine', support: 'Compliance Officer', lead: 'Immediate', priority: 'Standard', status: '🟢 Target: <= 20' }
-      ],
-      whyText: 'The current CSE faculty strength (45) does not satisfy the required <= 20 ratio for 1,200 students. Adding 15 qualified faculty is the minimum correction required to reach compliance.',
-      evidence: [
-        'Faculty appointment records',
-        'Qualification certificates',
-        'Updated faculty database',
-        'Department approval'
-      ]
-    },
-    {
-      id: 'REQ-FSR-002',
-      title: 'Faculty-Student Ratio (Amended)',
-      dept: 'CSE',
-      deptId: 'DEPT-CSE',
-      severity: 'HIGH RISK',
-      riskBadge: '🟠 High Risk',
-      category: 'At Risk',
-      riskScore: 75,
-      required: '<= 25 students per faculty',
-      actual: '1200 / 45 = 26.67 students',
-      students: 1200,
-      currentValue: 45,
-      requiredValue: 48,
-      gapCount: 3,
-      gapUnit: 'faculty members',
-      status: '🔴 NON-COMPLIANT',
-      formula: {
-        totalStudents: 1200,
-        targetRatio: '<= 25',
-        requiredStaff: 48,
-        currentStaff: 45,
-        gap: 3
-      },
-      impact: '3 additional qualified faculty members are required to reach the amended <= 25 threshold.',
-      flow: {
-        req: '<= 25 Target',
-        actual: '26.67 Actual',
-        gap: '+1.67 overload',
-        correction: '+3 Faculty'
-      },
-      recoveryPlan: [
-        { step: '01', title: 'Recruit 3 qualified faculty', owner: 'HR Department', support: 'CSE Dean', lead: '4–8 weeks', priority: 'High', status: '🟠 In Progress' },
-        { step: '02', title: 'Assign temporary teaching support', owner: 'CSE Dean', support: 'Academic Council', lead: '1–2 weeks', priority: 'Medium', status: '🟡 In Progress' },
-        { step: '03', title: 'Verify appointment evidence', owner: 'Registrar', support: 'HR Team', lead: '3–5 days', priority: 'Medium', status: '🔵 Pending Verification' },
-        { step: '04', title: 'Re-run amended ratio check', owner: 'Agent54 Engine', support: 'Compliance Officer', lead: 'Immediate', priority: 'Standard', status: '🟢 Target: <= 25' }
-      ],
-      whyText: 'The current CSE faculty strength (45) does not satisfy the amended <= 25 ratio for 1,200 students. Adding 3 qualified faculty is the minimum correction required to reach compliance under new norms.',
-      evidence: [
-        'Faculty appointment records',
-        'Qualification certificates',
-        'Updated faculty database',
-        'Department approval'
-      ]
-    }
-  ];
+      whyText: 'No regulatory violations detected in the latest live scan.',
+      evidence: ['Live scan log']
+    });
+  }
+
+  const allRecoveryItems = dynamicRecoveryItems;
 
   const [activeCategory, setActiveCategory] = useState<'All' | 'Critical' | 'At Risk' | 'Compliant'>('All');
   
@@ -407,13 +125,28 @@ export default function RemediationCenter({ dashboardData, initialCaseId }: Reme
     return true;
   });
 
-  const [selectedId, setSelectedId] = useState<string>(initialCaseId || 'REQ-FSR-001');
+  // Helper: find item matching an id/title string (case-insensitive, partial match)
+  const findItemByKey = (key: string) => {
+    if (!key) return null;
+    const lower = key.toLowerCase();
+    return allRecoveryItems.find(
+      item =>
+        item.id === key ||
+        item.id.toLowerCase().includes(lower) ||
+        item.title.toLowerCase().includes(lower) ||
+        lower.includes(item.title.toLowerCase())
+    ) || null;
+  };
+
+  const resolvedInitialId = initialCaseId
+    ? (findItemByKey(initialCaseId)?.id || 'REQ-FSR-001')
+    : 'REQ-FSR-001';
+
+  const [selectedId, setSelectedId] = useState<string>(resolvedInitialId);
 
   useEffect(() => {
     if (initialCaseId) {
-      const match = allRecoveryItems.find(
-        item => item.id === initialCaseId || item.id.toLowerCase().includes(initialCaseId.toLowerCase())
-      );
+      const match = findItemByKey(initialCaseId);
       if (match) {
         setSelectedId(match.id);
         resetSimulation();
