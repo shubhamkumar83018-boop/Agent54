@@ -699,10 +699,6 @@ const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
         </div>
       )}
 
-      {/* Footer */}
-      <footer className="relative z-10 py-3 text-center text-[10px] font-bold text-white/80 bg-slate-950/40 backdrop-blur-xs">
-        © 2026 Vignan's Foundation for Science, Technology & Research (Deemed to be University) • All Rights Reserved
-      </footer>
     </div>
   );
 };
