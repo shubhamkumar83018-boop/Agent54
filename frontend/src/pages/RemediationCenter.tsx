@@ -33,27 +33,28 @@ export default function RemediationCenter({ dashboardData, initialCaseId }: Reme
   const criticalCount = dashboardData?.complianceData?.find((c: any) => c.name === 'Non-Compliant')?.value || 2;
 
   // Build complete list of recovery cases dynamically from the Live Scan!
-  const dynamicRecoveryItems: any[] = dashboardData?.fullScan?.results
-    ?.filter((r: any) => r.status === 'NON_COMPLIANT' || r.status === 'AT_RISK')
+  const dynamicRecoveryItems: any[] = (dashboardData?.fullScan?.results || dashboardData?.resultsList || [])
+    ?.filter((r: any) => r.status !== 'COMPLIANT')
     .map((r: any) => {
-      const isCritical = r.status === 'NON_COMPLIANT';
+      const isCritical = r.severity === 'CRITICAL' || r.status === 'NON_COMPLIANT';
+      const isPending = r.status === 'EVIDENCE_PENDING';
       return {
         id: r.requirement_id,
-        title: r.requirement_name || r.requirement_id,
-        dept: r.department || 'University Compliance',
+        title: r.requirement_title || r.requirement_name || r.requirement_id,
+        dept: r.owner || r.department_name || r.department || 'University Compliance',
         deptId: 'DEPT-001',
-        severity: isCritical ? 'CRITICAL' : 'MEDIUM RISK',
-        riskBadge: isCritical ? '🔴 Critical Risk' : '🟡 Medium Risk',
-        category: isCritical ? 'Critical' : 'At Risk',
+        severity: isCritical ? 'CRITICAL' : isPending ? 'EVIDENCE PENDING' : 'MEDIUM RISK',
+        riskBadge: isCritical ? '🔴 Critical Lead Time' : isPending ? '🟡 Evidence Required' : '🟡 Review Required',
+        category: r.category || 'Compliance',
         riskScore: isCritical ? 92 : 65,
-        required: r.required_value || 'Mandatory',
-        actual: r.actual_value || r.issue || 'Failed',
+        required: r.required_value || 'Mandatory Standard',
+        actual: r.actual_value || 'Evidence Pending Submission',
         students: 0,
         currentValue: 0,
         requiredValue: 0,
         gapCount: 1,
-        gapUnit: 'compliance gap',
-        status: isCritical ? '🔴 NON-COMPLIANT' : '🟡 AT_RISK',
+        gapUnit: 'compliance checkpoint',
+        status: isCritical ? '🔴 CRITICAL ACTION' : '🟡 EVIDENCE PENDING',
         formula: {
           totalStudents: 0,
           targetRatio: r.required_value || 'Compliance Target',
@@ -61,24 +62,24 @@ export default function RemediationCenter({ dashboardData, initialCaseId }: Reme
           currentStaff: 0,
           gap: 1
         },
-        impact: r.issue || 'Regulatory non-compliance detected requiring immediate remediation action.',
+        impact: r.observation || `Evidence submission pending for ${r.source_document || 'Regulation'} Clause ${r.clause || ''}.`,
         flow: {
-          req: r.required_value || 'Compliance',
-          actual: r.actual_value || 'Failed',
-          gap: 'Identified Gap',
-          correction: 'Apply Remediation'
+          req: r.required_value || 'Statutory Norm',
+          actual: r.actual_value || 'Pending Records',
+          gap: r.gap || r.evidence_required || 'Audit Verification',
+          correction: 'Submit & Verify'
         },
         recoveryPlan: [
-          { step: '01', title: `Analyze failure: ${r.issue || r.requirement_name}`, owner: r.owner || 'Compliance Officer', support: 'AI Agent Swarm', lead: '1 day', priority: 'High', status: '🔴 In Progress' },
-          { step: '02', title: `Submit evidence for: ${r.evidence_required || 'Verification'}`, owner: r.owner || 'Department Head', support: 'Registrar', lead: '3 days', priority: 'High', status: '🟡 Pending' },
-          { step: '03', title: 'Verify corrective action against regulation', owner: 'Agent54 Engine', support: 'IQAC', lead: '1 day', priority: 'Medium', status: '🔵 Pending Verification' },
-          { step: '04', title: 'Re-evaluate compliance status', owner: 'Agent54 Orchestrator', support: 'System', lead: 'Immediate', priority: 'Standard', status: '🟢 Target: Compliant' }
+          { step: '01', title: `Review Clause Requirements: ${r.requirement_title || r.requirement_name}`, owner: r.owner || 'Compliance Officer', support: 'AI Agent Swarm', lead: '1 day', priority: 'High', status: '🔴 In Progress' },
+          { step: '02', title: `Collect & Ingest: ${r.evidence_required || 'Department Records'}`, owner: r.owner || 'Department Head', support: 'Registrar', lead: `${r.lead_time_days || 15} days`, priority: 'High', status: '🟡 Pending' },
+          { step: '03', title: 'Verify evidence conformity against regulatory clauses', owner: 'Agent 54 Compliance Engine', support: 'IQAC', lead: '1 day', priority: 'Medium', status: '🔵 Automated Check' },
+          { step: '04', title: 'Publish compliance verification & archive audit log', owner: 'Agent 54 Orchestrator', support: 'System', lead: 'Immediate', priority: 'Standard', status: '🟢 Target: Compliant' }
         ],
-        whyText: r.issue || `The system detected that ${r.requirement_name} does not meet the regulatory standard.`,
+        whyText: r.observation || r.notes || `Statutory clause ${r.clause || ''} requires formal verifiable institutional evidence.`,
         evidence: [
-          r.evidence_required || 'Required compliance documentation',
-          'Approval records',
-          'System logs'
+          r.evidence_required || 'Required statutory records & logs',
+          r.source_document || 'Official Board / Council Approval Orders',
+          'Automated Audit Trail Artifacts'
         ]
       };
     }) || [];
