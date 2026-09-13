@@ -317,8 +317,8 @@ export default function Dashboard() {
           })}
         </nav>
 
-        {/* Agent54 AI Chatbot Pill - Left side, 2cm above Admin */}
-        <div className="px-3" style={{ marginBottom: '2cm' }}>
+        {/* Agent54 AI Chatbot Pill - Directly above Admin section */}
+        <div className="px-3.5 py-2.5 border-t border-slate-100 bg-white">
           <button
             onClick={() => setChatbotOpen(true)}
             className="w-full group flex items-center gap-2.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white px-3.5 py-2.5 rounded-2xl shadow-md hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all duration-300 border border-white/20 cursor-pointer"
@@ -339,9 +339,9 @@ export default function Dashboard() {
           </button>
         </div>
 
-        {/* User Card / Auth Bar */}
-        <div className="p-3.5 border-t border-slate-100 bg-white">
-          <div className="bg-gradient-to-r from-slate-50 to-blue-50/40 rounded-2xl p-3.5 border border-slate-200/90 hover:border-blue-400 hover:shadow-md transition-all duration-200">
+        {/* User Card / Admin & Auth Bar */}
+        <div className="px-3.5 pb-3.5 bg-white">
+          <div className="bg-gradient-to-r from-slate-50 to-blue-50/40 rounded-2xl p-3 border border-slate-200/90 hover:border-blue-400 hover:shadow-md transition-all duration-200">
             <div 
               onClick={() => {
                 if (isAuthenticated) {
@@ -354,44 +354,28 @@ export default function Dashboard() {
               className="flex items-center justify-between cursor-pointer group"
               title={isAuthenticated ? "Click to view Profile" : "Click to go to Login Page"}
             >
-              <div className="flex items-center gap-3 overflow-hidden min-w-0">
-                <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 group-hover:from-blue-700 group-hover:to-indigo-800 flex items-center justify-center font-black text-base flex-shrink-0 text-white shadow-sm transition-all">
-                  {user?.name ? user.name.charAt(0).toUpperCase() : 'V'}
+              <div className="flex items-center gap-2.5 overflow-hidden min-w-0">
+                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 group-hover:from-blue-700 group-hover:to-indigo-800 flex items-center justify-center font-black text-sm flex-shrink-0 text-white shadow-sm transition-all">
+                  {user?.name ? user.name.charAt(0).toUpperCase() : 'A'}
                 </div>
                 <div className="truncate min-w-0">
-                  <p className="text-[13px] font-black text-slate-900 leading-tight truncate">{user?.name || 'Vignan Administrator'}</p>
-                  <div className="flex items-center gap-1.5 mt-1">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse flex-shrink-0"></span>
-                    <p className="text-[11px] text-blue-600 font-bold truncate capitalize">{user?.role || 'admin'}</p>
-                  </div>
+                  <p className="text-[13px] font-black text-slate-900 leading-tight truncate">{user?.name || 'Admin'}</p>
+                  <p className="text-[10px] text-blue-600 font-bold truncate leading-tight mt-0.5">{user?.role ? `${user.role.toUpperCase()} Operations` : 'University Operations'}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-1">
-                {isAuthenticated ? (
-                  <button 
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      logout();
-                      navigate('/');
-                    }} 
-                    title="Sign Out & Go to Login Page" 
-                    className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all cursor-pointer flex-shrink-0"
-                  >
-                    <LogOut className="w-5 h-5" />
-                  </button>
-                ) : (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      navigate('/');
-                    }}
-                    title="Go to Login Page"
-                    className="p-2 text-blue-600 hover:bg-blue-100 rounded-xl transition-all cursor-pointer flex-shrink-0"
-                  >
-                    <LogIn className="w-5 h-5" />
-                  </button>
-                )}
-              </div>
+              
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  logout();
+                  navigate('/');
+                }} 
+                title="Logout / Sign Out" 
+                className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 rounded-xl transition-all cursor-pointer flex-shrink-0 shadow-2xs"
+              >
+                <LogOut className="w-4 h-4 text-red-600" />
+                <span className="text-[11px] font-black text-red-600">Logout</span>
+              </button>
             </div>
           </div>
         </div>
