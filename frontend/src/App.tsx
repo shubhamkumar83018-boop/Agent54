@@ -388,23 +388,19 @@ export default function App() {
                   </div>
                 </div>
                 <div className="flex items-center gap-6">
-                  <div className="flex items-center gap-1">
-                    {[0, 1, 2, 3, 4, 5, 6].map((i) => (
-                      <div 
-                        key={i} 
-                        className="overflow-hidden cursor-pointer transition-transform duration-300 hover:scale-110 hover:-rotate-3"
-                        style={{ width: '40px', height: '48px', borderRadius: '50%' }}
+                  <div className="flex items-center gap-2.5">
+                    {['/badge_naac.png', '/badge_nirf.png', '/badge_nba.png', '/badge_aicte.png', '/badge_ugccare.png', '/badge_iic.png', '/badge_abet.png'].map((src, i) => (
+                      <div
+                        key={i}
+                        className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center cursor-pointer group"
+                        style={{ perspective: '1000px' }}
+                        title="Accreditation Badge"
                       >
-                        <img 
-                          src="/logos_cropped.jpg" 
-                          alt={`Accreditation ${i}`} 
-                          style={{ 
-                            height: '48px', 
-                            width: '280px', 
-                            maxWidth: 'none', 
-                            transform: `translateX(-${i * 40}px)`, 
-                            mixBlendMode: 'multiply' 
-                          }} 
+                        <img
+                          src={src}
+                          alt={`Accreditation ${i}`}
+                          className="w-full h-full object-contain filter drop-shadow-sm transition-all duration-700 ease-in-out group-hover:[transform:rotateY(360deg)] group-hover:scale-125"
+                          style={{ transformStyle: 'preserve-3d' }}
                         />
                       </div>
                     ))}
