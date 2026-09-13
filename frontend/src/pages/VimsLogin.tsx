@@ -83,26 +83,32 @@ const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
       {/* Subtle overlay only if needed for contrast, transparent backdrop */}
       <div className="absolute inset-0 bg-slate-950/20 z-0"></div>
 
-      {/* ── TOP HEADER (TOP LEFT VIGNAN LOGO & TOP RIGHT INDEPENDENT BADGES) ── */}
-      <header className="relative z-10 w-full px-8 py-5 flex items-center justify-between bg-transparent">
-        {/* Top Left: Vignan Logo */}
-        <div className="flex items-center gap-3.5">
-          <div className="w-11 h-11 rounded-2xl bg-blue-600 flex items-center justify-center text-white font-black text-2xl shadow-xl border border-blue-400/40">
-            V
-          </div>
-          <div>
-            <h1 className="text-xl font-black tracking-wide text-red-600 leading-none drop-shadow-sm">VIGNAN'S</h1>
-            <p className="text-[11px] text-white font-bold leading-tight mt-1 drop-shadow-md">
-              Foundation for Science, Technology & Research
-            </p>
-          </div>
+      {/* ── TOP HEADER (TOP LEFT VIGNAN LOGO [2ND IMAGE] & TOP RIGHT FLIPPING BADGES [1ST IMAGE]) ── */}
+      <header className="relative z-10 w-full px-6 sm:px-10 py-6 flex items-center justify-between bg-transparent">
+        {/* Top Left: 2nd Image Logo with background removed (mix-blend-multiply), enlarged, deep hover effect */}
+        <div className="flex items-center group cursor-pointer">
+          <img
+            src="/vignan_logo.png"
+            alt="Vignan's Foundation for Science, Technology & Research"
+            className="h-20 sm:h-24 md:h-28 lg:h-32 w-auto object-contain mix-blend-multiply filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] transition-all duration-500 hover:scale-110 hover:-translate-y-2.5 hover:drop-shadow-[0_30px_40px_rgba(0,0,0,0.85)] cursor-pointer"
+          />
         </div>
 
-        {/* Top Right: Independent Accreditation Badges without extra BG container */}
-        <div className="hidden sm:flex items-center gap-3">
+        {/* Top Right: Larger Accreditation Badges with Left-to-Right 3D Coin Flip Effect */}
+        <div className="hidden sm:flex items-center gap-3.5 md:gap-5">
           {['/badge_naac.png', '/badge_nirf.png', '/badge_nba.png', '/badge_aicte.png', '/badge_ugccare.png', '/badge_abet.png'].map((src, idx) => (
-            <div key={idx} className="w-10 h-10 rounded-full flex items-center justify-center hover:scale-110 transition-transform cursor-pointer drop-shadow-md">
-              <img src={src} alt={`badge-${idx}`} className="w-full h-full object-contain" />
+            <div
+              key={idx}
+              className="relative w-14 h-14 sm:w-16 sm:h-16 md:w-18 md:h-18 rounded-full flex items-center justify-center cursor-pointer group"
+              style={{ perspective: '1000px' }}
+              title="Accreditation Badge"
+            >
+              <img
+                src={src}
+                alt={`badge-${idx}`}
+                className="w-full h-full object-contain filter drop-shadow-xl transition-all duration-700 ease-in-out group-hover:[transform:rotateY(360deg)] group-hover:scale-125"
+                style={{ transformStyle: 'preserve-3d' }}
+              />
             </div>
           ))}
         </div>
