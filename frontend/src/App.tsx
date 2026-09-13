@@ -8,7 +8,8 @@ import ReadinessReportTab from './pages/ReadinessReportTab';
 import {
   Home, FileText, CheckCircle, AlertTriangle, Settings, RotateCw,
   Clock, Activity, BarChart2, Shield, PlayCircle,
-  Cpu, Database, BookOpen, ShieldCheck, Check
+  Cpu, Database, ShieldCheck, Check, Search, Filter,
+  ArrowRight, Sparkles
 } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
@@ -30,6 +31,9 @@ export default function App() {
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
   const [sweepRunning, setSweepRunning] = useState(false);
   const [sweepNotice, setSweepNotice] = useState<string | null>(null);
+  const [complianceFilter, setComplianceFilter] = useState<'ALL' | 'COMPLIANT' | 'AT_RISK' | 'NON_COMPLIANT'>('ALL');
+  const [complianceAuthority, setComplianceAuthority] = useState<string>('ALL');
+  const [complianceSearch, setComplianceSearch] = useState<string>('');
 
   const handleOpenRecoveryPlan = (caseId?: string) => {
     if (caseId) {
@@ -685,70 +689,238 @@ export default function App() {
           {activeTab === 'Regulations' && <RegulationsTab />}
 
 
-          {/* â”€â”€ COMPLIANCE TAB â”€â”€ */}
-          {activeTab === 'Compliance' && dashboardData && (
-            <div className="space-y-6">
-              <h2 className="text-3xl font-black text-blue-900 tracking-tight flex items-center gap-3"><CheckCircle className="w-7 h-7 text-blue-600"/>Deep Compliance Verification</h2>
+          {/* ── COMPLIANCE TAB ── */}
+          {activeTab === 'Compliance' && dashboardData && (() => {
+            const rawResults = dashboardData.resultsList || [];
+            
+            // Filter by search, status, and authority
+            const filteredResults = rawResults.filter((res: any) => {
+              const matchesStatus = complianceFilter === 'ALL' || res.status === complianceFilter;
+              const matchesAuthority = complianceAuthority === 'ALL' || (res.authority && res.authority.toUpperCase().includes(complianceAuthority.toUpperCase()));
+              const matchesSearch = complianceSearch === '' || 
+                (res.requirement_title && res.requirement_title.toLowerCase().includes(complianceSearch.toLowerCase())) ||
+                (res.requirement_id && res.requirement_id.toLowerCase().includes(complianceSearch.toLowerCase())) ||
+                (res.department_name && res.department_name.toLowerCase().includes(complianceSearch.toLowerCase())) ||
+                (res.category && res.category.toLowerCase().includes(complianceSearch.toLowerCase()));
+              return matchesStatus && matchesAuthority && matchesSearch;
+            });
 
-              {/* Summary cards */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                {[
-                  { label: 'Total Compliant', count: dashboardData.resultsList?.filter((r: any) => r.status === 'COMPLIANT').length || 0, color: 'border-emerald-200 bg-emerald-50', text: 'text-emerald-700', icon: CheckCircle },
-                  { label: 'At Risk', count: dashboardData.resultsList?.filter((r: any) => r.status === 'AT_RISK').length || 0, color: 'border-orange-200 bg-orange-50', text: 'text-orange-700', icon: AlertTriangle },
-                  { label: 'Non-Compliant', count: dashboardData.resultsList?.filter((r: any) => r.status === 'NON_COMPLIANT').length || 0, color: 'border-red-200 bg-red-50', text: 'text-red-700', icon: Shield },
-                ].map((s, i) => (
-                  <div key={i} className={`rounded-2xl border p-6 flex items-center gap-5 shadow-sm ${s.color}`}>
-                    <s.icon className={`w-8 h-8 ${s.text} flex-shrink-0`} />
+            const compliantCount = rawResults.filter((r: any) => r.status === 'COMPLIANT').length;
+            const atRiskCount = rawResults.filter((r: any) => r.status === 'AT_RISK').length;
+            const nonCompliantCount = rawResults.filter((r: any) => r.status === 'NON_COMPLIANT').length;
+
+            return (
+              <div className="space-y-6 font-sans pb-10">
+                {/* Header */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-200 text-white">
+                      <CheckCircle className="w-5 h-5" />
+                    </div>
                     <div>
-                      <p className="text-4xl font-black text-slate-800">{s.count}</p>
-                      <p className={`text-xs font-bold uppercase tracking-widest mt-1 ${s.text}`}>{s.label}</p>
+                      <h2 className="text-2xl font-black text-slate-800 tracking-tight">Deep Compliance Verification</h2>
+                      <p className="text-xs text-slate-400 font-semibold mt-0.5">Continuous automated audit across all 26 VFSTR, AICTE, UGC, NBA & NAAC regulation norms</p>
                     </div>
                   </div>
-                ))}
-              </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => {
+                        setComplianceFilter('ALL');
+                        setComplianceAuthority('ALL');
+                        setComplianceSearch('');
+                      }}
+                      className="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-black text-slate-600 hover:bg-slate-50 transition-all cursor-pointer"
+                    >
+                      Reset Filters
+                    </button>
+                  </div>
+                </div>
 
-              {/* Full results list */}
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
-                <h3 className="font-bold text-blue-900 text-base mb-2">All Compliance Results</h3>
-                {dashboardData.resultsList?.map((res: any, i: number) => {
-                  const isNC = res.status === 'NON_COMPLIANT';
-                  const isAR = res.status === 'AT_RISK';
-                  const statusStyle = isNC ? 'border-red-200 bg-red-50' : isAR ? 'border-orange-200 bg-orange-50' : 'border-emerald-200 bg-emerald-50';
-                  const badgeStyle = isNC ? 'bg-red-100 text-red-700' : isAR ? 'bg-orange-100 text-orange-700' : 'bg-emerald-100 text-emerald-700';
-                  return (
-                    <div key={i} className={`rounded-xl border p-5 ${statusStyle}`}>
-                      <div className="flex justify-between items-start mb-3">
+                {/* Summary KPI Cards (Clickable filters) */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {[
+                    { label: 'Total Regulations Scanned', filterKey: 'ALL', count: rawResults.length, color: 'border-blue-200 bg-blue-50/50', text: 'text-blue-700', badge: 'bg-blue-100 text-blue-800', icon: FileText },
+                    { label: 'Total Compliant', filterKey: 'COMPLIANT', count: compliantCount, color: 'border-emerald-200 bg-emerald-50/50', text: 'text-emerald-700', badge: 'bg-emerald-100 text-emerald-800', icon: CheckCircle },
+                    { label: 'At Risk (Action Advised)', filterKey: 'AT_RISK', count: atRiskCount, color: 'border-orange-200 bg-orange-50/50', text: 'text-orange-700', badge: 'bg-orange-100 text-orange-800', icon: AlertTriangle },
+                    { label: 'Non-Compliant (Critical)', filterKey: 'NON_COMPLIANT', count: nonCompliantCount, color: 'border-red-200 bg-red-50/50', text: 'text-red-700', badge: 'bg-red-100 text-red-800', icon: Shield },
+                  ].map((s, i) => (
+                    <div 
+                      key={i} 
+                      onClick={() => setComplianceFilter(s.filterKey as any)}
+                      className={`rounded-2xl border p-5 flex items-center justify-between shadow-sm cursor-pointer transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 ${s.color} ${complianceFilter === s.filterKey ? 'ring-2 ring-blue-500 shadow-md' : ''}`}
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className={`p-3 rounded-xl bg-white shadow-sm border border-slate-100 ${s.text}`}>
+                          <s.icon className="w-6 h-6" />
+                        </div>
                         <div>
-                          <p className="font-black text-slate-800">{res.requirement_title}</p>
-                          <p className="text-xs font-bold text-slate-500 mt-0.5">{res.department_name}</p>
-                        </div>
-                        <span className={`px-2.5 py-1 rounded text-[10px] font-black uppercase tracking-widest ${badgeStyle}`}>{res.status.replace('_', ' ')}</span>
-                      </div>
-                      <div className="flex flex-wrap gap-4 text-sm bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
-                        <div className="flex-1 min-w-[120px]">
-                          <span className="text-slate-400 font-bold uppercase text-[10px] tracking-widest block mb-1">Actual Value</span>
-                          <span className="font-black text-blue-900 text-lg">{res.actual_value}</span>
-                        </div>
-                        <div className="flex-1 min-w-[120px]">
-                          <span className="text-slate-400 font-bold uppercase text-[10px] tracking-widest block mb-1">Calculated Gap</span>
-                          <span className="font-black text-red-600 text-lg">{res.gap !== '0.0' && res.gap !== '0' ? res.gap : 'None'}</span>
-                        </div>
-                        <div className="flex-1 min-w-[200px]">
-                          <span className="text-slate-400 font-bold uppercase text-[10px] tracking-widest block mb-1">Observation</span>
-                          <span className="font-semibold text-slate-700 text-sm">{res.explanation?.split(' | ')[0] || 'â€”'}</span>
-                        </div>
-                        <div className="flex-1 min-w-[200px]">
-                          <span className="text-slate-400 font-bold uppercase text-[10px] tracking-widest block mb-1">Action Required</span>
-                          <span className="font-semibold text-slate-700 text-sm">{res.explanation?.split(' | ')[1] || 'â€”'}</span>
+                          <p className="text-3xl font-black text-slate-800">{s.count}</p>
+                          <p className={`text-[10px] font-black uppercase tracking-widest mt-0.5 ${s.text}`}>{s.label}</p>
                         </div>
                       </div>
+                      {complianceFilter === s.filterKey && (
+                        <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-600 text-white">Active</span>
+                      )}
                     </div>
-                  );
-                })}
+                  ))}
+                </div>
+
+                {/* Filters & Search Toolbar */}
+                <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                  {/* Search */}
+                  <div className="relative flex-1 max-w-md">
+                    <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    <input 
+                      type="text"
+                      placeholder="Search by regulation, department, keyword (e.g. FSR, Credits, NBA, Library)..."
+                      value={complianceSearch}
+                      onChange={(e) => setComplianceSearch(e.target.value)}
+                      className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+                    />
+                  </div>
+
+                  {/* Authority Selector */}
+                  <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
+                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mr-1 flex items-center gap-1">
+                      <Filter className="w-3 h-3" /> Authority:
+                    </span>
+                    {['ALL', 'VFSTR', 'AICTE', 'UGC', 'NBA', 'NAAC'].map((auth) => (
+                      <button
+                        key={auth}
+                        onClick={() => setComplianceAuthority(auth)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
+                          complianceAuthority === auth
+                            ? 'bg-blue-600 text-white shadow-sm'
+                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        }`}
+                      >
+                        {auth === 'ALL' ? 'All Authorities' : auth}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Full results list */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between px-1">
+                    <h3 className="font-black text-slate-800 text-sm">
+                      Compliance Inspection Register ({filteredResults.length} records)
+                    </h3>
+                    <span className="text-[11px] font-bold text-slate-500">
+                      Live VFSTR Deemed University Dataset
+                    </span>
+                  </div>
+
+                  {filteredResults.length === 0 && (
+                    <div className="bg-white rounded-2xl p-12 border border-slate-100 text-center shadow-sm">
+                      <CheckCircle className="w-12 h-12 text-slate-200 mx-auto mb-3" />
+                      <p className="font-black text-slate-600 text-base">No compliance records match your current filters.</p>
+                      <button 
+                        onClick={() => { setComplianceFilter('ALL'); setComplianceAuthority('ALL'); setComplianceSearch(''); }}
+                        className="mt-3 px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-black"
+                      >
+                        Reset All Filters
+                      </button>
+                    </div>
+                  )}
+
+                  {filteredResults.map((res: any, i: number) => {
+                    const isNC = res.status === 'NON_COMPLIANT';
+                    const isAR = res.status === 'AT_RISK';
+
+                    const statusStyle = isNC ? 'border-red-200 bg-white hover:border-red-300' : isAR ? 'border-orange-200 bg-white hover:border-orange-300' : 'border-slate-100 bg-white hover:border-blue-200';
+                    const badgeStyle = isNC ? 'bg-red-100 text-red-700 border-red-200' : isAR ? 'bg-orange-100 text-orange-700 border-orange-200' : 'bg-emerald-100 text-emerald-700 border-emerald-200';
+                    const leftBorder = isNC ? 'border-l-4 border-l-red-500' : isAR ? 'border-l-4 border-l-orange-500' : 'border-l-4 border-l-emerald-500';
+
+                    return (
+                      <div key={i} className={`rounded-2xl border p-5 shadow-sm transition-all duration-200 hover:shadow-md ${statusStyle} ${leftBorder}`}>
+                        
+                        {/* Header Row */}
+                        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-4">
+                          <div>
+                            <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                              <span className="text-[10px] font-black font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
+                                {res.requirement_id}
+                              </span>
+                              <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-100">
+                                {res.authority} • {res.category}
+                              </span>
+                              {res.clause && (
+                                <span className="text-[10px] font-semibold text-slate-400">
+                                  Clause {res.clause}
+                                </span>
+                              )}
+                            </div>
+                            <h4 className="font-black text-slate-800 text-base leading-snug">{res.requirement_title}</h4>
+                            <p className="text-xs font-bold text-slate-500 mt-0.5 flex items-center gap-1.5">
+                              <span>Department / Scope:</span>
+                              <strong className="text-slate-700">{res.department_name}</strong>
+                            </p>
+                          </div>
+
+                          <div className="flex items-center gap-2 flex-shrink-0">
+                            <span className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest border ${badgeStyle}`}>
+                              {res.status.replace('_', ' ')}
+                            </span>
+                            {(isNC || isAR) && (
+                              <button
+                                onClick={() => handleOpenRecoveryPlan(res.requirement_title || res.requirement_id)}
+                                className="px-3 py-1.5 bg-slate-900 hover:bg-blue-600 text-white rounded-lg text-xs font-black shadow-sm transition-all flex items-center gap-1 cursor-pointer"
+                              >
+                                <span>AI Plan</span>
+                                <ArrowRight className="w-3.5 h-3.5" />
+                              </button>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* 4-Box Metrics Grid */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-slate-50/70 p-4 rounded-xl border border-slate-100">
+                          
+                          {/* Required Value */}
+                          <div className="space-y-1">
+                            <span className="text-slate-400 font-black uppercase text-[9px] tracking-widest block">Required Standard</span>
+                            <p className="font-bold text-slate-800 text-xs leading-relaxed">{res.required_value || 'Mandatory'}</p>
+                          </div>
+
+                          {/* Actual Value */}
+                          <div className="space-y-1">
+                            <span className="text-slate-400 font-black uppercase text-[9px] tracking-widest block">Actual Evaluated Value</span>
+                            <p className="font-black text-blue-700 text-xs leading-relaxed">{res.actual_value || 'Verified'}</p>
+                          </div>
+
+                          {/* Calculated Gap */}
+                          <div className="space-y-1">
+                            <span className="text-slate-400 font-black uppercase text-[9px] tracking-widest block">Calculated Gap</span>
+                            <p className={`font-black text-xs leading-relaxed ${res.gap && res.gap !== '0' && res.gap !== '0.0' ? 'text-red-600' : 'text-emerald-700'}`}>
+                              {res.gap && res.gap !== '0' && res.gap !== '0.0' ? res.gap : 'None (Compliant)'}
+                            </p>
+                          </div>
+
+                          {/* Action Plan */}
+                          <div className="space-y-1">
+                            <span className="text-slate-400 font-black uppercase text-[9px] tracking-widest block">Action Required</span>
+                            <p className="font-bold text-slate-700 text-xs leading-relaxed">{res.action_required || 'Maintain standard compliance monitoring.'}</p>
+                          </div>
+                        </div>
+
+                        {/* Observation Footer */}
+                        {res.observation && (
+                          <div className="mt-3 pt-3 border-t border-slate-100 flex items-start gap-2 text-xs">
+                            <span className="text-slate-400 font-black uppercase text-[9px] tracking-widest flex-shrink-0 pt-0.5">Observation:</span>
+                            <p className="text-slate-600 font-medium leading-relaxed">{res.observation}</p>
+                          </div>
+                        )}
+
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          )}
-          {/* â”€â”€ RISKS TAB â”€â”€ */}
+            );
+          })()}
+
+          {/* ── RISKS TAB ── */}
           {activeTab === 'Risks' && dashboardData && (() => {
             const results = dashboardData.resultsList || [];
             const critical = results.filter((r: any) => r.status === 'NON_COMPLIANT');
@@ -759,52 +931,40 @@ export default function App() {
             const riskPct  = Math.round((atRisk.length / total) * 100);
             const safePct  = Math.round((safe.length / total) * 100);
 
-            const riskMeta: Record<string, { risk: string; action: string; owner: string; lead: string; priority: string }> = {
-              'REQ-QUAL-001':    { risk: 'high',     action: 'Recruit or upskill 2 faculty to PhD-qualified status', owner: 'HoD, Mechanical / HR',   lead: '~90 days',  priority: 'High'     },
-              'REQ-COMM-001':    { risk: 'critical',  action: 'Issue reconstitution order and appoint members',       owner: 'Registrar',              lead: '5 days',    priority: 'Critical' },
-              'LAB-INFRA-CHECK': { risk: 'medium',   action: 'Expedite signal generator replacement',               owner: 'HoD, ECE / Maintenance', lead: '10 days',   priority: 'Medium'   },
-              'REQ-LIB-001':     { risk: 'low',       action: 'Maintain current library stock levels',               owner: 'Library Head',           lead: 'Ongoing',   priority: 'Low'      },
-              'REQ-FSR-001':     { risk: 'critical',  action: 'Recruit 15 qualified faculty members and assign temporary teaching support', owner: 'HR Department / CSE Dean', lead: '8-12 weeks', priority: 'Critical' },
-              'REQ-FSR-002':     { risk: 'high',  action: 'Recruit 3 qualified faculty members', owner: 'HR Department / CSE Dean', lead: '4-8 weeks', priority: 'High' },
-              'FSR-CSE-001':     { risk: 'critical',  action: 'Recruit 15 qualified faculty members and assign temporary teaching support', owner: 'HR Department / CSE Dean', lead: '8-12 weeks', priority: 'Critical' },
-              'CRED-ECE-001':    { risk: 'medium',   action: 'Approve 2-credit elective or mini-project module and update course credit matrix', owner: 'Board of Studies / Dean Academics', lead: '14-20 days', priority: 'Medium' },
-            };
-
             const allRisks = results.map((r: any) => {
-              const meta = riskMeta[r.requirement_id] || {
-                risk: r.status === 'NON_COMPLIANT' ? 'high' : r.status === 'AT_RISK' ? 'medium' : 'low',
-                action: r.status === 'NON_COMPLIANT'
-                  ? 'Initiate corrective action plan and assign responsible officer immediately'
-                  : r.status === 'AT_RISK'
-                  ? 'Monitor closely and schedule preventive review within the next sprint'
-                  : 'No action needed — continue maintaining current compliance levels',
-                owner: r.department_name,
-                lead: r.status === 'NON_COMPLIANT' ? '10–15 days' : r.status === 'AT_RISK' ? '15–20 days' : 'Ongoing',
-                priority: r.status === 'NON_COMPLIANT' ? 'High' : r.status === 'AT_RISK' ? 'Medium' : 'Low',
+              const isCrit = r.status === 'NON_COMPLIANT';
+              const isAR = r.status === 'AT_RISK';
+              const riskLevel = isCrit ? 'critical' : isAR ? 'high' : 'low';
+              return {
+                ...r,
+                risk: riskLevel,
+                action: r.action_required || (isCrit ? 'Initiate immediate corrective action plan' : 'Monitor closely and review'),
+                owner: r.owner || r.department_name || 'Academic Section / IQAC',
+                lead: r.lead_time_days ? `${r.lead_time_days} days` : (isCrit ? '15–30 days' : 'Ongoing'),
+                priority: isCrit ? 'Critical' : isAR ? 'High Risk' : 'Low Risk',
               };
-              return { ...r, ...meta };
             }).sort((a: any, b: any) => {
               const order: Record<string, number> = { critical: 0, high: 1, medium: 2, low: 3 };
               return (order[a.risk] ?? 4) - (order[b.risk] ?? 4);
             });
 
             return (
-              <div className="space-y-5">
+              <div className="space-y-6 font-sans pb-10">
 
                 {/* Page header */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center shadow-lg shadow-red-200">
-                      <AlertTriangle className="w-5 h-5 text-white" />
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center shadow-lg shadow-red-200 text-white">
+                      <AlertTriangle className="w-5 h-5" />
                     </div>
                     <div>
-                      <h2 className="text-xl font-black text-slate-800 leading-none">Risk Overview</h2>
-                      <p className="text-[11px] text-slate-400 font-semibold mt-0.5">Live AI-assessed compliance risks Â· Agent54</p>
+                      <h2 className="text-2xl font-black text-slate-800 tracking-tight">Institutional Risk Matrix</h2>
+                      <p className="text-xs text-slate-400 font-semibold mt-0.5">Live AI-assessed compliance vulnerabilities sorted by statutory severity · Agent54</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2 px-3 py-1.5 bg-red-50 border border-red-100 rounded-full">
                     <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-                    <span className="text-[11px] font-black text-red-600 uppercase tracking-widest">Live Risk Engine</span>
+                    <span className="text-[11px] font-black text-red-600 uppercase tracking-widest">Live Risk Engine Active</span>
                   </div>
                 </div>
 
@@ -814,14 +974,14 @@ export default function App() {
                   {/* KPI Cards */}
                   <div className="col-span-12 lg:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-4">
                     {[
-                      { label: 'Total Checks',     value: results.length,  icon: Shield,        bg: 'from-blue-500 to-blue-600',       shadow: 'shadow-blue-200' },
+                      { label: 'Total Regulations', value: results.length,  icon: Shield,        bg: 'from-blue-500 to-blue-600',       shadow: 'shadow-blue-200' },
                       { label: 'Critical Risks',   value: critical.length, icon: AlertTriangle, bg: 'from-red-500 to-red-600',         shadow: 'shadow-red-200' },
-                      { label: 'At Risk',          value: atRisk.length,   icon: Activity,      bg: 'from-orange-400 to-orange-500',   shadow: 'shadow-orange-200' },
+                      { label: 'At Risk / Warnings', value: atRisk.length,   icon: Activity,      bg: 'from-orange-400 to-orange-500',   shadow: 'shadow-orange-200' },
                       { label: 'Safe / Compliant', value: safe.length,     icon: CheckCircle,   bg: 'from-emerald-500 to-emerald-600', shadow: 'shadow-emerald-200' },
                     ].map((kpi, i) => (
                       <div key={i} className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 flex flex-col gap-2 hover:shadow-md transition-shadow">
-                        <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${kpi.bg} flex items-center justify-center shadow-md ${kpi.shadow}`}>
-                          <kpi.icon className="w-4 h-4 text-white" />
+                        <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${kpi.bg} flex items-center justify-center shadow-md ${kpi.shadow} text-white`}>
+                          <kpi.icon className="w-4 h-4" />
                         </div>
                         <p className="text-3xl font-black text-slate-800 leading-none mt-1">{kpi.value}</p>
                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-tight">{kpi.label}</p>
@@ -861,7 +1021,7 @@ export default function App() {
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center justify-between mb-0.5">
                                 <span className="text-[10px] font-black text-slate-600">{seg.label}</span>
-                                <span className="text-[10px] font-black text-slate-500">{seg.count} Â· {seg.pct}%</span>
+                                <span className="text-[10px] font-black text-slate-500">{seg.count} · {seg.pct}%</span>
                               </div>
                               <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
                                 <div className="h-full rounded-full" style={{ width: `${seg.pct}%`, backgroundColor: seg.color }} />
@@ -877,16 +1037,9 @@ export default function App() {
                 {/* Risk Items List */}
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest">All Risk Items Â· Sorted by Severity</p>
-                    <span className="text-[10px] font-black text-slate-400">{allRisks.length} item{allRisks.length !== 1 ? 's' : ''}</span>
+                    <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest">All Institutional Risk Items · Ranked by Statutory Severity</p>
+                    <span className="text-[10px] font-black text-slate-400">{allRisks.length} regulations evaluated</span>
                   </div>
-
-                  {allRisks.length === 0 && (
-                    <div className="bg-white rounded-2xl p-16 border border-slate-100 text-center shadow-sm">
-                      <CheckCircle className="w-12 h-12 text-emerald-200 mx-auto mb-3" />
-                      <p className="font-black text-slate-400 text-lg">No risks detected. Everything is compliant!</p>
-                    </div>
-                  )}
 
                   {allRisks.map((risk: any, i: number) => {
                     const isCrit = risk.risk === 'critical';
@@ -894,9 +1047,9 @@ export default function App() {
                     const isMed  = risk.risk === 'medium';
                     const accentColor = isCrit ? '#ef4444' : isHigh ? '#f97316' : isMed ? '#f59e0b' : '#10b981';
                     const badgeBg     = isCrit ? 'bg-red-100 text-red-700 border-red-200' : isHigh ? 'bg-orange-100 text-orange-700 border-orange-200' : isMed ? 'bg-amber-100 text-amber-700 border-amber-200' : 'bg-emerald-100 text-emerald-700 border-emerald-200';
-                    const headerBg    = isCrit ? 'from-red-50 to-white' : isHigh ? 'from-orange-50 to-white' : isMed ? 'from-amber-50 to-white' : 'from-emerald-50 to-white';
+                    const headerBg    = isCrit ? 'from-red-50/80 to-white' : isHigh ? 'from-orange-50/80 to-white' : isMed ? 'from-amber-50/80 to-white' : 'from-emerald-50/80 to-white';
                     const iconBg      = isCrit ? 'bg-red-500' : isHigh ? 'bg-orange-500' : isMed ? 'bg-amber-400' : 'bg-emerald-500';
-                    const riskScore   = isCrit ? 95 : isHigh ? 75 : isMed ? 45 : 10;
+                    const riskScore   = isCrit ? 92 : isHigh ? 72 : isMed ? 40 : 5;
                     const scoreColor  = accentColor;
 
                     return (
@@ -907,30 +1060,44 @@ export default function App() {
                         <div className={`px-5 py-4 bg-gradient-to-r ${headerBg} border-b border-slate-100`}>
                           <div className="flex items-start justify-between gap-3">
                             <div className="flex items-start gap-3 flex-1 min-w-0">
-                              <div className={`w-9 h-9 rounded-xl ${iconBg} flex items-center justify-center flex-shrink-0 shadow-sm mt-0.5`}>
-                                {(isCrit || isHigh) ? <AlertTriangle className="w-4 h-4 text-white" /> : isMed ? <Activity className="w-4 h-4 text-white" /> : <CheckCircle className="w-4 h-4 text-white" />}
+                              <div className={`w-9 h-9 rounded-xl ${iconBg} flex items-center justify-center flex-shrink-0 shadow-sm mt-0.5 text-white`}>
+                                {(isCrit || isHigh) ? <AlertTriangle className="w-4 h-4" /> : isMed ? <Activity className="w-4 h-4" /> : <CheckCircle className="w-4 h-4" />}
                               </div>
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2 mb-1 flex-wrap">
                                   <span className={`px-2 py-0.5 rounded-md text-[8px] font-black uppercase tracking-widest border ${badgeBg}`}>{risk.priority}</span>
-                                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{risk.department_name}</span>
+                                  <span className="text-[9px] font-black font-mono text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">{risk.requirement_id}</span>
+                                  <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">{risk.authority} • {risk.department_name}</span>
                                 </div>
-                                <h3 className="font-black text-slate-800 text-[14px] leading-snug group-hover:text-blue-700 transition-colors">{risk.requirement_title}</h3>
+                                <h3 className="font-black text-slate-800 text-sm leading-snug group-hover:text-blue-700 transition-colors">{risk.requirement_title}</h3>
                               </div>
                             </div>
-                            {/* Risk score circle */}
-                            <div className="flex flex-col items-center flex-shrink-0">
-                              <div className="relative w-14 h-14">
-                                <svg viewBox="0 0 36 36" className="w-14 h-14 -rotate-90">
-                                  <circle cx="18" cy="18" r="14" fill="none" stroke="#f1f5f9" strokeWidth="4" />
-                                  <circle cx="18" cy="18" r="14" fill="none" stroke={scoreColor} strokeWidth="4"
-                                    strokeDasharray={`${(riskScore / 100) * 87.96} 87.96`} strokeLinecap="round" />
-                                </svg>
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                  <span className="text-[11px] font-black" style={{ color: scoreColor }}>{riskScore}</span>
+                            
+                            {/* Action / Score */}
+                            <div className="flex items-center gap-3 flex-shrink-0">
+                              <div className="flex flex-col items-center">
+                                <div className="relative w-12 h-12">
+                                  <svg viewBox="0 0 36 36" className="w-12 h-12 -rotate-90">
+                                    <circle cx="18" cy="18" r="14" fill="none" stroke="#f1f5f9" strokeWidth="4" />
+                                    <circle cx="18" cy="18" r="14" fill="none" stroke={scoreColor} strokeWidth="4"
+                                      strokeDasharray={`${(riskScore / 100) * 87.96} 87.96`} strokeLinecap="round" />
+                                  </svg>
+                                  <div className="absolute inset-0 flex items-center justify-center">
+                                    <span className="text-[10px] font-black" style={{ color: scoreColor }}>{riskScore}</span>
+                                  </div>
                                 </div>
+                                <span className="text-[7px] font-black text-slate-400 uppercase tracking-widest mt-0.5">RISK INDEX</span>
                               </div>
-                              <span className="text-[7px] font-black text-slate-400 uppercase tracking-widest mt-0.5">RISK SCORE</span>
+
+                              {(isCrit || isHigh) && (
+                                <button
+                                  onClick={() => handleOpenRecoveryPlan(risk.requirement_title || risk.requirement_id)}
+                                  className="px-3 py-2 bg-slate-900 hover:bg-blue-600 text-white rounded-xl text-xs font-black shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
+                                >
+                                  <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                                  <span>Launch AI Remediation</span>
+                                </button>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -939,50 +1106,42 @@ export default function App() {
                         <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-100">
                           {/* Actual vs Gap */}
                           <div className="px-5 py-3.5">
-                            <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-2">Actual vs Gap</p>
+                            <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-2">Evaluated Actual vs Gap</p>
                             <div className="flex flex-col gap-1.5">
                               <div className="flex items-start gap-2">
-                                <span className="text-[9px] font-bold text-slate-400 w-12 flex-shrink-0 pt-0.5">Actual</span>
+                                <span className="text-[9px] font-bold text-slate-400 w-14 flex-shrink-0 pt-0.5">Actual:</span>
                                 <span className="font-black text-slate-700 text-xs leading-snug">{risk.actual_value}</span>
                               </div>
                               <div className="flex items-start gap-2">
-                                <span className="text-[9px] font-bold text-slate-400 w-12 flex-shrink-0 pt-0.5">Gap</span>
-                                <span className="font-black text-red-500 text-xs leading-snug">{risk.gap && risk.gap !== '0.0' && risk.gap !== '0' ? risk.gap : 'â€”'}</span>
-                              </div>
-                            </div>
-                            <div className="mt-3">
-                              <div className="flex items-center justify-between mb-1">
-                                <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Risk Level</span>
-                                <span className="text-[9px] font-black" style={{ color: scoreColor }}>{riskScore}%</span>
-                              </div>
-                              <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
-                                <div className="h-full rounded-full transition-all duration-1000"
-                                  style={{ width: `${riskScore}%`, background: `linear-gradient(90deg, ${scoreColor}88, ${scoreColor})`, boxShadow: `0 0 6px ${scoreColor}44` }} />
+                                <span className="text-[9px] font-bold text-slate-400 w-14 flex-shrink-0 pt-0.5">Gap:</span>
+                                <span className={`font-black text-xs leading-snug ${risk.gap && risk.gap !== '0' && risk.gap !== '0.0' ? 'text-red-600' : 'text-emerald-600'}`}>
+                                  {risk.gap && risk.gap !== '0' && risk.gap !== '0.0' ? risk.gap : 'None'}
+                                </span>
                               </div>
                             </div>
                           </div>
 
                           {/* AI Action */}
                           <div className="px-5 py-3.5">
-                            <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-2">AI Suggested Action</p>
+                            <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-2">Corrective Action Plan</p>
                             <p className="text-xs font-semibold text-slate-700 leading-relaxed">{risk.action}</p>
-                            <div className="mt-2.5 flex items-center gap-1.5">
-                              <Clock className="w-3 h-3 text-slate-400 flex-shrink-0" />
-                              <span className="text-[10px] font-black text-slate-500">Lead time: {risk.lead}</span>
+                            <div className="mt-2 flex items-center gap-1.5">
+                              <Clock className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
+                              <span className="text-[10px] font-black text-slate-500">Lead time target: {risk.lead}</span>
                             </div>
                           </div>
 
                           {/* Owner */}
                           <div className="px-5 py-3.5">
-                            <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-2">Owner & Status</p>
-                            <div className="flex items-center gap-2 mb-2.5">
+                            <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-2">Responsible Authority</p>
+                            <div className="flex items-center gap-2 mb-2">
                               <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                                <span className="text-[9px] font-black text-blue-700">{(risk.owner || 'N').charAt(0).toUpperCase()}</span>
+                                <span className="text-[10px] font-black text-blue-700">{(risk.owner || 'A').charAt(0).toUpperCase()}</span>
                               </div>
-                              <span className="text-xs font-black text-slate-700 leading-snug">{risk.owner || 'Unassigned'}</span>
+                              <span className="text-xs font-black text-slate-700 leading-snug">{risk.owner}</span>
                             </div>
-                            <span className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border ${badgeBg}`}>
-                              {risk.status?.replace('_', ' ')}
+                            <span className={`px-2.5 py-1 rounded-md text-[8px] font-black uppercase tracking-widest border ${badgeBg}`}>
+                              Status: {risk.status?.replace('_', ' ')}
                             </span>
                           </div>
                         </div>
@@ -1009,17 +1168,6 @@ export default function App() {
 
           {/* ── AUDIT TRAIL TAB ── */}
           {activeTab === 'Audit Trail' && <AuditTrailTab dashboardData={dashboardData} />}
-
-          {/* ── OTHER TABS FALLBACK ── */}
-          {!['Home', 'Regulations', 'Compliance', 'Risks', 'Remediation', 'Simulator', 'Audit Trail'].includes(activeTab) && (
-            <div className="bg-white rounded-2xl p-12 shadow-sm border border-slate-200 min-h-[500px] flex items-center justify-center">
-              <div className="text-center">
-                <BookOpen className="w-16 h-16 text-blue-200 mx-auto mb-4" />
-                <h3 className="text-2xl font-black text-blue-900 mb-2">{activeTab}</h3>
-                <p className="text-slate-400 font-medium max-w-md mx-auto">This module is active and receiving live agentic updates from Agent54.</p>
-              </div>
-            </div>
-          )}
 
         </main>
       </div>

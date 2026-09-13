@@ -77,7 +77,7 @@ export default function ReadinessReportTab() {
             <FileCheck className="w-6 h-6 text-emerald-600" /> Statutory Inspection Readiness Dossier
           </h2>
           <p className="text-sm text-slate-500 font-medium mt-1">
-            Proactive pre-inspection audit evaluating <strong>AICTE, UGC, NBA Tier-1, and NAAC</strong> compliance to eliminate surprise non-compliance findings.
+            Proactive pre-inspection audit evaluating <strong>VFSTR Academic Regulations R26, AICTE, UGC, NBA Tier-1, and NAAC</strong> compliance to eliminate surprise non-compliance findings.
           </p>
         </div>
 

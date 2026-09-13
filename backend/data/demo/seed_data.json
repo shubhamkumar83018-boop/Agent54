@@ -5,12 +5,12 @@
   },
 
   "institution": {
-    "institution_id": "INST-001",
-    "name": "Astitwaa Institute of Technology",
-    "type": "Autonomous Engineering College",
-    "affiliated_body": "State Technical University",
-    "approved_by": ["AICTE", "UGC"],
-    "accreditation": ["NBA (2 programs)", "NAAC (Grade A)"],
+    "institution_id": "INST-VFSTR",
+    "name": "Vignan's Foundation for Science, Technology and Research (VFSTR)",
+    "type": "Deemed-to-be University",
+    "affiliated_body": "UGC / AICTE Approved Deemed University",
+    "approved_by": ["AICTE", "UGC", "Govt. of India"],
+    "accreditation": ["NBA (Tier-1 Accredited)", "NAAC (Grade A+)"],
     "total_students": 320,
     "total_faculty": 34,
     "total_staff": 18,
