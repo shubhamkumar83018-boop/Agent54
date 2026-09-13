@@ -26,7 +26,8 @@ export default function SimulatorTab({ dashboardData }: SimulatorProps) {
     setSimulationResult(null);
     
     try {
-      const response = await fetch('http://localhost:8000/api/simulation/predict', {
+      const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const response = await fetch(`${API_BASE}/api/simulation/predict`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

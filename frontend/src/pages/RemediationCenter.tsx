@@ -33,7 +33,7 @@ export default function RemediationCenter({ dashboardData, initialCaseId }: Reme
   const criticalCount = dashboardData?.complianceData?.find((c: any) => c.name === 'Non-Compliant')?.value || 2;
 
   // Build complete list of recovery cases dynamically from the Live Scan!
-  const dynamicRecoveryItems = dashboardData?.fullScan?.results
+  const dynamicRecoveryItems: any[] = dashboardData?.fullScan?.results
     ?.filter((r: any) => r.status === 'NON_COMPLIANT' || r.status === 'AT_RISK')
     .map((r: any) => {
       const isCritical = r.status === 'NON_COMPLIANT';
@@ -609,7 +609,7 @@ export default function RemediationCenter({ dashboardData, initialCaseId }: Reme
 
           {/* Step Timeline */}
           <div className="space-y-4 relative before:absolute before:left-4 before:top-3 before:bottom-3 before:w-0.5 before:bg-slate-100">
-            {selectedItem.recoveryPlan.map((stepItem, i) => (
+            {selectedItem.recoveryPlan.map((stepItem: any, i: number) => (
               <div key={i} className="relative pl-10">
                 <div className={`absolute left-2.5 top-0 -translate-x-1/2 w-6 h-6 rounded-full text-white font-black text-[10px] flex items-center justify-center ring-4 ring-white shadow-sm ${
                   i === 0 ? 'bg-red-600' : i === 1 ? 'bg-amber-500' : i === 2 ? 'bg-blue-600' : 'bg-emerald-600'
@@ -847,7 +847,7 @@ export default function RemediationCenter({ dashboardData, initialCaseId }: Reme
 
             {/* Checklist items */}
             <div className="space-y-2 text-xs">
-              {selectedItem.evidence.map((ev, i) => (
+              {selectedItem.evidence.map((ev: any, i: number) => (
                 <label key={i} className="flex items-center gap-2.5 p-2 rounded-lg bg-slate-50 border border-slate-100 cursor-pointer hover:bg-slate-100/60 transition-all">
                   <input
                     type="checkbox"
@@ -1027,7 +1027,7 @@ export default function RemediationCenter({ dashboardData, initialCaseId }: Reme
               <div>
                 <h4 className="text-xs font-black text-slate-800 mb-3 uppercase tracking-widest border-b border-slate-100 pb-2">Execution Steps</h4>
                 <div className="space-y-4 relative before:absolute before:left-4 before:top-3 before:bottom-3 before:w-0.5 before:bg-slate-100">
-                  {modalItem.recoveryPlan.map((stepItem, i) => (
+                  {modalItem.recoveryPlan.map((stepItem: any, i: number) => (
                     <div key={i} className="relative pl-10">
                       <div className={`absolute left-2.5 top-0 -translate-x-1/2 w-6 h-6 rounded-full text-white font-black text-[10px] flex items-center justify-center ring-4 ring-white shadow-sm ${
                         i === 0 ? 'bg-red-600' : i === 1 ? 'bg-amber-500' : i === 2 ? 'bg-blue-600' : 'bg-emerald-600'
