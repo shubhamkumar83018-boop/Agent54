@@ -1,0 +1,404 @@
+{
+  "_meta": {
+    "description": "Small demo/seed dataset for Agent 54 — AI Regulatory Compliance Command Center. All numbers are SAMPLE DATA, scaled down for a hackathon demo, not real AICTE/UGC values. Load this into the database on startup (backend/data/demo/seed_data.json).",
+    "scale_notes": "1 institute, 4 departments, 20 students per class section (1 teacher per section), 5 laboratories, library with 10,000 total volumes. Numbers are deliberately small so demo output is easy to read on screen."
+  },
+
+  "institution": {
+    "institution_id": "INST-001",
+    "name": "Astitwaa Institute of Technology",
+    "type": "Autonomous Engineering College",
+    "affiliated_body": "State Technical University",
+    "approved_by": ["AICTE", "UGC"],
+    "accreditation": ["NBA (2 programs)", "NAAC (Grade A)"],
+    "total_students": 320,
+    "total_faculty": 34,
+    "total_staff": 18,
+    "campuses": 1
+  },
+
+  "departments": [
+    { "department_id": "DEPT-CSE", "name": "Computer Science & Engineering", "hod": "Dr. Kavita Rao", "total_students": 80, "total_faculty": 6 },
+    { "department_id": "DEPT-ECE", "name": "Electronics & Communication Engineering", "hod": "Dr. Suresh Menon", "total_students": 80, "total_faculty": 7 },
+    { "department_id": "DEPT-MECH", "name": "Mechanical Engineering", "hod": "Dr. Anil Kumar", "total_students": 80, "total_faculty": 9 },
+    { "department_id": "DEPT-CIVIL", "name": "Civil Engineering", "hod": "Dr. Priya Nair", "total_students": 80, "total_faculty": 8 }
+  ],
+
+  "class_sections": [
+    { "section_id": "CSE-A", "department_id": "DEPT-CSE", "course": "Data Structures", "faculty": "Dr. Kavita Rao", "student_count": 20 },
+    { "section_id": "CSE-B", "department_id": "DEPT-CSE", "course": "Data Structures", "faculty": "Mr. Rohit Sharma", "student_count": 20 },
+    { "section_id": "CSE-C", "department_id": "DEPT-CSE", "course": "Operating Systems", "faculty": "Ms. Neha Joshi", "student_count": 20 },
+    { "section_id": "CSE-D", "department_id": "DEPT-CSE", "course": "Operating Systems", "faculty": "Mr. Arjun Verma", "student_count": 20 },
+    { "section_id": "ECE-A", "department_id": "DEPT-ECE", "course": "Digital Circuits", "faculty": "Dr. Suresh Menon", "student_count": 20 },
+    { "section_id": "ECE-B", "department_id": "DEPT-ECE", "course": "Digital Circuits", "faculty": "Ms. Divya Pillai", "student_count": 20 },
+    { "section_id": "ECE-C", "department_id": "DEPT-ECE", "course": "Signals & Systems", "faculty": "Mr. Karan Shah", "student_count": 20 },
+    { "section_id": "ECE-D", "department_id": "DEPT-ECE", "course": "Signals & Systems", "faculty": "Ms. Ritu Kapoor", "student_count": 20 },
+    { "section_id": "MECH-A", "department_id": "DEPT-MECH", "course": "Thermodynamics", "faculty": "Dr. Anil Kumar", "student_count": 20 },
+    { "section_id": "MECH-B", "department_id": "DEPT-MECH", "course": "Thermodynamics", "faculty": "Mr. Vikram Singh", "student_count": 20 },
+    { "section_id": "MECH-C", "department_id": "DEPT-MECH", "course": "Fluid Mechanics", "faculty": "Mr. Sanjay Gupta", "student_count": 20 },
+    { "section_id": "MECH-D", "department_id": "DEPT-MECH", "course": "Fluid Mechanics", "faculty": "Ms. Pooja Reddy", "student_count": 20 },
+    { "section_id": "CIVIL-A", "department_id": "DEPT-CIVIL", "course": "Structural Analysis", "faculty": "Dr. Priya Nair", "student_count": 20 },
+    { "section_id": "CIVIL-B", "department_id": "DEPT-CIVIL", "course": "Structural Analysis", "faculty": "Mr. Manoj Tiwari", "student_count": 20 },
+    { "section_id": "CIVIL-C", "department_id": "DEPT-CIVIL", "course": "Geotechnical Engineering", "faculty": "Ms. Sneha Iyer", "student_count": 20 },
+    { "section_id": "CIVIL-D", "department_id": "DEPT-CIVIL", "course": "Geotechnical Engineering", "faculty": "Mr. Farhan Ali", "student_count": 20 }
+  ],
+
+  "faculty": [
+    { "faculty_id": "F-CSE-01", "name": "Dr. Kavita Rao", "department_id": "DEPT-CSE", "qualification": "PhD", "designation": "Professor & HoD", "years_experience": 14 },
+    { "faculty_id": "F-CSE-02", "name": "Mr. Rohit Sharma", "department_id": "DEPT-CSE", "qualification": "M.Tech", "designation": "Assistant Professor", "years_experience": 5 },
+    { "faculty_id": "F-CSE-03", "name": "Ms. Neha Joshi", "department_id": "DEPT-CSE", "qualification": "M.Tech", "designation": "Assistant Professor", "years_experience": 4 },
+    { "faculty_id": "F-CSE-04", "name": "Mr. Arjun Verma", "department_id": "DEPT-CSE", "qualification": "M.Tech", "designation": "Assistant Professor", "years_experience": 3 },
+    { "faculty_id": "F-CSE-05", "name": "Dr. Meera Desai", "department_id": "DEPT-CSE", "qualification": "PhD", "designation": "Associate Professor", "years_experience": 9 },
+    { "faculty_id": "F-CSE-06", "name": "Mr. Aditya Nair", "department_id": "DEPT-CSE", "qualification": "M.Tech", "designation": "Assistant Professor", "years_experience": 2 },
+
+    { "faculty_id": "F-ECE-01", "name": "Dr. Suresh Menon", "department_id": "DEPT-ECE", "qualification": "PhD", "designation": "Professor & HoD", "years_experience": 16 },
+    { "faculty_id": "F-ECE-02", "name": "Ms. Divya Pillai", "department_id": "DEPT-ECE", "qualification": "M.Tech", "designation": "Assistant Professor", "years_experience": 6 },
+    { "faculty_id": "F-ECE-03", "name": "Mr. Karan Shah", "department_id": "DEPT-ECE", "qualification": "M.Tech", "designation": "Assistant Professor", "years_experience": 5 },
+    { "faculty_id": "F-ECE-04", "name": "Ms. Ritu Kapoor", "department_id": "DEPT-ECE", "qualification": "M.Tech", "designation": "Assistant Professor", "years_experience": 4 },
+    { "faculty_id": "F-ECE-05", "name": "Dr. Naveen Rao", "department_id": "DEPT-ECE", "qualification": "PhD", "designation": "Associate Professor", "years_experience": 10 },
+    { "faculty_id": "F-ECE-06", "name": "Ms. Shalini Bose", "department_id": "DEPT-ECE", "qualification": "M.Tech", "designation": "Assistant Professor", "years_experience": 3 },
+    { "faculty_id": "F-ECE-07", "name": "Mr. Deepak Chawla", "department_id": "DEPT-ECE", "qualification": "M.Tech", "designation": "Assistant Professor", "years_experience": 2 },
+
+    { "faculty_id": "F-MECH-01", "name": "Dr. Anil Kumar", "department_id": "DEPT-MECH", "qualification": "PhD", "designation": "Professor & HoD", "years_experience": 18 },
+    { "faculty_id": "F-MECH-02", "name": "Mr. Vikram Singh", "department_id": "DEPT-MECH", "qualification": "M.Tech", "designation": "Assistant Professor", "years_experience": 7 },
+    { "faculty_id": "F-MECH-03", "name": "Mr. Sanjay Gupta", "department_id": "DEPT-MECH", "qualification": "M.Tech", "designation": "Assistant Professor", "years_experience": 6 },
+    { "faculty_id": "F-MECH-04", "name": "Ms. Pooja Reddy", "department_id": "DEPT-MECH", "qualification": "M.Tech", "designation": "Assistant Professor", "years_experience": 5 },
+    { "faculty_id": "F-MECH-05", "name": "Dr. Ramesh Iyer", "department_id": "DEPT-MECH", "qualification": "PhD", "designation": "Associate Professor", "years_experience": 11 },
+    { "faculty_id": "F-MECH-06", "name": "Mr. Ashok Pillai", "department_id": "DEPT-MECH", "qualification": "M.Tech", "designation": "Assistant Professor", "years_experience": 4 },
+    { "faculty_id": "F-MECH-07", "name": "Ms. Kiran Bhat", "department_id": "DEPT-MECH", "qualification": "M.Tech", "designation": "Assistant Professor", "years_experience": 3 },
+    { "faculty_id": "F-MECH-08", "name": "Mr. Suresh Babu", "department_id": "DEPT-MECH", "qualification": "M.Tech", "designation": "Assistant Professor", "years_experience": 2 },
+    { "faculty_id": "F-MECH-09", "name": "Ms. Anita George", "department_id": "DEPT-MECH", "qualification": "M.Tech", "designation": "Assistant Professor", "years_experience": 1 },
+
+    { "faculty_id": "F-CIVIL-01", "name": "Dr. Priya Nair", "department_id": "DEPT-CIVIL", "qualification": "PhD", "designation": "Professor & HoD", "years_experience": 15 },
+    { "faculty_id": "F-CIVIL-02", "name": "Mr. Manoj Tiwari", "department_id": "DEPT-CIVIL", "qualification": "M.Tech", "designation": "Assistant Professor", "years_experience": 8 },
+    { "faculty_id": "F-CIVIL-03", "name": "Ms. Sneha Iyer", "department_id": "DEPT-CIVIL", "qualification": "M.Tech", "designation": "Assistant Professor", "years_experience": 6 },
+    { "faculty_id": "F-CIVIL-04", "name": "Mr. Farhan Ali", "department_id": "DEPT-CIVIL", "qualification": "M.Tech", "designation": "Assistant Professor", "years_experience": 5 },
+    { "faculty_id": "F-CIVIL-05", "name": "Dr. Lakshmi Menon", "department_id": "DEPT-CIVIL", "qualification": "PhD", "designation": "Associate Professor", "years_experience": 9 },
+    { "faculty_id": "F-CIVIL-06", "name": "Mr. Rahul Deshpande", "department_id": "DEPT-CIVIL", "qualification": "M.Tech", "designation": "Assistant Professor", "years_experience": 4 },
+    { "faculty_id": "F-CIVIL-07", "name": "Ms. Nandini Rao", "department_id": "DEPT-CIVIL", "qualification": "M.Tech", "designation": "Assistant Professor", "years_experience": 3 },
+    { "faculty_id": "F-CIVIL-08", "name": "Mr. Vivek Kulkarni", "department_id": "DEPT-CIVIL", "qualification": "M.Tech", "designation": "Assistant Professor", "years_experience": 2 }
+  ],
+
+  "faculty_qualification_summary": {
+    "note": "Used for the PhD-cadre-ratio requirement in the demo",
+    "DEPT-CSE": { "total_faculty": 6, "phd_count": 2, "phd_percent": 33.3, "required_phd_percent": 40 },
+    "DEPT-ECE": { "total_faculty": 7, "phd_count": 2, "phd_percent": 28.6, "required_phd_percent": 40 },
+    "DEPT-MECH": { "total_faculty": 9, "phd_count": 2, "phd_percent": 22.2, "required_phd_percent": 40 },
+    "DEPT-CIVIL": { "total_faculty": 8, "phd_count": 2, "phd_percent": 25.0, "required_phd_percent": 40 }
+  },
+
+  "laboratories": [
+    { "lab_id": "LAB-01", "name": "Programming Lab", "department_id": "DEPT-CSE", "capacity": 40, "status": "functional" },
+    { "lab_id": "LAB-02", "name": "Networks Lab", "department_id": "DEPT-CSE", "capacity": 30, "status": "functional" },
+    { "lab_id": "LAB-03", "name": "Electronics Lab", "department_id": "DEPT-ECE", "capacity": 30, "status": "functional" },
+    { "lab_id": "LAB-04", "name": "Communication Systems Lab", "department_id": "DEPT-ECE", "capacity": 30, "status": "under_maintenance", "maintenance_reason": "Signal generator replacement", "expected_restoration_days": 10 },
+    { "lab_id": "LAB-05", "name": "Thermal Engineering Lab", "department_id": "DEPT-MECH", "capacity": 25, "status": "functional" }
+  ],
+
+  "library": {
+    "library_id": "LIB-001",
+    "total_volumes": 10000,
+    "total_titles": 2500,
+    "total_students_served": 320,
+    "titles_per_student_ratio": "1:7.8",
+    "required_titles_per_student_ratio": "1:10",
+    "journals_subscribed": 45,
+    "digital_access": true,
+    "seating_capacity": 60,
+    "staff_count": 3
+  },
+
+  "committees": [
+    { "committee_id": "COMM-01", "name": "Internal Quality Assurance Cell (IQAC)", "status": "active", "last_reconstituted": "2025-07-01" },
+    { "committee_id": "COMM-02", "name": "Anti-Ragging Committee", "status": "lapsed", "last_reconstituted": "2025-01-15", "lapsed_since_days": 40, "mandatory": true },
+    { "committee_id": "COMM-03", "name": "Grievance Redressal Committee", "status": "active", "last_reconstituted": "2025-06-10" },
+    { "committee_id": "COMM-04", "name": "Women's Safety / ICC Committee", "status": "active", "last_reconstituted": "2025-05-20" }
+  ],
+
+  "credit_structure": [
+    { "department_id": "DEPT-CSE", "program": "B.Tech CSE", "total_credits_required": 160, "credits_assigned": 160, "conformant": true },
+    { "department_id": "DEPT-ECE", "program": "B.Tech ECE", "total_credits_required": 160, "credits_assigned": 158, "conformant": false, "shortfall": 2 },
+    { "department_id": "DEPT-MECH", "program": "B.Tech Mechanical", "total_credits_required": 160, "credits_assigned": 160, "conformant": true },
+    { "department_id": "DEPT-CIVIL", "program": "B.Tech Civil", "total_credits_required": 160, "credits_assigned": 160, "conformant": true }
+  ],
+
+  "contact_hours": [
+    { "course": "Thermodynamics (Project work)", "department_id": "DEPT-MECH", "required_hours_per_week": 6, "actual_hours_per_week": 4.5, "compliant": false }
+  ],
+
+  "sample_regulations": [
+    {
+      "regulation_id": "REG-AICTE-001",
+      "title": "AICTE Faculty-Student Ratio Norms",
+      "version": "v1.0",
+      "effective_date": "2024-01-01",
+      "status": "superseded_by_v2",
+      "requirements": [
+        {
+          "requirement_id": "REQ-FSR-001",
+          "title": "Faculty-Student Ratio",
+          "category": "faculty_ratio",
+          "metric": "students_per_faculty",
+          "operator": "<=",
+          "threshold": 20,
+          "unit": "students per faculty",
+          "severity": "critical",
+          "source_reference": "AICTE Approval Handbook, Clause 4.2",
+          "version": "v1.0",
+          "effective_date": "2024-01-01"
+        }
+      ]
+    },
+    {
+      "regulation_id": "REG-AICTE-002",
+      "title": "AICTE Faculty-Student Ratio Norms (Amended)",
+      "version": "v2.0",
+      "effective_date": "2026-09-01",
+      "status": "active",
+      "requirements": [
+        {
+          "requirement_id": "REQ-FSR-002",
+          "title": "Faculty-Student Ratio (Amended)",
+          "category": "faculty_ratio",
+          "metric": "students_per_faculty",
+          "operator": "<=",
+          "threshold": 25,
+          "unit": "students per faculty",
+          "severity": "critical",
+          "source_reference": "AICTE Approval Handbook, Clause 4.2 (Amendment 2026)",
+          "version": "v2.0",
+          "effective_date": "2026-09-01",
+          "supersedes": "REQ-FSR-001",
+          "change_note": "Threshold relaxed from 1:20 to 1:25. Affected departments: CSE, ECE (both were at risk under v1.0)."
+        }
+      ]
+    },
+    {
+      "regulation_id": "REG-UGC-001",
+      "title": "UGC Faculty Qualification Norms",
+      "version": "v1.0",
+      "effective_date": "2023-06-01",
+      "status": "active",
+      "requirements": [
+        {
+          "requirement_id": "REQ-QUAL-001",
+          "title": "Minimum PhD Faculty Cadre Ratio",
+          "category": "faculty_qualification",
+          "metric": "phd_percent",
+          "operator": ">=",
+          "threshold": 40,
+          "unit": "percent",
+          "severity": "high",
+          "source_reference": "UGC Regulations 2023, Section 3.1",
+          "version": "v1.0",
+          "effective_date": "2023-06-01"
+        }
+      ]
+    },
+    {
+      "regulation_id": "REG-NBA-001",
+      "title": "NBA Library Adequacy Norms",
+      "version": "v1.0",
+      "effective_date": "2023-01-01",
+      "status": "active",
+      "requirements": [
+        {
+          "requirement_id": "REQ-LIB-001",
+          "title": "Library Titles per Student",
+          "category": "infrastructure",
+          "metric": "titles_per_student",
+          "operator": ">=",
+          "threshold": 10,
+          "unit": "students per title",
+          "severity": "medium",
+          "source_reference": "NBA Criteria, Criterion 5",
+          "version": "v1.0",
+          "effective_date": "2023-01-01"
+        }
+      ]
+    },
+    {
+      "regulation_id": "REG-UNIV-001",
+      "title": "University Statutory Committee Requirements",
+      "version": "v1.0",
+      "effective_date": "2022-01-01",
+      "status": "active",
+      "requirements": [
+        {
+          "requirement_id": "REQ-COMM-001",
+          "title": "Mandatory Anti-Ragging Committee Active Status",
+          "category": "committee_compliance",
+          "metric": "committee_status",
+          "operator": "==",
+          "threshold": "active",
+          "unit": "status",
+          "severity": "critical",
+          "source_reference": "University Statute 12(3)",
+          "version": "v1.0",
+          "effective_date": "2022-01-01"
+        }
+    },
+    {
+      "regulation_id": "REG-INTERNAL-001",
+      "title": "Internal Departmental Norms",
+      "version": "v1.0",
+      "effective_date": "2024-01-01",
+      "status": "active",
+      "requirements": [
+        {
+          "requirement_id": "FSR-CSE-001",
+          "title": "FSR-CSE-001",
+          "category": "staffing",
+          "metric": "students_per_faculty",
+          "operator": "<=",
+          "threshold": 20,
+          "unit": "students per faculty",
+          "severity": "critical",
+          "source_reference": "Departmental internal norms",
+          "version": "v1.0",
+          "effective_date": "2024-01-01"
+        },
+        {
+          "requirement_id": "CRED-ECE-001",
+          "title": "CRED-ECE-001",
+          "category": "academics",
+          "metric": "credits",
+          "operator": ">=",
+          "threshold": 160,
+          "unit": "credits",
+          "severity": "medium",
+          "source_reference": "Curriculum structural norms",
+          "version": "v1.0",
+          "effective_date": "2024-01-01"
+        }
+      ]
+    }
+  ],
+
+  "compliance_snapshot_v1_before_amendment": [
+    { "department_id": "DEPT-CSE", "requirement_id": "REQ-FSR-001", "actual_value": "80/6 = 13.3", "status": "COMPLIANT" },
+    { "department_id": "DEPT-ECE", "requirement_id": "REQ-FSR-001", "actual_value": "80/7 = 11.4", "status": "COMPLIANT" },
+    { "department_id": "DEPT-MECH", "requirement_id": "REQ-FSR-001", "actual_value": "80/9 = 8.9", "status": "COMPLIANT" },
+    { "department_id": "DEPT-CIVIL", "requirement_id": "REQ-FSR-001", "actual_value": "80/8 = 10.0", "status": "COMPLIANT" }
+  ],
+
+  "demo_gap_examples": [
+    {
+      "requirement_id": "REQ-QUAL-001",
+      "department_id": "DEPT-MECH",
+      "required_value": "40% PhD",
+      "actual_value": "22.2% PhD (2 of 9 faculty)",
+      "status": "NON_COMPLIANT",
+      "gap": "Need 2 more PhD-qualified faculty to reach 40%",
+      "risk": "high",
+      "suggested_action": "Recruit or upskill 2 faculty to PhD-qualified status",
+      "owner": "HoD, Mechanical / HR",
+      "priority": "High",
+      "estimated_lead_time": "1 recruitment cycle (~90 days) or 2+ years for internal PhD completion"
+    },
+    {
+      "requirement_id": "REQ-LIB-001",
+      "department_id": "INST-001",
+      "required_value": "1 title per 10 students",
+      "actual_value": "1 title per 7.8 students (2500 titles / 320 students) — actually exceeds requirement",
+      "status": "COMPLIANT",
+      "gap": "0",
+      "note": "Included to show a compliant example alongside the non-compliant ones above"
+    },
+    {
+      "requirement_id": "REQ-COMM-001",
+      "department_id": "INST-001",
+      "required_value": "Active",
+      "actual_value": "Lapsed 40 days ago",
+      "status": "NON_COMPLIANT",
+      "gap": "Committee must be reconstituted immediately",
+      "risk": "critical",
+      "suggested_action": "Issue reconstitution order and appoint members",
+      "owner": "Registrar",
+      "priority": "Critical",
+      "estimated_lead_time": "5 days"
+    },
+    {
+      "requirement_id": "LAB-INFRA-CHECK",
+      "department_id": "DEPT-ECE",
+      "title": "Laboratory Infrastructure Readiness",
+      "required_value": "All labs functional",
+      "actual_value": "1 of 2 ECE labs under maintenance (Communication Systems Lab)",
+      "status": "AT_RISK",
+      "gap": "Lab unavailable for practicals until restored",
+      "risk": "medium",
+      "suggested_action": "Expedite signal generator replacement",
+      "owner": "HoD, ECE / Maintenance",
+      "priority": "Medium",
+      "estimated_lead_time": "10 days"
+    },
+    {
+      "requirement_id": "FSR-CSE-001",
+      "department_id": "DEPT-CSE",
+      "title": "FSR-CSE-001",
+      "required_value": "1:20 Faculty-Student Ratio (60 faculty for 1200 students)",
+      "actual_value": "1:26.67 (45 faculty for 1200 students)",
+      "status": "NON_COMPLIANT",
+      "gap": "15 additional qualified faculty members required to meet 1:20 ratio",
+      "risk": "critical",
+      "suggested_action": "Recruit 15 qualified faculty members and assign temporary teaching support",
+      "owner": "HR Department / CSE Dean",
+      "priority": "Critical",
+      "estimated_lead_time": "8-12 weeks"
+    },
+    {
+      "requirement_id": "CRED-ECE-001",
+      "department_id": "DEPT-ECE",
+      "title": "CRED-ECE-001",
+      "required_value": "160 Credits (B.Tech ECE)",
+      "actual_value": "158 Credits assigned — 2-credit shortfall",
+      "status": "AT_RISK",
+      "gap": "2-credit shortfall requires academic council credit realignment",
+      "risk": "medium",
+      "suggested_action": "Approve 2-credit elective or mini-project module and update course credit matrix",
+      "owner": "Board of Studies / Dean Academics",
+      "priority": "Medium",
+      "estimated_lead_time": "14-20 days"
+    },
+    {
+      "requirement_id": "REQ-FSR-001",
+      "department_id": "DEPT-CSE",
+      "required_value": "<= 20 students per faculty",
+      "actual_value": "1200 / 45 = 26.67 students per faculty",
+      "status": "NON_COMPLIANT",
+      "gap": "15 additional faculty needed to reach <= 20",
+      "risk": "critical",
+      "suggested_action": "Recruit 15 qualified faculty members",
+      "owner": "HoD, CSE",
+      "priority": "Critical",
+      "estimated_lead_time": "8-12 weeks"
+    },
+    {
+      "requirement_id": "REQ-FSR-002",
+      "department_id": "DEPT-CSE",
+      "required_value": "<= 25 students per faculty",
+      "actual_value": "1200 / 45 = 26.67 students per faculty",
+      "status": "NON_COMPLIANT",
+      "gap": "3 additional faculty needed to reach <= 25",
+      "risk": "high",
+      "suggested_action": "Recruit 3 qualified faculty members",
+      "owner": "HoD, CSE",
+      "priority": "High",
+      "estimated_lead_time": "4-8 weeks"
+    }
+  ],
+
+  "what_if_example": {
+    "question": "What happens if we recruit 10 more faculty across the institution?",
+    "simulation_input": { "additional_faculty": 10, "distribution": "proportional to current department size" },
+    "simulation_output_note": "Simulator should recompute faculty-student ratio and PhD-cadre percentage per department WITHOUT writing to the production faculty table — output a projected compliance state only."
+  },
+
+  "audit_trail_sample": [
+    { "event_id": "EVT-001", "timestamp": "2026-09-01T09:00:00Z", "agent": "Regulation Intelligence Agent", "action": "Extracted 5 requirements from REG-AICTE-002", "status": "success" },
+    { "event_id": "EVT-002", "timestamp": "2026-09-01T09:01:10Z", "agent": "Compliance Agent", "action": "Ran faculty-ratio check for all departments", "status": "success" },
+    { "event_id": "EVT-003", "timestamp": "2026-09-01T09:01:15Z", "agent": "Change Monitoring Agent", "action": "Detected REQ-FSR-001 superseded by REQ-FSR-002; re-ran checks for CSE, ECE", "status": "success" },
+    { "event_id": "EVT-004", "timestamp": "2026-09-01T09:02:00Z", "agent": "Risk & Priority Agent", "action": "Scored 4 open gaps by severity and lead time", "status": "success" },
+    { "event_id": "EVT-005", "timestamp": "2026-09-01T09:02:40Z", "agent": "Remediation Agent", "action": "Proposed 3 remediation actions, 1 flagged PENDING_HUMAN_APPROVAL", "status": "success" }
+  ]
+}
