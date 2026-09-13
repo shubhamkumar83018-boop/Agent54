@@ -247,7 +247,9 @@ export default function Dashboard() {
         {/* Vignan Logo */}
         <div className="px-4 py-3.5 border-b border-slate-100 bg-gradient-to-b from-slate-50/70 to-white">
           <div className="flex items-center gap-3 mb-2.5">
-            <img src="/vignan_shield.png" alt="Vignan Logo" className="w-10 h-10 object-contain flex-shrink-0 drop-shadow-xs" />
+            <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white font-extrabold text-2xl shadow-md flex-shrink-0 border border-blue-500/40">
+              V
+            </div>
             <div className="min-w-0">
               <p className="text-[14px] font-black text-red-600 leading-none tracking-wide">VIGNAN'S</p>
               <p className="text-[10px] text-slate-500 leading-tight mt-1 font-semibold">Foundation for Science,<br/>Technology & Research</p>
@@ -275,8 +277,8 @@ export default function Dashboard() {
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 py-4 px-3.5 flex flex-col gap-3 overflow-y-auto overflow-x-hidden select-none bg-slate-50/30">
-          <div className="px-1 pb-1 flex items-center justify-between mb-1">
+        <nav className="flex-1 py-4 px-3 flex flex-col gap-2.5 overflow-y-auto overflow-x-hidden select-none bg-slate-50/30">
+          <div className="px-1.5 pb-1 flex items-center justify-between mb-1">
             <span className="text-[11px] font-black uppercase tracking-widest text-slate-400">Navigation Modules</span>
             <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-200/70 text-slate-600">9 Tabs</span>
           </div>
@@ -301,8 +303,8 @@ export default function Dashboard() {
                   >
                     <Icon className="w-4 h-4" />
                   </div>
-                  <span className={`text-[13.5px] tracking-wide truncate
-                    ${isActive ? 'font-black' : 'font-bold group-hover:font-extrabold'}`}
+                  <span className={`text-[14.5px] tracking-tight truncate
+                    ${isActive ? 'font-black text-white' : 'font-extrabold text-slate-800 group-hover:text-blue-700'}`}
                   >
                     {label}
                   </span>
@@ -371,7 +373,7 @@ export default function Dashboard() {
                   navigate('/');
                 }} 
                 title="Logout / Sign Out" 
-                className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 rounded-xl transition-all cursor-pointer flex-shrink-0 shadow-2xs"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 rounded-xl transition-all cursor-pointer flex-shrink-0 shadow-2xs"
               >
                 <LogOut className="w-4 h-4 text-red-600" />
                 <span className="text-[11px] font-black text-red-600">Logout</span>
