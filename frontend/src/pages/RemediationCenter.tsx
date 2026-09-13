@@ -33,7 +33,7 @@ export default function RemediationCenter({ dashboardData, initialCaseId }: Reme
   const criticalCount = dashboardData?.complianceData?.find((c: any) => c.name === 'Non-Compliant')?.value || 2;
 
   // Build complete list of recovery cases dynamically from the Live Scan!
-  const dynamicRecoveryItems = dashboardData?.fullScan?.results
+  const dynamicRecoveryItems: any[] = dashboardData?.fullScan?.results
     ?.filter((r: any) => r.status === 'NON_COMPLIANT' || r.status === 'AT_RISK')
     .map((r: any) => {
       const isCritical = r.status === 'NON_COMPLIANT';
@@ -78,29 +78,29 @@ export default function RemediationCenter({ dashboardData, initialCaseId }: Reme
         evidence: [
           r.evidence_required || 'Required compliance documentation',
           'Approval records',
+          'Internal audit sign-off',
           'System logs'
         ]
       };
     }) || [];
 
-  // If there are no failed rules, provide a fallback "All Clear" item
   if (dynamicRecoveryItems.length === 0) {
     dynamicRecoveryItems.push({
-      id: 'ALL-CLEAR',
-      title: 'No Active Non-Compliances',
-      dept: 'University Wide',
-      deptId: 'UNI',
+      id: 'REQ-ALL-000',
+      title: 'Full Statutory Compliance Maintained',
+      dept: 'All Institutional Departments',
+      deptId: 'DEPT-000',
       severity: 'COMPLIANT',
-      riskBadge: '🟢 Compliant / Safe',
+      riskBadge: '🟢 Fully Compliant',
       category: 'Compliant',
-      riskScore: 0,
-      required: 'N/A',
-      actual: 'N/A',
+      riskScore: 10,
+      required: '100% Statutory Alignment',
+      actual: '100% Alignment',
       students: 0,
       currentValue: 0,
       requiredValue: 0,
       gapCount: 0,
-      gapUnit: 'N/A',
+      gapUnit: 'None',
       status: '🟢 COMPLIANT',
       formula: { totalStudents: 0, targetRatio: 'N/A', requiredStaff: 0, currentStaff: 0, gap: 0 },
       impact: 'All monitored systems are currently fully compliant. No active remediation plans required.',
@@ -113,11 +113,11 @@ export default function RemediationCenter({ dashboardData, initialCaseId }: Reme
     });
   }
 
-  const allRecoveryItems = dynamicRecoveryItems;
+  const allRecoveryItems: any[] = dynamicRecoveryItems;
 
   const [activeCategory, setActiveCategory] = useState<'All' | 'Critical' | 'At Risk' | 'Compliant'>('All');
   
-  const filteredItems = allRecoveryItems.filter(item => {
+  const filteredItems = allRecoveryItems.filter((item: any) => {
     if (activeCategory === 'All') return true;
     if (activeCategory === 'Critical') return item.category === 'Critical';
     if (activeCategory === 'At Risk') return item.category === 'At Risk';
@@ -130,7 +130,7 @@ export default function RemediationCenter({ dashboardData, initialCaseId }: Reme
     if (!key) return null;
     const lower = key.toLowerCase();
     return allRecoveryItems.find(
-      item =>
+      (item: any) =>
         item.id === key ||
         item.id.toLowerCase().includes(lower) ||
         item.title.toLowerCase().includes(lower) ||
@@ -154,7 +154,7 @@ export default function RemediationCenter({ dashboardData, initialCaseId }: Reme
     }
   }, [initialCaseId]);
 
-  const selectedItem = allRecoveryItems.find(item => item.id === selectedId) || allRecoveryItems[0];
+  const selectedItem = allRecoveryItems.find((item: any) => item.id === selectedId) || allRecoveryItems[0];
 
   // Interactive state for selected remediation item
   const [approvalStatus, setApprovalStatus] = useState<'pending' | 'approved' | 'modified' | 'rejected'>('pending');
@@ -227,10 +227,10 @@ export default function RemediationCenter({ dashboardData, initialCaseId }: Reme
     setModalCaseId(null);
   };
 
-  const modalItem = allRecoveryItems.find(item => item.id === modalCaseId) || selectedItem;
+  const modalItem = allRecoveryItems.find((item: any) => item.id === modalCaseId) || selectedItem;
 
   return (
-    <div className="space-y-6 font-sans pb-10">
+    <div className="space-y-7 font-sans pb-10">
 
       {/* ── PAGE HEADER ── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -269,9 +269,9 @@ export default function RemediationCenter({ dashboardData, initialCaseId }: Reme
       </div>
 
       {/* ── 1. TOP KPI STRIP (Dynamic from Database) ── */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
         {/* Open Issues */}
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 flex flex-col gap-2 hover:shadow-md transition-shadow">
+        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 flex flex-col gap-3 hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 to-amber-500 flex items-center justify-center shadow-md shadow-amber-200">
               <AlertTriangle className="w-4 h-4 text-white" />
@@ -285,7 +285,7 @@ export default function RemediationCenter({ dashboardData, initialCaseId }: Reme
         </div>
 
         {/* Critical Issues */}
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 flex flex-col gap-2 hover:shadow-md transition-shadow">
+        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 flex flex-col gap-3 hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center shadow-md shadow-red-200">
               <ShieldAlert className="w-4 h-4 text-white" />
@@ -299,7 +299,7 @@ export default function RemediationCenter({ dashboardData, initialCaseId }: Reme
         </div>
 
         {/* In Progress */}
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 flex flex-col gap-2 hover:shadow-md transition-shadow">
+        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 flex flex-col gap-3 hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-md shadow-blue-200">
               <Activity className="w-4 h-4 text-white" />
@@ -313,7 +313,7 @@ export default function RemediationCenter({ dashboardData, initialCaseId }: Reme
         </div>
 
         {/* Resolution Progress */}
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 flex flex-col gap-2 hover:shadow-md transition-shadow">
+        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 flex flex-col gap-3 hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-md shadow-emerald-200">
               <CheckCircle className="w-4 h-4 text-white" />
@@ -359,7 +359,7 @@ export default function RemediationCenter({ dashboardData, initialCaseId }: Reme
               onChange={(e) => selectItemById(e.target.value)}
               className="bg-slate-800 text-white text-xs font-bold px-3 py-2 rounded-lg border border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer w-full sm:w-auto"
             >
-              {allRecoveryItems.map((item) => (
+              {allRecoveryItems.map((item: any) => (
                 <option key={item.id} value={item.id}>
                   {item.category === 'Critical' ? '🔴' : item.category === 'At Risk' ? '🟠' : '🟢'} {item.title} ({item.dept})
                 </option>
@@ -396,8 +396,8 @@ export default function RemediationCenter({ dashboardData, initialCaseId }: Reme
         </div>
 
         {/* 6 Case Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-          {filteredItems.map((item) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filteredItems.map((item: any) => (
             <div
               key={item.id}
               onClick={() => selectItemById(item.id)}
@@ -468,39 +468,39 @@ export default function RemediationCenter({ dashboardData, initialCaseId }: Reme
           
           {/* Metrics Breakdown Grid */}
           <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-3">
-            <div className="bg-slate-50 border border-slate-100 rounded-xl p-3.5">
+            <div className="bg-slate-50 border border-slate-100 rounded-xl p-3.5 flex flex-col justify-between">
               <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Required Target</p>
-              <p className="text-2xl font-black text-slate-800 mt-0.5">{selectedItem.required}</p>
+              <p className={`font-black text-slate-800 my-1 leading-snug break-words ${String(selectedItem.required).length > 15 ? 'text-sm' : 'text-2xl'}`}>{selectedItem.required}</p>
               <p className="text-[10px] font-bold text-slate-500">Statutory Norm</p>
             </div>
 
-            <div className="bg-red-50/60 border border-red-100 rounded-xl p-3.5">
+            <div className="bg-red-50/60 border border-red-100 rounded-xl p-3.5 flex flex-col justify-between">
               <p className="text-[9px] font-black text-red-600 uppercase tracking-widest">Actual Status</p>
-              <p className="text-2xl font-black text-red-600 mt-0.5">{selectedItem.actual}</p>
+              <p className={`font-black text-red-600 my-1 leading-snug break-words ${String(selectedItem.actual).length > 15 ? 'text-sm' : 'text-2xl'}`}>{selectedItem.actual}</p>
               <p className="text-[10px] font-bold text-red-500 flex items-center gap-0.5">🔴 Gap Detected</p>
             </div>
 
-            <div className="bg-slate-50 border border-slate-100 rounded-xl p-3.5">
+            <div className="bg-slate-50 border border-slate-100 rounded-xl p-3.5 flex flex-col justify-between">
               <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Scope Unit</p>
-              <p className="text-2xl font-black text-blue-700 mt-0.5">{selectedItem.students}</p>
+              <p className="text-2xl font-black text-blue-700 my-1">{selectedItem.students}</p>
               <p className="text-[10px] font-bold text-slate-500">{selectedItem.dept} Scope</p>
             </div>
 
-            <div className="bg-slate-50 border border-slate-100 rounded-xl p-3.5">
+            <div className="bg-slate-50 border border-slate-100 rounded-xl p-3.5 flex flex-col justify-between">
               <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Current Count</p>
-              <p className="text-2xl font-black text-slate-800 mt-0.5">{selectedItem.currentValue}</p>
+              <p className="text-2xl font-black text-slate-800 my-1">{selectedItem.currentValue}</p>
               <p className="text-[10px] font-bold text-slate-500">Active Value</p>
             </div>
 
-            <div className="bg-slate-50 border border-slate-100 rounded-xl p-3.5">
+            <div className="bg-slate-50 border border-slate-100 rounded-xl p-3.5 flex flex-col justify-between">
               <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Target Threshold</p>
-              <p className="text-2xl font-black text-emerald-600 mt-0.5">{selectedItem.requiredValue}</p>
+              <p className="text-2xl font-black text-emerald-600 my-1">{selectedItem.requiredValue}</p>
               <p className="text-[10px] font-bold text-slate-500">Target Value</p>
             </div>
 
-            <div className="bg-red-100/50 border border-red-200 rounded-xl p-3.5">
+            <div className="bg-red-100/50 border border-red-200 rounded-xl p-3.5 flex flex-col justify-between">
               <p className="text-[9px] font-black text-red-700 uppercase tracking-widest">Required Correction</p>
-              <p className="text-2xl font-black text-red-700 mt-0.5">{selectedItem.gapCount}</p>
+              <p className="text-2xl font-black text-red-700 my-1">{selectedItem.gapCount}</p>
               <p className="text-[10px] font-bold text-red-600">{selectedItem.gapUnit}</p>
             </div>
           </div>
@@ -553,38 +553,38 @@ export default function RemediationCenter({ dashboardData, initialCaseId }: Reme
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3 relative">
           {/* Node 1 */}
-          <div className="bg-blue-50/50 border border-blue-100 rounded-xl p-4 text-center">
+          <div className="bg-blue-50/50 border border-blue-100 rounded-xl p-4 text-center flex flex-col justify-between">
             <div className="text-[9px] font-black uppercase tracking-widest text-blue-700 mb-1">
               01. REGULATORY REQUIREMENT
             </div>
-            <div className="text-2xl font-black text-blue-900">{selectedItem.flow.req}</div>
+            <div className={`font-black text-blue-900 leading-snug break-words px-1 my-1 ${String(selectedItem.flow.req).length > 20 ? 'text-sm' : 'text-xl'}`}>{selectedItem.flow.req}</div>
             <div className="text-[10px] font-bold text-slate-500 mt-1">Statutory Target</div>
           </div>
 
           {/* Node 2 */}
-          <div className="bg-red-50/50 border border-red-100 rounded-xl p-4 text-center">
+          <div className="bg-red-50/50 border border-red-100 rounded-xl p-4 text-center flex flex-col justify-between">
             <div className="text-[9px] font-black uppercase tracking-widest text-red-700 mb-1">
               🔴 02. UNIVERSITY ACTUAL
             </div>
-            <div className="text-2xl font-black text-red-600">{selectedItem.flow.actual}</div>
+            <div className={`font-black text-red-600 leading-snug break-words px-1 my-1 ${String(selectedItem.flow.actual).length > 20 ? 'text-sm' : 'text-xl'}`}>{selectedItem.flow.actual}</div>
             <div className="text-[10px] font-bold text-slate-500 mt-1">{selectedItem.dept} Current Load</div>
           </div>
 
           {/* Node 3 */}
-          <div className="bg-amber-50/50 border border-amber-100 rounded-xl p-4 text-center">
+          <div className="bg-amber-50/50 border border-amber-100 rounded-xl p-4 text-center flex flex-col justify-between">
             <div className="text-[9px] font-black uppercase tracking-widest text-amber-700 mb-1">
               🟡 03. COMPLIANCE GAP
             </div>
-            <div className="text-2xl font-black text-amber-600">{selectedItem.flow.gap}</div>
+            <div className={`font-black text-amber-600 leading-snug break-words px-1 my-1 ${String(selectedItem.flow.gap).length > 20 ? 'text-sm' : 'text-xl'}`}>{selectedItem.flow.gap}</div>
             <div className="text-[10px] font-bold text-slate-500 mt-1">Regulatory Overload</div>
           </div>
 
           {/* Node 4 */}
-          <div className="bg-emerald-50/50 border border-emerald-100 rounded-xl p-4 text-center">
+          <div className="bg-emerald-50/50 border border-emerald-100 rounded-xl p-4 text-center flex flex-col justify-between">
             <div className="text-[9px] font-black uppercase tracking-widest text-emerald-700 mb-1">
               🟢 04. REQUIRED CORRECTION
             </div>
-            <div className="text-2xl font-black text-emerald-600">{selectedItem.flow.correction}</div>
+            <div className={`font-black text-emerald-600 leading-snug break-words px-1 my-1 ${String(selectedItem.flow.correction).length > 20 ? 'text-sm' : 'text-xl'}`}>{selectedItem.flow.correction}</div>
             <div className="text-[10px] font-bold text-slate-500 mt-1">To Restore Compliance</div>
           </div>
         </div>
@@ -609,7 +609,7 @@ export default function RemediationCenter({ dashboardData, initialCaseId }: Reme
 
           {/* Step Timeline */}
           <div className="space-y-4 relative before:absolute before:left-4 before:top-3 before:bottom-3 before:w-0.5 before:bg-slate-100">
-            {selectedItem.recoveryPlan.map((stepItem, i) => (
+            {selectedItem.recoveryPlan.map((stepItem: any, i: number) => (
               <div key={i} className="relative pl-10">
                 <div className={`absolute left-2.5 top-0 -translate-x-1/2 w-6 h-6 rounded-full text-white font-black text-[10px] flex items-center justify-center ring-4 ring-white shadow-sm ${
                   i === 0 ? 'bg-red-600' : i === 1 ? 'bg-amber-500' : i === 2 ? 'bg-blue-600' : 'bg-emerald-600'
@@ -668,7 +668,7 @@ export default function RemediationCenter({ dashboardData, initialCaseId }: Reme
               {/* Current State */}
               <div className="bg-red-50/60 border border-red-100 rounded-xl p-3.5 text-center space-y-1">
                 <span className="text-[9px] font-black uppercase tracking-widest text-red-600 block">CURRENT STATE</span>
-                <p className="text-2xl font-black text-red-600">{selectedItem.actual}</p>
+                <p className={`font-black text-red-600 break-words my-1 leading-snug px-1 ${String(selectedItem.actual).length > 15 ? 'text-xs sm:text-sm' : 'text-2xl'}`}>{selectedItem.actual}</p>
                 <div className="inline-flex items-center gap-1 text-[9px] font-black text-red-700 bg-red-100 px-2 py-0.5 rounded border border-red-200">
                   🔴 NON-COMPLIANT
                 </div>
@@ -681,7 +681,7 @@ export default function RemediationCenter({ dashboardData, initialCaseId }: Reme
               {/* Target State */}
               <div className="bg-emerald-50/60 border border-emerald-100 rounded-xl p-3.5 text-center space-y-1">
                 <span className="text-[9px] font-black uppercase tracking-widest text-emerald-700 block">TARGET STATE</span>
-                <p className="text-2xl font-black text-emerald-600">{selectedItem.required}</p>
+                <p className={`font-black text-emerald-600 break-words my-1 leading-snug px-1 ${String(selectedItem.required).length > 15 ? 'text-xs sm:text-sm' : 'text-2xl'}`}>{selectedItem.required}</p>
                 <div className="inline-flex items-center gap-1 text-[9px] font-black text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-200">
                   🟢 COMPLIANT
                 </div>
@@ -847,7 +847,7 @@ export default function RemediationCenter({ dashboardData, initialCaseId }: Reme
 
             {/* Checklist items */}
             <div className="space-y-2 text-xs">
-              {selectedItem.evidence.map((ev, i) => (
+              {selectedItem.evidence.map((ev: any, i: number) => (
                 <label key={i} className="flex items-center gap-2.5 p-2 rounded-lg bg-slate-50 border border-slate-100 cursor-pointer hover:bg-slate-100/60 transition-all">
                   <input
                     type="checkbox"
@@ -1027,7 +1027,7 @@ export default function RemediationCenter({ dashboardData, initialCaseId }: Reme
               <div>
                 <h4 className="text-xs font-black text-slate-800 mb-3 uppercase tracking-widest border-b border-slate-100 pb-2">Execution Steps</h4>
                 <div className="space-y-4 relative before:absolute before:left-4 before:top-3 before:bottom-3 before:w-0.5 before:bg-slate-100">
-                  {modalItem.recoveryPlan.map((stepItem, i) => (
+                  {modalItem.recoveryPlan.map((stepItem: any, i: number) => (
                     <div key={i} className="relative pl-10">
                       <div className={`absolute left-2.5 top-0 -translate-x-1/2 w-6 h-6 rounded-full text-white font-black text-[10px] flex items-center justify-center ring-4 ring-white shadow-sm ${
                         i === 0 ? 'bg-red-600' : i === 1 ? 'bg-amber-500' : i === 2 ? 'bg-blue-600' : 'bg-emerald-600'
