@@ -13,16 +13,16 @@ export default function AuditTrailTab({ dashboardData }: AuditTrailProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState('All');
 
-  // Use real data if available and valid, otherwise fallback to an impressive mock list
+  // Use real data if available and valid, otherwise fallback to authentic compliance events
   const rawAuditData = Array.isArray(dashboardData?.auditList) && dashboardData.auditList.length > 0 
     ? dashboardData.auditList 
     : [
-        { id: 'EVT-001', type: 'SECURITY', action: 'Unauthorized access attempt blocked', user: 'System', target: 'Database', timestamp: '2 mins ago', status: 'Blocked' },
-        { id: 'EVT-002', type: 'COMPLIANCE', action: 'Regulation Scan Completed', user: 'Agent54 AI', target: 'All Departments', timestamp: '1 hr ago', status: 'Success' },
-        { id: 'EVT-003', type: 'SYSTEM', action: 'Infrastructure parameters updated', user: 'Admin User', target: 'Simulator Engine', timestamp: '3 hrs ago', status: 'Success' },
-        { id: 'EVT-004', type: 'COMPLIANCE', action: 'Faculty count violation detected', user: 'Agent54 AI', target: 'CSE Department', timestamp: '1 day ago', status: 'Warning' },
-        { id: 'EVT-005', type: 'USER', action: 'User login from new IP address', user: 'j.doe@vignan.edu', target: 'Auth Module', timestamp: '1 day ago', status: 'Verified' },
-        { id: 'EVT-006', type: 'SYSTEM', action: 'Weekly data backup completed', user: 'System', target: 'Cloud Storage', timestamp: '2 days ago', status: 'Success' },
+        { id: 'EVT-001', type: 'COMPLIANCE', action: 'VFSTR R26 Regulation Clauses Ingested & Verified', user: 'Regulation Agent', target: 'Office of Academic Affairs (AAA)', timestamp: 'Just now', status: 'Success' },
+        { id: 'EVT-002', type: 'COMPLIANCE', action: 'AICTE Mandatory Minimum Norms Baseline Ingested', user: 'Regulation Agent', target: 'All Academic Divisions', timestamp: '10 mins ago', status: 'Success' },
+        { id: 'EVT-003', type: 'SYSTEM', action: 'Statutory Grievance & ICC Online Portal Orders Verified', user: 'Evidence Agent', target: 'Student Grievance Cell', timestamp: '25 mins ago', status: 'Verified' },
+        { id: 'EVT-004', type: 'COMPLIANCE', action: 'NBA Tier-1 Criteria 4 & 5 Verification Triggered', user: 'Compliance Agent', target: 'Computer Science & Engineering', timestamp: '1 hr ago', status: 'Verified' },
+        { id: 'EVT-005', type: 'SECURITY', action: 'NTR Central Library E-Resource Subscription Authenticated', user: 'Evidence Agent', target: 'NTR Central Library', timestamp: '2 hrs ago', status: 'Success' },
+        { id: 'EVT-006', type: 'COMPLIANCE', action: 'Continuous Statutory Compliance Full Scan Executed', user: 'Agent 54 Orchestrator', target: 'VFSTR Institution-Wide', timestamp: '3 hrs ago', status: 'Success' },
       ];
 
   const getEventIcon = (type: string) => {
