@@ -225,10 +225,12 @@ export default function App() {
 
         {/* Vignan Logo */}
         <div className="px-4 py-3.5 border-b border-slate-100 bg-gradient-to-b from-slate-50/70 to-white">
-          <div className="flex items-center gap-3 mb-2.5">
-            <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white font-extrabold text-2xl shadow-md flex-shrink-0 border border-blue-500/40">
-              V
-            </div>
+          <div className="flex items-center gap-2.5 mb-2.5">
+            <img
+              src="/vignan_crest_large.png"
+              alt="Vignan Crest Emblem"
+              className="w-11 h-11 object-contain flex-shrink-0 filter drop-shadow-sm hover:scale-105 transition-transform"
+            />
             <div className="min-w-0">
               <p className="text-[14px] font-black text-red-600 leading-none tracking-wide">VIGNAN'S</p>
               <p className="text-[10px] text-slate-500 leading-tight mt-1 font-semibold">Foundation for Science,<br/>Technology & Research</p>
