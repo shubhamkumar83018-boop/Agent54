@@ -85,12 +85,12 @@ const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
 
       {/* ── TOP HEADER (TOP LEFT VIGNAN LOGO [2ND IMAGE] & TOP RIGHT FLIPPING BADGES [1ST IMAGE]) ── */}
       <header className="relative z-10 w-full px-6 sm:px-10 py-6 flex items-center justify-between bg-transparent">
-        {/* Top Left: 2nd Image Logo with pure white subtext and 100% transparent background (No BG container) */}
+        {/* Top Left: 2nd Image Logo with deep solid white subtext, sharp outline drop-shadow and 100% transparent background */}
         <div className="flex items-center group cursor-pointer">
           <img
-            src="/vignan_logo_white_text.png"
+            src="/vignan_logo_deep_white.png"
             alt="Vignan's Foundation for Science, Technology & Research"
-            className="h-20 sm:h-24 md:h-28 lg:h-32 w-auto object-contain filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.8)] transition-all duration-500 hover:scale-110 hover:-translate-y-2 hover:drop-shadow-[0_25px_35px_rgba(0,0,0,0.95)] cursor-pointer"
+            className="h-20 sm:h-24 md:h-28 lg:h-32 w-auto object-contain filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] drop-shadow-[0_0_2px_rgba(0,0,0,1)] transition-all duration-500 hover:scale-110 hover:-translate-y-2 hover:drop-shadow-[0_15px_25px_rgba(0,0,0,1)] cursor-pointer"
           />
         </div>
 
