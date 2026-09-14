@@ -21,7 +21,7 @@ const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [showLoginForm, setShowLoginForm] = useState(false);
+  const [showLoginForm, setShowLoginForm] = useState(() => window.innerWidth < 768);
   const [isCreatingAccount, setIsCreatingAccount] = useState(false);
   const [fullName, setFullName] = useState('Dr. Admin User');
   const [empCode, setEmpCode] = useState('VIGNAN_ADMIN');
