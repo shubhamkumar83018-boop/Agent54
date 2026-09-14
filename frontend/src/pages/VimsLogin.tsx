@@ -21,7 +21,7 @@ const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [showLoginForm, setShowLoginForm] = useState(() => window.innerWidth < 768);
+  const [showLoginForm, setShowLoginForm] = useState(true);
   const [isCreatingAccount, setIsCreatingAccount] = useState(false);
   const [fullName, setFullName] = useState('Dr. Admin User');
   const [empCode, setEmpCode] = useState('VIGNAN_ADMIN');
@@ -235,14 +235,8 @@ const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
       {/* Subtle overlay */}
       <div className="absolute inset-0 bg-slate-950/5 z-0"></div>
 
-      {/* Floating Watermark to cover video sparkle */}
-      <div className="absolute -bottom-6 right-[6%] z-0 pointer-events-none drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)] backdrop-blur-2xl bg-black/10 rounded-full p-4 sm:p-8 w-36 h-36 sm:w-64 sm:h-64 flex items-center justify-center">
-        <img 
-          src="/vignan_shield.png" 
-          alt="Vignan Watermark" 
-          className="w-28 h-28 sm:w-48 sm:h-48 object-contain filter contrast-125 saturate-150 animate-[pulse_4s_ease-in-out_infinite]"
-        />
-      </div>
+
+
 
       {/* ── TOP HEADER (TOP LEFT VIGNAN LOGO & TOP RIGHT FLIPPING BADGES) ── */}
       <header className="relative z-10 w-full px-4 md:px-6 lg:px-10 py-3 md:py-6 flex items-center justify-between bg-transparent">
@@ -310,46 +304,46 @@ const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
 
       {/* ── MAIN LOGIN SECTION (RIGHT MIDDLE ALIGNED & WHITE BACKGROUND) ── */}
       {showLoginForm && (
-      <main className="relative z-10 flex-1 flex items-center justify-center md:justify-end px-4 md:pr-12 lg:pr-20 xl:pr-28 md:p-4 overflow-y-auto">
-        <div className="w-full max-w-[480px] bg-white/95 backdrop-blur-xl border border-slate-200/90 rounded-3xl p-5 md:p-6 lg:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.3)] hover:shadow-[0_30px_70px_rgba(37,99,235,0.35)] hover:border-blue-400 md:hover:scale-[1.02] md:hover:-translate-y-2 transition-all duration-500 text-slate-800 relative group/card">
+      <main className="relative z-10 flex-1 flex items-end md:items-center justify-center md:justify-end px-3 md:pr-12 lg:pr-20 xl:pr-28 md:p-4 overflow-y-auto md:mt-16">
+        <div className="w-full max-w-[560px] bg-white/95 backdrop-blur-xl border border-slate-200/90 rounded-t-3xl md:rounded-3xl p-7 pb-10 md:p-7 lg:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.3)] hover:shadow-[0_30px_70px_rgba(37,99,235,0.35)] hover:border-blue-400 md:hover:scale-[1.02] md:hover:-translate-y-2 transition-all duration-500 text-slate-800 relative group/card min-h-[82vh] md:min-h-0">
           
           {/* Mode Switcher Tabs */}
-          <div className="flex items-center justify-center gap-2 p-1.5 bg-slate-100 rounded-2xl mb-6 border border-slate-200 shadow-inner">
+          <div className="flex items-center justify-center gap-2 p-2 bg-slate-100 rounded-2xl mb-5 border border-slate-200 shadow-inner">
             <button
               type="button"
               onClick={() => { setIsCreatingAccount(false); setErrorMsg(null); setSuccessMsg(null); }}
-              className={`flex-1 py-3 px-4 rounded-xl text-sm font-black transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer ${
+              className={`flex-1 py-3.5 px-4 rounded-xl text-sm md:text-sm font-black transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer ${
                 !isCreatingAccount
                   ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white shadow-md scale-105'
                   : 'text-slate-600 hover:text-blue-700 hover:bg-white/80 hover:scale-102'
               }`}
             >
-              <LogIn className="w-4 h-4" />
+              <LogIn className="w-5 h-5" />
               <span>Sign In</span>
             </button>
             <button
               type="button"
               onClick={() => { setIsCreatingAccount(true); setErrorMsg(null); setSuccessMsg(null); }}
-              className={`flex-1 py-3 px-4 rounded-xl text-sm font-black transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer ${
+              className={`flex-1 py-3.5 px-4 rounded-xl text-sm md:text-sm font-black transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer ${
                 isCreatingAccount
                   ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white shadow-md scale-105'
                   : 'text-slate-600 hover:text-blue-700 hover:bg-white/80 hover:scale-102'
               }`}
             >
-              <UserPlus className="w-4 h-4" />
+              <UserPlus className="w-5 h-5" />
               <span>Create Account</span>
             </button>
           </div>
 
           {/* Header text */}
-          <div className="mb-6 text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-black tracking-wider uppercase mb-3 shadow-2xs hover:scale-105 hover:bg-blue-100 hover:border-blue-300 transition-all duration-300 cursor-pointer">
+          <div className="mb-5 text-center">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs md:text-xs font-black tracking-wider uppercase mb-3 shadow-2xs hover:scale-105 hover:bg-blue-100 hover:border-blue-300 transition-all duration-300 cursor-pointer">
               <ShieldCheck className="w-4 h-4 text-blue-600" /> VFSTR Portal Authentication
             </div>
-            <h2 className="text-3xl font-black text-slate-900 tracking-tight transition-all">
+            <h2 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight transition-all">
               {isCreatingAccount ? 'Create Workspace Account' : 'Sign In To Workspace'}
             </h2>
-            <p className="text-sm text-slate-500 font-semibold mt-1.5">
+            <p className="text-sm md:text-sm text-slate-500 font-semibold mt-2">
               {isCreatingAccount
                 ? 'Register your employee credentials & 3-digit security grid.'
                 : 'Enter your credentials and security grid values to proceed.'}
@@ -368,7 +362,7 @@ const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
             </div>
           )}
 
-          <form onSubmit={handleLoginSubmit} className="space-y-4">
+          <form onSubmit={handleLoginSubmit} className="space-y-5">
             
             {/* If Creating Account */}
             {isCreatingAccount && (
@@ -392,21 +386,21 @@ const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
             )}
 
             {/* EMPCODE & PASSWORD */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3">
               <div className="group/input">
                 <label className="block text-xs font-extrabold tracking-widest text-slate-800 uppercase mb-2">
                   EMPCODE
                 </label>
                 <div className="relative">
-                  <span className="absolute left-3 top-2.5 text-slate-400 group-hover/input:text-blue-600 group-hover/input:scale-110 transition-all duration-300">
-                    <CreditCard className="w-4 h-4" />
+                  <span className="absolute left-3.5 top-3.5 text-slate-400 group-hover/input:text-blue-600 group-hover/input:scale-110 transition-all duration-300">
+                    <CreditCard className="w-5 h-5" />
                   </span>
                   <input
                     type="text"
                     value={empCode}
                     onChange={(e) => setEmpCode(e.target.value)}
-                    placeholder="Any Employee ID"
-                    className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-10 pr-3 py-3 text-sm font-bold text-slate-900 placeholder-slate-400 hover:bg-white hover:border-blue-500 hover:shadow-md hover:scale-[1.02] focus:scale-[1.02] focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300"
+                    placeholder="Employee ID"
+                    className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-11 pr-3 py-3.5 text-base font-bold text-slate-900 placeholder-slate-400 hover:bg-white hover:border-blue-500 hover:shadow-md focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300"
                   />
                 </div>
               </div>
@@ -416,15 +410,15 @@ const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
                   PASSWORD
                 </label>
                 <div className="relative">
-                  <span className="absolute left-3 top-2.5 text-slate-400 group-hover/input:text-blue-600 group-hover/input:scale-110 transition-all duration-300">
-                    <Lock className="w-4 h-4" />
+                  <span className="absolute left-3.5 top-3.5 text-slate-400 group-hover/input:text-blue-600 group-hover/input:scale-110 transition-all duration-300">
+                    <Lock className="w-5 h-5" />
                   </span>
                   <input
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Any Password"
-                    className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-10 pr-3 py-3 text-sm font-bold text-slate-900 placeholder-slate-400 hover:bg-white hover:border-blue-500 hover:shadow-md hover:scale-[1.02] focus:scale-[1.02] focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300"
+                    placeholder="Password"
+                    className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-11 pr-3 py-3.5 text-base font-bold text-slate-900 placeholder-slate-400 hover:bg-white hover:border-blue-500 hover:shadow-md focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300"
                   />
                 </div>
               </div>
@@ -450,7 +444,7 @@ const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
                   value={gridVal1}
                   onChange={(e) => setGridVal1(e.target.value.replace(/\D/g, ''))}
                   placeholder="123"
-                  className="w-32 text-center bg-white border border-slate-300 rounded-xl py-3 text-lg font-black text-slate-900 placeholder-slate-400 shadow-xs hover:scale-110 hover:border-blue-600 hover:shadow-lg focus:scale-110 focus:border-blue-600 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300"
+                  className="w-28 md:w-32 text-center bg-white border border-slate-300 rounded-xl py-3.5 text-xl font-black text-slate-900 placeholder-slate-400 shadow-xs hover:scale-110 hover:border-blue-600 hover:shadow-lg focus:scale-110 focus:border-blue-600 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300"
                 />
                 <span className="w-6 h-0.5 bg-slate-400 rounded-full flex-shrink-0"></span>
                 <input
@@ -459,7 +453,7 @@ const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
                   value={gridVal2}
                   onChange={(e) => setGridVal2(e.target.value.replace(/\D/g, ''))}
                   placeholder="456"
-                  className="w-32 text-center bg-white border border-slate-300 rounded-xl py-3 text-lg font-black text-slate-900 placeholder-slate-400 shadow-xs hover:scale-110 hover:border-blue-600 hover:shadow-lg focus:scale-110 focus:border-blue-600 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300"
+                  className="w-28 md:w-32 text-center bg-white border border-slate-300 rounded-xl py-3.5 text-xl font-black text-slate-900 placeholder-slate-400 shadow-xs hover:scale-110 hover:border-blue-600 hover:shadow-lg focus:scale-110 focus:border-blue-600 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300"
                 />
               </div>
             </div>
@@ -468,14 +462,14 @@ const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-4 px-4 bg-gradient-to-r from-slate-950 via-blue-950 to-indigo-950 hover:from-blue-600 hover:via-indigo-600 hover:to-blue-700 text-white font-black text-sm uppercase tracking-widest rounded-2xl shadow-xl hover:shadow-[0_15px_35px_rgba(37,99,235,0.5)] border border-slate-800 hover:border-blue-400 flex items-center justify-center gap-2.5 hover:scale-[1.03] active:scale-95 transition-all duration-300 cursor-pointer group/btn"
+              className="w-full py-4.5 px-4 bg-gradient-to-r from-slate-950 via-blue-950 to-indigo-950 hover:from-blue-600 hover:via-indigo-600 hover:to-blue-700 text-white font-black text-sm md:text-sm uppercase tracking-widest rounded-2xl shadow-xl hover:shadow-[0_15px_35px_rgba(37,99,235,0.5)] border border-slate-800 hover:border-blue-400 flex items-center justify-center gap-2.5 hover:scale-[1.03] active:scale-95 transition-all duration-300 cursor-pointer group/btn"
             >
               <span>{loading ? 'PROCESSING...' : isCreatingAccount ? 'CREATE WORKSPACE ACCOUNT' : 'SIGN IN TO WORKSPACE'}</span>
               <ArrowRight className="w-5 h-5 text-blue-400 group-hover/btn:translate-x-2 group-hover/btn:scale-125 transition-transform duration-300" />
             </button>
 
             {/* Sub-links */}
-            <div className="flex flex-wrap items-center justify-center gap-3 text-xs font-extrabold text-slate-600 pt-2">
+            <div className="flex flex-wrap items-center justify-center gap-3 text-sm font-extrabold text-slate-600 pt-2">
               <button
                 type="button"
                 onClick={() => { setIsCreatingAccount(!isCreatingAccount); setErrorMsg(null); setSuccessMsg(null); }}
