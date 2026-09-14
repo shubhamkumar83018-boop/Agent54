@@ -4,7 +4,7 @@
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 html {
-  font-size: 112.5%; /* Increases base font size from 16px to 18px. All rem values scale up. */
+  font-size: 125%; /* Increases base font size from 16px to 20px. All rem values scale up significantly. */
 }
 body {
   background-color: #111827; /* gray-900 */
