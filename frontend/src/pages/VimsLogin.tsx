@@ -259,7 +259,7 @@ const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
 
         {/* Top Center: Sign In Button */}
         {!showLoginForm && (
-          <div className="absolute left-1/2 -translate-x-1/2 top-4 sm:top-6 z-50">
+          <div className="absolute left-[40%] md:left-[42%] -translate-x-1/2 top-4 sm:top-6 z-50">
             <button
               onClick={() => setShowLoginForm(true)}
               className="group px-6 py-2.5 sm:px-8 sm:py-3 bg-white hover:bg-gray-100 text-black font-black text-xs sm:text-sm uppercase tracking-widest rounded-[14px] shadow-[0_8px_25px_rgba(0,0,0,0.25)] hover:shadow-[0_12px_35px_rgba(255,255,255,0.3)] border border-gray-200 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer flex items-center justify-center gap-2"
