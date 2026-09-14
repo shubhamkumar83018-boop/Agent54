@@ -9,6 +9,9 @@ html {
 body {
   background-color: #111827; /* gray-900 */
   font-family: 'Plus Jakarta Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #1e293b; /* slate-800 for crisp text */
 }
 
 @keyframes antiGravity {
