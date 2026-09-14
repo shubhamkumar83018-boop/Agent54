@@ -245,58 +245,53 @@ const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
       </div>
 
       {/* ── TOP HEADER (TOP LEFT VIGNAN LOGO & TOP RIGHT FLIPPING BADGES) ── */}
-      <header className="relative z-10 w-full px-4 sm:px-6 md:px-10 py-3 sm:py-6 flex flex-col sm:flex-row items-center justify-between bg-transparent gap-2 sm:gap-0">
-        {/* Top Row on mobile: Logo + Sign In Button */}
-        <div className="w-full sm:w-auto flex items-center justify-between sm:justify-start">
-          {/* Top Left: Logo */}
-          <div className="flex items-center group cursor-pointer">
-            <div className="px-1 py-1 sm:px-2 sm:py-2 transition-all duration-500 hover:scale-105 hover:-translate-y-1">
-              <img
-                src="/vignan_logo.png"
-                alt="Vignan's Foundation for Science, Technology & Research"
-                className="h-12 sm:h-24 md:h-28 lg:h-32 w-auto object-contain cursor-pointer filter drop-shadow-[0_4px_15px_rgba(255,255,255,0.9)] drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]"
-              />
-            </div>
+      <header className="relative z-10 w-full px-4 md:px-6 lg:px-10 py-3 md:py-6 flex items-center justify-between bg-transparent">
+        {/* Top Left: Logo */}
+        <div className="flex items-center group cursor-pointer flex-shrink-0">
+          <div className="px-1 py-1 md:px-2 md:py-2 transition-all duration-500 hover:scale-105 hover:-translate-y-1">
+            <img
+              src="/vignan_logo.png"
+              alt="Vignan's Foundation for Science, Technology & Research"
+              className="h-10 md:h-24 lg:h-28 xl:h-32 w-auto object-contain cursor-pointer filter drop-shadow-[0_4px_15px_rgba(255,255,255,0.9)] drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]"
+            />
           </div>
-
-          {/* Sign In Button - inline on mobile, absolute center on desktop */}
-          {!showLoginForm && (
-            <>
-              {/* Mobile: inline button */}
-              <div className="sm:hidden">
-                <button
-                  onClick={() => setShowLoginForm(true)}
-                  className="group px-4 py-2 bg-white hover:bg-gray-100 text-black font-black text-[10px] uppercase tracking-widest rounded-xl shadow-lg border border-gray-200 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer flex items-center justify-center gap-1.5"
-                >
-                  <LogIn className="w-3.5 h-3.5" />
-                  <span>Sign In</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </>
-          )}
         </div>
 
-        {/* Desktop: Centered Sign In Button */}
+        {/* Center: Sign In Button */}
         {!showLoginForm && (
-          <div className="hidden sm:block absolute left-[40%] md:left-[42%] -translate-x-1/2 top-4 sm:top-6 z-50">
-            <button
-              onClick={() => setShowLoginForm(true)}
-              className="group px-6 py-2.5 sm:px-8 sm:py-3 bg-white hover:bg-gray-100 text-black font-black text-xs sm:text-sm uppercase tracking-widest rounded-[14px] shadow-[0_8px_25px_rgba(0,0,0,0.25)] hover:shadow-[0_12px_35px_rgba(255,255,255,0.3)] border border-gray-200 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer flex items-center justify-center gap-2"
-            >
-              <LogIn className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-300" />
-              <span>Sign In to Workspace</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-300" />
-            </button>
-          </div>
+          <>
+            {/* Mobile/Tablet: simple centered button */}
+            <div className="md:hidden">
+              <button
+                onClick={() => setShowLoginForm(true)}
+                className="group px-4 py-2 bg-white hover:bg-gray-100 text-black font-black text-[10px] uppercase tracking-widest rounded-xl shadow-lg border border-gray-200 active:scale-95 transition-all duration-300 cursor-pointer flex items-center justify-center gap-1.5"
+              >
+                <LogIn className="w-3.5 h-3.5" />
+                <span>Sign In</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            {/* Desktop: Centered absolute button */}
+            <div className="hidden md:block absolute left-[40%] lg:left-[42%] -translate-x-1/2 top-4 md:top-6 z-50">
+              <button
+                onClick={() => setShowLoginForm(true)}
+                className="group px-6 py-2.5 lg:px-8 lg:py-3 bg-white hover:bg-gray-100 text-black font-black text-xs lg:text-sm uppercase tracking-widest rounded-[14px] shadow-[0_8px_25px_rgba(0,0,0,0.25)] hover:shadow-[0_12px_35px_rgba(255,255,255,0.3)] border border-gray-200 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer flex items-center justify-center gap-2"
+              >
+                <LogIn className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-300" />
+                <span>Sign In to Workspace</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-300" />
+              </button>
+            </div>
+          </>
         )}
 
-        {/* Top Right: Accreditation Badges with Left-to-Right 3D Coin Flip Effect */}
-        <div className="hidden sm:flex items-center gap-4 md:gap-6 mr-4 lg:mr-12 xl:mr-16">
+        {/* Top Right: Accreditation Badges - only on large screens */}
+        <div className="hidden lg:flex items-center gap-4 xl:gap-6 mr-4 xl:mr-12 2xl:mr-16">
           {['/badge_naac.png', '/badge_nirf.png', '/badge_nba.png', '/badge_aicte.png', '/badge_ugccare.png', '/badge_abet.png'].map((src, idx) => (
             <div
               key={idx}
-              className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full flex items-center justify-center cursor-pointer group"
+              className="relative w-20 h-20 xl:w-24 xl:h-24 2xl:w-28 2xl:h-28 rounded-full flex items-center justify-center cursor-pointer group"
               style={{ perspective: '1000px' }}
               title="Accreditation Badge"
             >
@@ -315,8 +310,8 @@ const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
 
       {/* ── MAIN LOGIN SECTION (RIGHT MIDDLE ALIGNED & WHITE BACKGROUND) ── */}
       {showLoginForm && (
-      <main className="relative z-10 flex-1 flex items-center justify-center sm:justify-end px-4 sm:pr-12 md:pr-20 lg:pr-28 sm:p-4 overflow-y-auto">
-        <div className="w-full max-w-[480px] bg-white/95 backdrop-blur-xl border border-slate-200/90 rounded-3xl p-5 sm:p-6 md:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.3)] hover:shadow-[0_30px_70px_rgba(37,99,235,0.35)] hover:border-blue-400 sm:hover:scale-[1.02] sm:hover:-translate-y-2 transition-all duration-500 text-slate-800 relative group/card">
+      <main className="relative z-10 flex-1 flex items-center justify-center md:justify-end px-4 md:pr-12 lg:pr-20 xl:pr-28 md:p-4 overflow-y-auto">
+        <div className="w-full max-w-[480px] bg-white/95 backdrop-blur-xl border border-slate-200/90 rounded-3xl p-5 md:p-6 lg:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.3)] hover:shadow-[0_30px_70px_rgba(37,99,235,0.35)] hover:border-blue-400 md:hover:scale-[1.02] md:hover:-translate-y-2 transition-all duration-500 text-slate-800 relative group/card">
           
           {/* Mode Switcher Tabs */}
           <div className="flex items-center justify-center gap-2 p-1.5 bg-slate-100 rounded-2xl mb-6 border border-slate-200 shadow-inner">
