@@ -207,7 +207,7 @@ const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
   };
 
   return (
-    <div className="relative w-screen h-screen overflow-hidden flex flex-col font-sans select-none bg-slate-950">
+    <div className="relative w-full min-h-screen md:h-screen overflow-x-hidden overflow-y-auto md:overflow-hidden flex flex-col font-sans select-none bg-slate-950">
       
       {/* Hidden File Input for PDF Uploads */}
       <input
@@ -226,14 +226,14 @@ const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
         muted
         playsInline
         preload="auto"
-        className="absolute inset-0 w-full h-full object-cover z-0 opacity-100 filter brightness-110 contrast-110 saturate-110"
+        className="fixed inset-0 w-full h-full object-cover z-0 opacity-100 filter brightness-110 contrast-110 saturate-110"
       >
         <source src="/login_page_bg.mp4" type="video/mp4" />
         <source src="/video.mp4" type="video/mp4" />
       </video>
 
       {/* Subtle overlay */}
-      <div className="absolute inset-0 bg-slate-950/5 z-0"></div>
+      <div className="fixed inset-0 bg-slate-950/5 z-0"></div>
 
 
 
@@ -304,8 +304,8 @@ const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
 
       {/* ── MAIN LOGIN SECTION (RIGHT MIDDLE ALIGNED & WHITE BACKGROUND) ── */}
       {showLoginForm && (
-      <main className="relative z-10 flex-1 flex items-end md:items-center justify-center md:justify-end px-3 md:pr-12 lg:pr-20 xl:pr-28 md:p-4 overflow-y-auto md:mt-16">
-        <div className="w-full max-w-[560px] bg-white/95 backdrop-blur-xl border border-slate-200/90 rounded-t-3xl md:rounded-3xl p-7 pb-10 md:p-7 lg:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.3)] hover:shadow-[0_30px_70px_rgba(37,99,235,0.35)] hover:border-blue-400 md:hover:scale-[1.02] md:hover:-translate-y-2 transition-all duration-500 text-slate-800 relative group/card min-h-[82vh] md:min-h-0">
+      <main className="relative z-10 flex-1 flex items-end md:items-center justify-center md:justify-end px-3 md:pr-12 lg:pr-20 xl:pr-28 md:p-4 overflow-y-auto md:overflow-visible mt-[85svh] md:mt-16 pb-6 w-full">
+        <div className="w-full max-w-[560px] bg-white/95 backdrop-blur-xl border border-slate-200/90 rounded-t-3xl md:rounded-3xl p-7 pb-10 md:p-7 lg:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.3)] hover:shadow-[0_30px_70px_rgba(37,99,235,0.35)] hover:border-blue-400 md:hover:scale-[1.02] md:hover:-translate-y-2 transition-all duration-500 text-slate-800 relative group/card min-h-[90vh] md:min-h-0">
           
           {/* Mode Switcher Tabs */}
           <div className="flex items-center justify-center gap-2 p-2 bg-slate-100 rounded-2xl mb-5 border border-slate-200 shadow-inner">
