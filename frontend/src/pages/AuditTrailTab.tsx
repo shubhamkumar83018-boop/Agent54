@@ -63,6 +63,30 @@ export default function AuditTrailTab({ dashboardData }: AuditTrailProps) {
     return matchesFilter && matchesSearch;
   });
 
+  const handleExport = () => {
+    const headers = ['Event ID', 'Type', 'Action', 'Initiator (User)', 'Target', 'Timestamp', 'Status'];
+    const csvRows = filteredData.map((event: any) => {
+      return [
+        `"${event.id || ''}"`,
+        `"${event.type || ''}"`,
+        `"${event.action || ''}"`,
+        `"${event.user || ''}"`,
+        `"${event.target || ''}"`,
+        `"${event.timestamp || ''}"`,
+        `"${event.status || ''}"`
+      ].join(',');
+    });
+    const csvContent = [headers.join(','), ...csvRows].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `agent54_audit_log_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="space-y-6 font-sans pb-10 h-full flex flex-col">
       
@@ -77,7 +101,10 @@ export default function AuditTrailTab({ dashboardData }: AuditTrailProps) {
             Real-time, cryptographically verified logging of all system and agentic events.
           </p>
         </div>
-        <button className="bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-indigo-600 px-4 py-2 rounded-xl font-bold text-sm shadow-sm transition-all flex items-center gap-2">
+        <button 
+          onClick={handleExport}
+          className="bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-indigo-600 active:scale-95 px-4 py-2 rounded-xl font-bold text-sm shadow-sm transition-all flex items-center gap-2 cursor-pointer"
+        >
           <Download className="w-4 h-4" />
           Export Log
         </button>
