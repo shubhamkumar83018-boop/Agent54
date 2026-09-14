@@ -236,37 +236,57 @@ const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
       <div className="absolute inset-0 bg-slate-950/5 z-0"></div>
 
       {/* Floating Watermark to cover video sparkle */}
-      <div className="absolute -bottom-6 right-[6%] z-0 pointer-events-none drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)] backdrop-blur-2xl bg-black/10 rounded-full p-8 w-64 h-64 flex items-center justify-center">
+      <div className="absolute -bottom-6 right-[6%] z-0 pointer-events-none drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)] backdrop-blur-2xl bg-black/10 rounded-full p-4 sm:p-8 w-36 h-36 sm:w-64 sm:h-64 flex items-center justify-center">
         <img 
           src="/vignan_shield.png" 
           alt="Vignan Watermark" 
-          className="w-48 h-48 object-contain filter contrast-125 saturate-150 animate-[pulse_4s_ease-in-out_infinite]"
+          className="w-28 h-28 sm:w-48 sm:h-48 object-contain filter contrast-125 saturate-150 animate-[pulse_4s_ease-in-out_infinite]"
         />
       </div>
 
       {/* ── TOP HEADER (TOP LEFT VIGNAN LOGO & TOP RIGHT FLIPPING BADGES) ── */}
-      <header className="relative z-10 w-full px-6 sm:px-10 py-6 flex items-center justify-between bg-transparent">
-        {/* Top Left: Logo */}
-        <div className="flex items-center group cursor-pointer">
-          <div className="px-2 py-2 transition-all duration-500 hover:scale-105 hover:-translate-y-1">
-            <img
-              src="/vignan_logo.png"
-              alt="Vignan's Foundation for Science, Technology & Research"
-              className="h-20 sm:h-24 md:h-28 lg:h-32 w-auto object-contain cursor-pointer filter drop-shadow-[0_4px_15px_rgba(255,255,255,0.9)] drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]"
-            />
+      <header className="relative z-10 w-full px-4 sm:px-6 md:px-10 py-3 sm:py-6 flex flex-col sm:flex-row items-center justify-between bg-transparent gap-2 sm:gap-0">
+        {/* Top Row on mobile: Logo + Sign In Button */}
+        <div className="w-full sm:w-auto flex items-center justify-between sm:justify-start">
+          {/* Top Left: Logo */}
+          <div className="flex items-center group cursor-pointer">
+            <div className="px-1 py-1 sm:px-2 sm:py-2 transition-all duration-500 hover:scale-105 hover:-translate-y-1">
+              <img
+                src="/vignan_logo.png"
+                alt="Vignan's Foundation for Science, Technology & Research"
+                className="h-12 sm:h-24 md:h-28 lg:h-32 w-auto object-contain cursor-pointer filter drop-shadow-[0_4px_15px_rgba(255,255,255,0.9)] drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]"
+              />
+            </div>
           </div>
+
+          {/* Sign In Button - inline on mobile, absolute center on desktop */}
+          {!showLoginForm && (
+            <>
+              {/* Mobile: inline button */}
+              <div className="sm:hidden">
+                <button
+                  onClick={() => setShowLoginForm(true)}
+                  className="group px-4 py-2 bg-white hover:bg-gray-100 text-black font-black text-[10px] uppercase tracking-widest rounded-xl shadow-lg border border-gray-200 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer flex items-center justify-center gap-1.5"
+                >
+                  <LogIn className="w-3.5 h-3.5" />
+                  <span>Sign In</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </>
+          )}
         </div>
 
-        {/* Top Center: Sign In Button */}
+        {/* Desktop: Centered Sign In Button */}
         {!showLoginForm && (
-          <div className="absolute left-[40%] md:left-[42%] -translate-x-1/2 top-4 sm:top-6 z-50">
+          <div className="hidden sm:block absolute left-[40%] md:left-[42%] -translate-x-1/2 top-4 sm:top-6 z-50">
             <button
               onClick={() => setShowLoginForm(true)}
               className="group px-6 py-2.5 sm:px-8 sm:py-3 bg-white hover:bg-gray-100 text-black font-black text-xs sm:text-sm uppercase tracking-widest rounded-[14px] shadow-[0_8px_25px_rgba(0,0,0,0.25)] hover:shadow-[0_12px_35px_rgba(255,255,255,0.3)] border border-gray-200 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer flex items-center justify-center gap-2"
             >
-              <LogIn className="w-4 h-4 sm:w-4.5 sm:h-4.5 group-hover:translate-x-0.5 transition-transform duration-300" />
+              <LogIn className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-300" />
               <span>Sign In to Workspace</span>
-              <ArrowRight className="w-4 h-4 sm:w-4.5 sm:h-4.5 group-hover:translate-x-1.5 transition-transform duration-300" />
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-300" />
             </button>
           </div>
         )}
@@ -295,8 +315,8 @@ const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
 
       {/* ── MAIN LOGIN SECTION (RIGHT MIDDLE ALIGNED & WHITE BACKGROUND) ── */}
       {showLoginForm && (
-      <main className="relative z-10 flex-1 flex items-center justify-end pr-6 sm:pr-12 md:pr-20 lg:pr-28 p-4">
-        <div className="w-full max-w-[480px] bg-white/95 backdrop-blur-xl border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.3)] hover:shadow-[0_30px_70px_rgba(37,99,235,0.35)] hover:border-blue-400 hover:scale-[1.02] hover:-translate-y-2 transition-all duration-500 text-slate-800 relative group/card">
+      <main className="relative z-10 flex-1 flex items-center justify-center sm:justify-end px-4 sm:pr-12 md:pr-20 lg:pr-28 sm:p-4 overflow-y-auto">
+        <div className="w-full max-w-[480px] bg-white/95 backdrop-blur-xl border border-slate-200/90 rounded-3xl p-5 sm:p-6 md:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.3)] hover:shadow-[0_30px_70px_rgba(37,99,235,0.35)] hover:border-blue-400 sm:hover:scale-[1.02] sm:hover:-translate-y-2 transition-all duration-500 text-slate-800 relative group/card">
           
           {/* Mode Switcher Tabs */}
           <div className="flex items-center justify-center gap-2 p-1.5 bg-slate-100 rounded-2xl mb-6 border border-slate-200 shadow-inner">
