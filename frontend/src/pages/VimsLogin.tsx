@@ -292,8 +292,8 @@ const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
               <img
                 src={src}
                 alt={`badge-${idx}`}
-                className="w-full h-full object-contain filter drop-shadow-xl transition-all duration-700 ease-in-out group-hover:[transform:rotateY(360deg)] group-hover:scale-125"
-                style={{ transformStyle: 'preserve-3d' }}
+                className="w-full h-full object-contain filter drop-shadow-xl animate-coin-flip hover:scale-110 transition-transform duration-300"
+                style={{ transformStyle: 'preserve-3d', animationDelay: `${idx * 0.3}s` }}
               />
             </div>
           ))}
