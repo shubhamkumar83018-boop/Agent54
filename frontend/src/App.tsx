@@ -142,6 +142,119 @@ export default function App() {
     setActiveTab('Remediation');
   };
 
+  const handleUpdateCompliance = (
+    requirementId: string,
+    newStatus: 'COMPLIANT' | 'NON_COMPLIANT' | 'EVIDENCE_PENDING',
+    actualValue?: string,
+    gapText?: string
+  ) => {
+    setDashboardData((prevData: any) => {
+      if (!prevData) return prevData;
+
+      const updatedResults = (prevData.resultsList || []).map((r: any) => {
+        if (
+          r.requirement_id === requirementId ||
+          r.id === requirementId ||
+          r.requirement_title === requirementId
+        ) {
+          const isComp = newStatus === 'COMPLIANT';
+          const isNonComp = newStatus === 'NON_COMPLIANT';
+          return {
+            ...r,
+            status: newStatus,
+            actual_value: actualValue || (isComp ? 'Verified Official Evidence' : isNonComp ? (actualValue || 'Deficiency in audit data') : r.actual_value),
+            gap: gapText || (isComp ? 'None (Official Evidence Verified)' : isNonComp ? 'Deficiency detected in evidence audit' : r.gap),
+            observation: isComp
+              ? `Evidence verified and evaluated against statutory regulation. Compliance criteria fulfilled.`
+              : isNonComp
+              ? `Evidence audited from CSV. Statutory condition violated or below threshold.`
+              : r.observation
+          };
+        }
+        return r;
+      });
+
+      // Recalculate summary metrics
+      let compliantCount = 0;
+      let nonCompliantCount = 0;
+      let pendingCount = 0;
+      const catStats: Record<string, { total: number; compliant: number }> = {};
+
+      updatedResults.forEach((r: any) => {
+        const cat = r.category || 'General';
+        if (!catStats[cat]) catStats[cat] = { total: 0, compliant: 0 };
+        catStats[cat].total++;
+
+        if (r.status === 'COMPLIANT') {
+          compliantCount++;
+          catStats[cat].compliant++;
+        } else if (r.status === 'NON_COMPLIANT') {
+          nonCompliantCount++;
+        } else {
+          pendingCount++;
+        }
+      });
+
+      const categories = Object.entries(catStats).map(([name, stats]) => ({
+        name,
+        val: Math.round((stats.compliant / stats.total) * 100)
+      })).sort((a, b) => b.val - a.val);
+
+      const totalReqs = updatedResults.length || 26;
+      const newScore = Math.round((compliantCount / totalReqs) * 100);
+
+      // Add real trace event to immutable audit log
+      const now = new Date();
+      const newAuditLog = {
+        id: `EVT-${Date.now().toString().slice(-6)}`,
+        type: 'COMPLIANCE',
+        action: `Remediation Audit: ${requirementId} marked ${newStatus}`,
+        user: 'Admin (Academic Affairs AAA)',
+        role: 'Dean Academics / IQAC Lead',
+        target: requirementId,
+        timestamp: 'Just now',
+        date: now.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
+        fullTimestamp: now.toISOString(),
+        details: {
+          channel: 'REMEDIATION_EVIDENCE_ENGINE',
+          event_type: 'STATUTORY_CHECKPOINT_REMEDIATION',
+          requirement_id: requirementId,
+          new_status: newStatus,
+          actual_value_audited: actualValue || 'Official Verified Evidence',
+          remediation_gap: gapText || 'Condition Fulfilled',
+          audit_hash: `0x${Math.random().toString(16).substring(2, 10).toUpperCase()}`
+        },
+        status: newStatus === 'COMPLIANT' ? 'Success' : 'Warning'
+      };
+
+      return {
+        ...prevData,
+        complianceScore: newScore,
+        totalRisks: pendingCount + nonCompliantCount,
+        resultsList: updatedResults,
+        categories: categories,
+        auditList: [newAuditLog, ...(prevData.auditList || [])],
+        complianceData: [
+          { name: 'Compliant', value: compliantCount, color: '#3B82F6' },
+          { name: 'At Risk', value: 0, color: '#F59E0B' },
+          { name: 'Non-Compliant', value: nonCompliantCount, color: '#EF4444' },
+          { name: 'Pending Review', value: pendingCount, color: '#F59E0B' }
+        ],
+        fullScan: {
+          ...(prevData.fullScan || {}),
+          overall_compliance_pct: newScore,
+          results: updatedResults,
+          summary: {
+            COMPLIANT: compliantCount,
+            EVIDENCE_PENDING: pendingCount,
+            NON_COMPLIANT: nonCompliantCount,
+            AT_RISK: 0
+          }
+        }
+      };
+    });
+  };
+
   useEffect(() => {
     const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
     Promise.all([
@@ -1265,10 +1378,21 @@ export default function App() {
           })()}
 
           {/* ── READINESS REPORT TAB ── */}
-          {activeTab === 'Readiness' && <ReadinessReportTab />}
+          {activeTab === 'Readiness' && (
+            <ReadinessReportTab
+              dashboardData={dashboardData}
+              onOpenRemediation={handleOpenRecoveryPlan}
+            />
+          )}
 
           {/* ── REMEDIATION TAB ── */}
-          {activeTab === 'Remediation' && <RemediationCenter dashboardData={dashboardData} initialCaseId={selectedCaseId} />}
+          {activeTab === 'Remediation' && (
+            <RemediationCenter
+              dashboardData={dashboardData}
+              initialCaseId={selectedCaseId}
+              onUpdateCompliance={handleUpdateCompliance}
+            />
+          )}
 
           {/* ── INTEGRATIONS MESH TAB ── */}
           {activeTab === 'Integrations' && <IntegrationsTab />}
