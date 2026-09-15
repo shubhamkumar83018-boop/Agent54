@@ -1,0 +1,342 @@
+[
+  {
+    "selector": "/* --- Top Overlay Header --- */\n.top-header",
+    "properties": "position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  z-index: 100;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 14px 48px;\n  pointer-events: none;"
+  },
+  {
+    "selector": ".header-logo-container,\n.header-badges-container",
+    "properties": "pointer-events: auto;\n  display: flex;\n  align-items: center;"
+  },
+  {
+    "selector": ".header-main-logo",
+    "properties": "height: 130px;\n  width: auto;\n  object-fit: contain;\n  margin-top: -4px;\n  filter:\n    drop-shadow(0 2px 8px rgba(0, 40, 120, 0.15));\n  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);\n  cursor: pointer;\n  animation: logoFloat 4s ease-in-out infinite;"
+  },
+  {
+    "selector": "}\n\n\n.header-main-logo:hover",
+    "properties": "animation-play-state: paused;\n  transform: translateY(-6px) scale(1.08);\n  filter:\n    drop-shadow(0 4px 16px rgba(0, 98, 255, 0.5));"
+  },
+  {
+    "selector": "/* --- Accreditation Badges: Separated 3D Coin Flip Badges --- */\n.header-badges-container",
+    "properties": "pointer-events: auto;\n  display: flex;\n  align-items: center;\n  gap: 12px;\n  perspective: 1200px;\n  animation: badgesFloat 4s ease-in-out infinite;"
+  },
+  {
+    "selector": "}\n\n.header-badges-container:hover",
+    "properties": "animation-play-state: paused;"
+  },
+  {
+    "selector": "/* Individual 3D Coin Item */\n.badge-coin",
+    "properties": "position: relative;\n  width: 72px;\n  height: 72px;\n  perspective: 1000px;\n  cursor: pointer;\n  user-select: none;\n  outline: none;\n  border-radius: 50%;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;"
+  },
+  {
+    "selector": ".coin-inner",
+    "properties": "position: relative;\n  width: 100%;\n  height: 100%;\n  border-radius: 50%;\n  transform-style: preserve-3d;\n  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease, filter 0.35s ease;\n  background: #ffffff;\n  box-shadow:\n    0 0 0 2px rgba(255, 255, 255, 0.95),\n    0 3px 12px rgba(0, 0, 0, 0.15),\n    0 0 16px rgba(255, 255, 255, 0.95),\n    0 4px 16px rgba(0, 40, 120, 0.2);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  overflow: hidden;"
+  },
+  {
+    "selector": ".badge-coin .badge-img",
+    "properties": "width: 100%;\n  height: 100%;\n  object-fit: cover;\n  border-radius: 50%;\n  display: block;\n  pointer-events: none;"
+  },
+  {
+    "selector": "/* Metallic Glint / Shine Sweep on Coin Flip */\n.coin-inner::after",
+    "properties": "content: '';\n  position: absolute;\n  top: 0;\n  left: -120%;\n  width: 70%;\n  height: 100%;\n  background: linear-gradient(90deg,\n      rgba(255, 255, 255, 0) 0%,\n      rgba(255, 255, 255, 0.9) 50%,\n      rgba(255, 255, 255, 0) 100%);\n  transform: skewX(-25deg);\n  border-radius: 50%;\n  pointer-events: none;\n  opacity: 0;"
+  },
+  {
+    "selector": "/* Coin Toss & Flip on Cursor Touch / Hover or Focus */\n.badge-coin:hover .coin-inner,\n.badge-coin:focus-visible .coin-inner",
+    "properties": "animation: coinFlipToss 0.85s cubic-bezier(0.25, 1, 0.5, 1) forwards;\n  box-shadow:\n    0 0 0 2.5px #ffffff,\n    0 0 22px rgba(255, 255, 255, 1),\n    0 10px 32px rgba(0, 98, 255, 0.65),\n    0 2px 10px rgba(0, 0, 0, 0.25);\n  filter: brightness(1.06);"
+  },
+  {
+    "selector": ".badge-coin:hover .coin-inner::after,\n.badge-coin:focus-visible .coin-inner::after",
+    "properties": "opacity: 1;\n  animation: coinShineGleam 0.85s cubic-bezier(0.25, 1, 0.5, 1) forwards;"
+  },
+  {
+    "selector": "}\n\n.badge-coin:active .coin-inner",
+    "properties": "transform: rotateY(360deg) scale(1.1);"
+  },
+  {
+    "selector": "/* --- Fullscreen Video Background --- */\n.video-container",
+    "properties": "position: fixed;\n  top: 0;\n  left: 0;\n  width: 100vw;\n  height: 100vh;\n  z-index: 1;\n  overflow: hidden;"
+  },
+  {
+    "selector": ".video-overlay",
+    "properties": "position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  z-index: 2;\n  background: transparent;"
+  },
+  {
+    "selector": "/* --- Main Layout Wrapper --- */\n.login-wrapper",
+    "properties": "position: relative;\n  z-index: 10;\n  min-height: 100vh;\n  width: 100%;\n  max-width: 1440px;\n  margin: 0 500px;\n  display: flex;\n  align-items: center;\n  justify-content: flex-end;\n  padding: 40px 50px 40px 40px;"
+  },
+  {
+    "selector": "/* --- Login Card Container --- */\n.login-card",
+    "properties": "width: 100%;\n  max-width: 445px;\n  background: rgba(255, 255, 255, 0.94);\n  backdrop-filter: blur(32px) saturate(200%);\n  -webkit-backdrop-filter: blur(32px) saturate(200%);\n  border: 1.5px solid rgba(255, 255, 255, 1);\n  border-radius: 28px;\n  box-shadow:\n    0 0 0 1px rgba(255, 255, 255, 1) inset,\n    0 25px 65px -15px rgba(15, 23, 42, 0.16),\n    0 12px 30px -8px rgba(0, 50, 140, 0.08);\n  padding: 38px 36px 30px 36px;\n  position: relative;\n  overflow: hidden;\n  animation: cardAppear 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;\n  transition: transform 0.35s ease, box-shadow 0.35s ease;"
+  },
+  {
+    "selector": ".login-card::before",
+    "properties": "content: '';\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  height: 3px;\n  background: linear-gradient(90deg, #0052ff, #38bdf8, #0052ff);\n  background-size: 200% 100%;\n  animation: shimmerBorder 6s linear infinite;"
+  },
+  {
+    "selector": "/* --- Form Layout --- */\n.login-form",
+    "properties": "display: flex;\n  flex-direction: column;\n  gap: 16px;"
+  },
+  {
+    "selector": "/* Eye Toggle Button */\n.toggle-password-btn",
+    "properties": "position: absolute;\n  right: 14px;\n  background: none;\n  border: none;\n  cursor: pointer;\n  padding: 6px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  color: #94a3b8;\n  border-radius: 8px;\n  transition: color 0.2s ease, background 0.2s ease;"
+  },
+  {
+    "selector": ".toggle-password-btn:hover",
+    "properties": "color: #0f172a;\n  background: rgba(0, 0, 0, 0.04);"
+  },
+  {
+    "selector": "/* Error states */\n.input-field-group.has-error input",
+    "properties": "border-color: var(--danger);\n  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.12);"
+  },
+  {
+    "selector": ".error-msg",
+    "properties": "display: none;\n  font-size: 12px;\n  font-weight: 500;\n  color: var(--danger);\n  margin-top: 6px;\n  padding-left: 4px;"
+  },
+  {
+    "selector": ".input-field-group.has-error .error-msg",
+    "properties": "display: block;"
+  },
+  {
+    "selector": "/* --- Primary Submit Button --- */\n.submit-btn",
+    "properties": "width: 100%;\n  height: 52px;\n  background: linear-gradient(135deg, #0052ff 0%, #0066ff 50%, #0084ff 100%);\n  border: none;\n  border-radius: 14px;\n  color: #ffffff;\n  font-family: var(--font-primary);\n  font-size: 15.5px;\n  font-weight: 700;\n  letter-spacing: -0.01em;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  gap: 8px;\n  cursor: pointer;\n  box-shadow:\n    0 8px 24px -4px rgba(0, 98, 255, 0.45),\n    0 2px 6px rgba(0, 98, 255, 0.25),\n    inset 0 1px 1px rgba(255, 255, 255, 0.35);\n  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);\n  position: relative;\n  overflow: hidden;"
+  },
+  {
+    "selector": ".submit-btn::before",
+    "properties": "content: '';\n  position: absolute;\n  top: 0;\n  left: -100%;\n  width: 100%;\n  height: 100%;\n  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);\n  transition: left 0.6s ease;"
+  },
+  {
+    "selector": ".submit-btn:hover",
+    "properties": "transform: translateY(-2px);\n  box-shadow:\n    0 12px 30px -4px rgba(0, 98, 255, 0.55),\n    0 4px 10px rgba(0, 98, 255, 0.3),\n    inset 0 1px 1px rgba(255, 255, 255, 0.5);"
+  },
+  {
+    "selector": ".submit-btn:hover::before",
+    "properties": "left: 100%;"
+  },
+  {
+    "selector": ".submit-btn:active",
+    "properties": "transform: translateY(0) scale(0.985);\n  box-shadow: 0 4px 14px rgba(0, 98, 255, 0.35);"
+  },
+  {
+    "selector": ".submit-btn:hover .btn-arrow",
+    "properties": "transform: translateX(4px);"
+  },
+  {
+    "selector": "/* --- Toast Notification --- */\n.toast-container",
+    "properties": "position: fixed;\n  bottom: 24px;\n  right: 24px;\n  z-index: 1000;\n  display: flex;\n  flex-direction: column;\n  gap: 10px;"
+  },
+  {
+    "selector": ".toast",
+    "properties": "background: #0b1528;\n  color: #ffffff;\n  padding: 14px 20px;\n  border-radius: var(--radius-md);\n  font-size: 14px;\n  font-weight: 500;\n  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);\n  display: flex;\n  align-items: center;\n  gap: 10px;\n  border-left: 4px solid var(--primary-blue);\n  animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;"
+  },
+  {
+    "selector": ".badge-coin",
+    "properties": "width: 60px;\n    height: 60px;"
+  },
+  {
+    "selector": ".header-main-logo",
+    "properties": "height: 64px;"
+  },
+  {
+    "selector": ".header-badges-container",
+    "properties": "gap: 6px;"
+  },
+  {
+    "selector": ".badge-coin",
+    "properties": "width: 50px;\n    height: 50px;"
+  },
+  {
+    "selector": ".header-badges-container",
+    "properties": "flex-wrap: wrap;\n    justify-content: center;"
+  },
+  {
+    "selector": "/* --- Agent 54 Post-Login Executive Dashboard --- */\n.dashboard-card",
+    "properties": "width: 100%;\n  max-width: 580px;\n  background: rgba(255, 255, 255, 0.98);\n  backdrop-filter: blur(28px);\n  -webkit-backdrop-filter: blur(28px);\n  border-radius: 28px;\n  padding: 36px 32px;\n  box-shadow:\n    0 30px 60px -12px rgba(0, 40, 100, 0.25),\n    0 10px 24px -6px rgba(0, 0, 0, 0.08),\n    0 0 0 1.5px rgba(255, 255, 255, 0.9);\n  animation: cardFadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;\n  z-index: 10;"
+  },
+  {
+    "selector": ".btn-logout",
+    "properties": "background: #fee2e2;\n  color: #b91c1c;\n  border: none;\n  padding: 8px 14px;\n  border-radius: 10px;\n  font-size: 13px;\n  font-weight: 650;\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n  gap: 6px;\n  transition: all 0.2s ease;"
+  },
+  {
+    "selector": ".btn-logout:hover",
+    "properties": "background: #fecaca;\n  transform: translateY(-1px);"
+  },
+  {
+    "selector": "/* ==========================================================================\n   VIMS Portal Login Card Styles - Premium Edition\n   ========================================================================== */\n\n/* Override card for VIMS style - shifted RIGHT */\n.vims-card",
+    "properties": "padding: 32px 36px 28px;\n  max-width: 620px;\n  width: 95%;\n  border-radius: 22px;\n  background: rgba(235, 242, 252, 0.88);\n  backdrop-filter: blur(24px) saturate(180%);\n  -webkit-backdrop-filter: blur(24px) saturate(180%);\n  box-shadow:\n    0 24px 80px rgba(8, 15, 50, 0.28),\n    0 4px 20px rgba(0, 0, 0, 0.08),\n    inset 0 1px 0 rgba(255, 255, 255, 0.5);\n  border: 1.5px solid rgba(255, 255, 255, 0.6);\n  transition: all 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);\n  animation: vimsCardEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards, vimsFloat 5s ease-in-out 1s infinite;"
+  },
+  {
+    "selector": ".vims-card:hover",
+    "properties": "transform: translateY(-6px) scale(1.008);\n  border-color: rgba(0, 98, 255, 0.35);\n  box-shadow:\n    0 36px 100px rgba(8, 15, 50, 0.3),\n    0 12px 40px rgba(0, 60, 180, 0.15),\n    0 0 0 1px rgba(0, 98, 255, 0.1),\n    0 0 40px rgba(0, 98, 255, 0.06),\n    inset 0 1px 0 rgba(255, 255, 255, 0.7);"
+  },
+  {
+    "selector": "/* Form */\n.vims-form",
+    "properties": "display: flex;\n  flex-direction: column;\n  gap: 18px;"
+  },
+  {
+    "selector": "/* Two-column row for EMPCODE + PASSWORD */\n.vims-row-two",
+    "properties": "display: grid;\n  grid-template-columns: 1fr 1fr;\n  gap: 18px;"
+  },
+  {
+    "selector": "/* Field Group */\n.vims-field-group",
+    "properties": "display: flex;\n  flex-direction: column;\n  gap: 7px;"
+  },
+  {
+    "selector": ".vims-label",
+    "properties": "font-size: 0.72rem;\n  font-weight: 800;\n  color: #0a2080;\n  letter-spacing: 0.08em;\n  text-transform: uppercase;\n  transition: color 0.2s ease;"
+  },
+  {
+    "selector": ".vims-field-group:focus-within .vims-label",
+    "properties": "color: #0052ff;"
+  },
+  {
+    "selector": ".vims-input-wrapper",
+    "properties": "position: relative;\n  display: flex;\n  align-items: center;"
+  },
+  {
+    "selector": ".vims-input-icon",
+    "properties": "position: absolute;\n  left: 14px;\n  color: #94a3b8;\n  pointer-events: none;\n  z-index: 1;\n  flex-shrink: 0;\n  transition: color 0.2s ease;"
+  },
+  {
+    "selector": ".vims-input-wrapper:focus-within .vims-input-icon",
+    "properties": "color: #0052ff;"
+  },
+  {
+    "selector": ".vims-input",
+    "properties": "width: 100%;\n  padding: 12px 40px 12px 42px;\n  border: 1.5px solid #d0d8ee;\n  border-radius: 12px;\n  background: rgba(255, 255, 255, 0.85);\n  font-family: var(--font-primary);\n  font-size: 0.9rem;\n  color: #0b1528;\n  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);\n  outline: none;"
+  },
+  {
+    "selector": ".vims-input::placeholder",
+    "properties": "color: #b0bcd4;\n  font-size: 0.85rem;"
+  },
+  {
+    "selector": ".vims-input:hover",
+    "properties": "border-color: #a0b4d8;\n  background: rgba(255, 255, 255, 0.95);"
+  },
+  {
+    "selector": ".vims-input:focus",
+    "properties": "border-color: #0062ff;\n  box-shadow: 0 0 0 4px rgba(0, 98, 255, 0.1), 0 2px 12px rgba(0, 98, 255, 0.08);\n  background: #fff;\n  transform: translateY(-1px);"
+  },
+  {
+    "selector": "/* Grid Values Section */\n.vims-grid-group",
+    "properties": "background: rgba(255, 255, 255, 0.55);\n  border: 1.5px solid #d0d8ee;\n  border-radius: 14px;\n  padding: 16px 18px;\n  transition: all 0.3s ease;"
+  },
+  {
+    "selector": ".vims-grid-group:hover",
+    "properties": "background: rgba(255, 255, 255, 0.7);\n  border-color: #b0c4ee;\n  box-shadow: 0 4px 16px rgba(0, 60, 180, 0.06);"
+  },
+  {
+    "selector": ".vims-grid-header",
+    "properties": "display: flex;\n  align-items: center;\n  gap: 8px;\n  margin-bottom: 14px;\n  color: #0a2080;"
+  },
+  {
+    "selector": ".vims-grid-header svg",
+    "properties": "color: #0a2080;"
+  },
+  {
+    "selector": ".vims-grid-row",
+    "properties": "display: grid;\n  grid-template-columns: 1fr 1fr;\n  gap: 16px;"
+  },
+  {
+    "selector": ".vims-grid-cell",
+    "properties": "display: flex;\n  align-items: center;\n  gap: 10px;\n  background: rgba(255, 255, 255, 0.8);\n  border: 1.5px solid #d0d8ee;\n  border-radius: 10px;\n  padding: 10px 14px;\n  transition: all 0.25s ease;"
+  },
+  {
+    "selector": ".vims-grid-cell:hover",
+    "properties": "border-color: #a0b4d8;\n  background: rgba(255, 255, 255, 0.95);\n  box-shadow: 0 2px 10px rgba(0, 60, 180, 0.06);"
+  },
+  {
+    "selector": ".vims-grid-cell:focus-within",
+    "properties": "border-color: #0062ff;\n  box-shadow: 0 0 0 3px rgba(0, 98, 255, 0.1);\n  background: #fff;"
+  },
+  {
+    "selector": ".vims-grid-key",
+    "properties": "font-size: 0.72rem;\n  font-weight: 700;\n  color: #fff;\n  background: linear-gradient(135deg, #0a2080, #0052ff);\n  padding: 3px 9px;\n  border-radius: 6px;\n  letter-spacing: 0.04em;\n  white-space: nowrap;\n  flex-shrink: 0;\n  box-shadow: 0 2px 6px rgba(0, 52, 255, 0.2);"
+  },
+  {
+    "selector": ".vims-grid-input",
+    "properties": "flex: 1;\n  border: none;\n  outline: none;\n  background: transparent;\n  font-family: var(--font-primary);\n  font-size: 1rem;\n  font-weight: 700;\n  color: #0b1528;\n  letter-spacing: 0.15em;\n  width: 100%;\n  text-align: center;"
+  },
+  {
+    "selector": ".vims-grid-input::placeholder",
+    "properties": "color: #c2cfe0;\n  letter-spacing: 0.08em;\n  font-weight: 500;"
+  },
+  {
+    "selector": "/* SIGN IN Button - Premium */\n.vims-submit-btn",
+    "properties": "background: linear-gradient(135deg, #0d1b5e 0%, #1a3090 50%, #0d1b5e 100%);\n  background-size: 200% 100%;\n  border-radius: 12px;\n  padding: 15px 24px;\n  font-size: 0.9rem;\n  font-weight: 700;\n  letter-spacing: 0.12em;\n  color: #fff;\n  border: none;\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  gap: 12px;\n  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);\n  box-shadow: 0 6px 24px rgba(13, 27, 94, 0.35);\n  width: 100%;\n  position: relative;\n  overflow: hidden;"
+  },
+  {
+    "selector": ".vims-submit-btn::before",
+    "properties": "content: '';\n  position: absolute;\n  top: 0;\n  left: -100%;\n  width: 100%;\n  height: 100%;\n  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);\n  transition: left 0.5s ease;"
+  },
+  {
+    "selector": ".vims-submit-btn:hover",
+    "properties": "background-position: 100% 0;\n  transform: translateY(-2px);\n  box-shadow: 0 10px 32px rgba(13, 27, 94, 0.45);"
+  },
+  {
+    "selector": ".vims-submit-btn:hover::before",
+    "properties": "left: 100%;"
+  },
+  {
+    "selector": ".vims-submit-btn:active",
+    "properties": "transform: translateY(0);\n  box-shadow: 0 4px 16px rgba(13, 27, 94, 0.35);"
+  },
+  {
+    "selector": ".vims-submit-btn .btn-arrow",
+    "properties": "transition: transform 0.3s ease;"
+  },
+  {
+    "selector": ".vims-submit-btn:hover .btn-arrow",
+    "properties": "transform: translateX(4px);"
+  },
+  {
+    "selector": "/* Footer links row */\n.vims-footer-links",
+    "properties": "display: flex;\n  align-items: center;\n  justify-content: center;\n  gap: 12px;\n  margin-top: -4px;"
+  },
+  {
+    "selector": ".vims-forgot",
+    "properties": "font-size: 0.8rem;\n  color: #475569;\n  text-decoration: none;\n  font-weight: 500;\n  transition: all 0.2s ease;\n  padding: 2px 0;\n  position: relative;"
+  },
+  {
+    "selector": ".vims-forgot::after",
+    "properties": "content: '';\n  position: absolute;\n  bottom: 0;\n  left: 0;\n  width: 0;\n  height: 1.5px;\n  background: #0062ff;\n  transition: width 0.3s ease;"
+  },
+  {
+    "selector": ".vims-forgot:hover",
+    "properties": "color: #0062ff;"
+  },
+  {
+    "selector": ".vims-forgot:hover::after",
+    "properties": "width: 100%;"
+  },
+  {
+    "selector": "/* Error state for VIMS inputs */\n.vims-field-group.has-error .vims-input",
+    "properties": "border-color: #ef4444;\n  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);"
+  },
+  {
+    "selector": ".vims-field-group.has-error .vims-label",
+    "properties": "color: #ef4444;"
+  },
+  {
+    "selector": ".vims-field-group.has-error .error-msg",
+    "properties": "display: block;"
+  },
+  {
+    "selector": ".vims-grid-group.has-error",
+    "properties": "border-color: #ef4444;\n  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);"
+  },
+  {
+    "selector": ".vims-grid-group .error-msg",
+    "properties": "display: none;\n  color: #ef4444;\n  font-size: 0.72rem;\n  font-weight: 500;\n  margin-top: 6px;"
+  },
+  {
+    "selector": ".vims-grid-group.has-error .error-msg",
+    "properties": "display: block;"
+  },
+  {
+    "selector": ".vims-row-two",
+    "properties": "grid-template-columns: 1fr;"
+  },
+  {
+    "selector": ".vims-grid-row",
+    "properties": "grid-template-columns: 1fr;"
+  }
+]

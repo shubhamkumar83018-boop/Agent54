@@ -1,0 +1,236 @@
+[
+  {
+    "requirement_id": "VIG-R26-001",
+    "requirement_title": "B.Tech degree credit requirement",
+    "department_name": "Dean AAA / Academic Section",
+    "actual_value": "ECE: 158/160 (shortfall: 2)",
+    "gap": "Credit shortfall detected: ECE: 158/160 (shortfall: 2) -- pending BoS realignment",
+    "status": "AT_RISK",
+    "explanation": "VFSTR Academic Regulations R26 \u2013 B.Tech | Current curriculum/transcript audit"
+  },
+  {
+    "requirement_id": "VIG-R26-002",
+    "requirement_title": "Maximum credits registered per regular semester",
+    "department_name": "AAA Section",
+    "actual_value": "1 course(s) with overloaded contact hours",
+    "gap": "Thermodynamics (Project work): 4.5h/wk vs allowed 6h/wk",
+    "status": "AT_RISK",
+    "explanation": "VFSTR Academic Regulations R26 \u2013 B.Tech | Semester registration records"
+  },
+  {
+    "requirement_id": "VIG-R26-003",
+    "requirement_title": "Minimum instructional days in regular semester",
+    "department_name": "Academic Section",
+    "actual_value": null,
+    "gap": "None (Compliant)",
+    "status": "EVIDENCE_PENDING",
+    "explanation": "VFSTR Academic Regulations R26 \u2013 B.Tech | Approved academic calendar + attendance/calendar records"
+  },
+  {
+    "requirement_id": "VIG-R26-004",
+    "requirement_title": "Lecture credit equivalence",
+    "department_name": "BoS / Academic Section",
+    "actual_value": null,
+    "gap": "None (Compliant)",
+    "status": "EVIDENCE_PENDING",
+    "explanation": "VFSTR Academic Regulations R26 \u2013 B.Tech | Curriculum course L-T-P-SL structure"
+  },
+  {
+    "requirement_id": "VIG-R26-005",
+    "requirement_title": "Practical credit equivalence",
+    "department_name": "Department / Academic Section",
+    "actual_value": null,
+    "gap": "None (Compliant)",
+    "status": "EVIDENCE_PENDING",
+    "explanation": "VFSTR Academic Regulations R26 \u2013 B.Tech | Course timetable + curriculum L-T-P-SL data"
+  },
+  {
+    "requirement_id": "VIG-R26-006",
+    "requirement_title": "Course outcome count",
+    "department_name": "BoS / Course Coordinators",
+    "actual_value": null,
+    "gap": "None (Compliant)",
+    "status": "EVIDENCE_PENDING",
+    "explanation": "VFSTR Academic Regulations R26 \u2013 B.Tech | Course files / syllabus repository"
+  },
+  {
+    "requirement_id": "VIG-R26-007",
+    "requirement_title": "Mandatory textbook per course",
+    "department_name": "Department / Library",
+    "actual_value": "2,500 library titles -- textbook coverage adequate",
+    "gap": "None (Compliant)",
+    "status": "COMPLIANT",
+    "explanation": "VFSTR Academic Regulations R26 \u2013 B.Tech | Approved syllabus/course file"
+  },
+  {
+    "requirement_id": "VIG-R26-008",
+    "requirement_title": "Reference books per course",
+    "department_name": "Department / Library",
+    "actual_value": null,
+    "gap": "None (Compliant)",
+    "status": "EVIDENCE_PENDING",
+    "explanation": "VFSTR Academic Regulations R26 \u2013 B.Tech | Approved syllabus/course file"
+  },
+  {
+    "requirement_id": "VIG-R26-009",
+    "requirement_title": "Student attendance qualifying threshold",
+    "department_name": "Department / Examination Section",
+    "actual_value": null,
+    "gap": "None (Compliant)",
+    "status": "EVIDENCE_PENDING",
+    "explanation": "VFSTR Academic Regulations R26 \u2013 B.Tech | Attendance management system"
+  },
+  {
+    "requirement_id": "VIG-R26-010",
+    "requirement_title": "Formative assessment minimum",
+    "department_name": "Examination Section",
+    "actual_value": null,
+    "gap": "None (Compliant)",
+    "status": "EVIDENCE_PENDING",
+    "explanation": "VFSTR Academic Regulations R26 \u2013 B.Tech | Internal/formative marks database"
+  },
+  {
+    "requirement_id": "VIG-R26-011",
+    "requirement_title": "Summative assessment minimum",
+    "department_name": "Examination Section",
+    "actual_value": null,
+    "gap": "None (Compliant)",
+    "status": "EVIDENCE_PENDING",
+    "explanation": "VFSTR Academic Regulations R26 \u2013 B.Tech | End-semester assessment database"
+  },
+  {
+    "requirement_id": "VIG-R26-012",
+    "requirement_title": "Laboratory manual availability",
+    "department_name": "HoD / Lab Coordinator",
+    "actual_value": "1 lab(s) under maintenance: Communication Systems Lab",
+    "gap": "Communication Systems Lab -- Signal generator replacement -- lab manual access affected",
+    "status": "AT_RISK",
+    "explanation": "VFSTR Academic Regulations R26 \u2013 B.Tech | Laboratory manual + publication/schedule record"
+  },
+  {
+    "requirement_id": "VIG-AICTE-001",
+    "requirement_title": "Regular faculty provision",
+    "department_name": "Registrar / HR / Deans",
+    "actual_value": "Computer: 13.33, Electronics: 11.43, Mechanical: 8.89, Civil: 10.0",
+    "gap": "None (Compliant)",
+    "status": "COMPLIANT",
+    "explanation": "AICTE Approval Process Handbook 2024\u20132027 | Program-wise sanctioned/required faculty + appointment status + ratio calculation"
+  },
+  {
+    "requirement_id": "VIG-AICTE-002",
+    "requirement_title": "PG course professor with PhD",
+    "department_name": "Dean / HR",
+    "actual_value": "PhD faculty available for PG supervision (33.3% PhD in CSE)",
+    "gap": "None (Compliant)",
+    "status": "COMPLIANT",
+    "explanation": "AICTE Approval Process Handbook 2024\u20132027 | PG program faculty roster + qualification records"
+  },
+  {
+    "requirement_id": "VIG-UGC-001",
+    "requirement_title": "Faculty appointment qualifications",
+    "department_name": "HR / Registrar",
+    "actual_value": "Computer: 33.3%; Electronics: 28.6%; Mechanical: 22.2%; Civil: 25.0%",
+    "gap": "4 dept(s) below 40% PhD cadre required by UGC norms",
+    "status": "NON_COMPLIANT",
+    "explanation": "UGC Minimum Qualifications Regulations 2018 + amendments | Faculty qualification, degree, eligibility/NET/SET/PhD records as applicable"
+  },
+  {
+    "requirement_id": "VIG-UGC-002",
+    "requirement_title": "Anti-ragging institutional compliance",
+    "department_name": "Anti-Ragging Committee",
+    "actual_value": "Anti-Ragging Committee -- Lapsed",
+    "gap": "Committee lapsed 40+ days ago. Immediate reconstitution required per UGC mandate",
+    "status": "NON_COMPLIANT",
+    "explanation": "UGC Curbing the Menace of Ragging Regulations 2009 + amendments | Committee composition, policy, undertakings, awareness, complaint mechanism, reports"
+  },
+  {
+    "requirement_id": "VIG-UGC-003",
+    "requirement_title": "Student grievance redressal mechanism",
+    "department_name": "Student Grievance Cell",
+    "actual_value": "Student Grievance Redressal Committee -- Active",
+    "gap": "None (Compliant)",
+    "status": "COMPLIANT",
+    "explanation": "UGC (Redressal of Grievances of Students) Regulations 2023 | SGRC composition, minutes, complaint records, closure reports"
+  },
+  {
+    "requirement_id": "VIG-NBA-001",
+    "requirement_title": "NBA program accreditation applicability",
+    "department_name": "IQAC / Dean",
+    "actual_value": "NBA: NBA (2 programs)",
+    "gap": "None (Compliant)",
+    "status": "COMPLIANT",
+    "explanation": "NBA UG Engineering accreditation framework | NBA accreditation certificate/order and validity period per program"
+  },
+  {
+    "requirement_id": "VIG-NBA-002",
+    "requirement_title": "NBA student-faculty ratio",
+    "department_name": "IQAC / Department",
+    "actual_value": "FSR range: 8.9--13.3 (all within NBA 20:1)",
+    "gap": "None (Compliant)",
+    "status": "COMPLIANT",
+    "explanation": "NBA UG Engineering Tier-I accreditation guidance | Program-wise student and faculty data + accreditation cycle"
+  },
+  {
+    "requirement_id": "VIG-NBA-003",
+    "requirement_title": "NBA PhD faculty evidence",
+    "department_name": "IQAC / Department",
+    "actual_value": "Avg PhD ratio: 27.3% (below NBA 30% threshold)",
+    "gap": "Average PhD faculty ratio (27.3%) below NBA accreditation criterion",
+    "status": "NON_COMPLIANT",
+    "explanation": "NBA UG Engineering accreditation guidance | Two-year program faculty roster + PhD qualification records + required faculty calculation"
+  },
+  {
+    "requirement_id": "VIG-NBA-004",
+    "requirement_title": "NBA library and learning resources evidence",
+    "department_name": "Library / IQAC",
+    "actual_value": "2,500 titles + digital access enabled",
+    "gap": "None (Compliant)",
+    "status": "COMPLIANT",
+    "explanation": "NBA UG Engineering accreditation manual | Books/titles, journals/e-resources, usage, adequacy, digital resources and program evidence"
+  },
+  {
+    "requirement_id": "VIG-VFSTR-001",
+    "requirement_title": "Central library current resource snapshot",
+    "department_name": "Chief Librarian",
+    "actual_value": "10,000 volumes (meets VFSTR published baseline of 1,20,100)",
+    "gap": "None (Compliant)",
+    "status": "COMPLIANT",
+    "explanation": "VFSTR Central Library webpage | Library management system export / stock verification"
+  },
+  {
+    "requirement_id": "VIG-VFSTR-002",
+    "requirement_title": "Anti-ragging committee existence",
+    "department_name": "Anti-Ragging Committee",
+    "actual_value": "Anti-Ragging Committee -- lapsed",
+    "gap": "Committee lapsed 40+ days -- reconstitution required",
+    "status": "NON_COMPLIANT",
+    "explanation": "VFSTR Institutional Committees / Anti-Ragging pages | Current committee order/composition + meeting records"
+  },
+  {
+    "requirement_id": "VIG-VFSTR-003",
+    "requirement_title": "Institutional committee evidence coverage",
+    "department_name": "Registrar / IQAC",
+    "actual_value": "3 active, 1 lapsed of 4 tracked",
+    "gap": "1 mandatory committee lapsed -- reconstitution order needed immediately",
+    "status": "AT_RISK",
+    "explanation": "VFSTR Institutional Committees page | Current orders, member lists, meeting minutes and action taken reports"
+  },
+  {
+    "requirement_id": "VIG-INT-001",
+    "requirement_title": "FSR-CSE-001 program ratio check",
+    "department_name": "CSE HoD / IQAC",
+    "actual_value": "CSE FSR: 13.3 students/faculty (within AICTE 1:20)",
+    "gap": "None (Compliant)",
+    "status": "COMPLIANT",
+    "explanation": "Agent 54 internal control | CSE student count + required/available faculty + applicable regulator rule"
+  },
+  {
+    "requirement_id": "VIG-INT-002",
+    "requirement_title": "CRED-ECE-001 credit structure check",
+    "department_name": "ECE HoD / Academic Section",
+    "actual_value": "ECE: 158/160 credits (shortfall: 2)",
+    "gap": "2-credit shortfall in ECE curriculum -- BoS realignment needed",
+    "status": "AT_RISK",
+    "explanation": "Agent 54 internal control mapped to R26 | ECE curriculum, semester registration and credit distribution"
+  }
+]

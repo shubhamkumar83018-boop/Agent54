@@ -1723,9 +1723,15 @@ export default function RemediationCenter({ dashboardData, initialCaseId, onUpda
             )}
 
             {/* Checklist items */}
+<<<<<<< HEAD
             <div className="space-y-1.5 text-xs">
               {selectedItem.evidence.map((ev: any, i: number) => (
                 <label key={i} className="flex items-center gap-2 p-1.5 rounded-lg bg-slate-50 border border-slate-100 cursor-pointer hover:bg-slate-100/60 transition-all">
+=======
+            <div className="space-y-2 text-xs">
+              {selectedItem.evidence.map((ev: any, i: number) => (
+                <label key={i} className="flex items-center gap-2.5 p-2 rounded-lg bg-slate-50 border border-slate-100 cursor-pointer hover:bg-slate-100/60 transition-all">
+>>>>>>> db81771e10c5fd8361462266966be508cca4780e
                   <input
                     type="checkbox"
                     checked={checkedEvidence[`item${i}`]}

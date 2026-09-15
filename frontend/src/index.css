@@ -1,7 +1,17 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+html {
+  font-size: 125%; /* Increases base font size from 16px to 20px. All rem values scale up significantly. */
+}
 body {
   background-color: #111827; /* gray-900 */
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #1e293b; /* slate-800 for crisp text */
 }
 
 @keyframes antiGravity {

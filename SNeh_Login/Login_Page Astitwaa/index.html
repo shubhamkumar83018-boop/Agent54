@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login - Agent 54 Regulation Compliance Platform</title>
+  <meta name="description" content="Sign in to access Agent 54 - Regulation Compliance Platform Admin Dashboard.">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css?v=4">
+</head>
+
+<body>
+
+  <!-- Top Header with HD Logo & Accreditation Badges -->
+  <header class="top-header">
+    <div class="header-logo-container">
+      <img src="vignan_main_logo.png?v=3" alt="VIGNAN'S Foundation for Science, Technology & Research"
+        class="header-main-logo">
+    </div>
+    <div class="header-badges-container" id="badgesContainer" aria-label="Accreditations and Rankings">
+      <div class="badge-coin" title="NAAC A+ Accredited" tabindex="0">
+        <div class="coin-inner">
+          <img src="badge_naac.png" alt="NAAC A+ Accredited" class="badge-img">
+        </div>
+      </div>
+      <div class="badge-coin" title="NIRF Ranked" tabindex="0">
+        <div class="coin-inner">
+          <img src="badge_nirf.png" alt="NIRF Ranked" class="badge-img">
+        </div>
+      </div>
+      <div class="badge-coin" title="NBA Accredited" tabindex="0">
+        <div class="coin-inner">
+          <img src="badge_nba.png" alt="NBA Accredited" class="badge-img">
+        </div>
+      </div>
+      <div class="badge-coin" title="AICTE Approved" tabindex="0">
+        <div class="coin-inner">
+          <img src="badge_aicte.png" alt="AICTE Approved" class="badge-img">
+        </div>
+      </div>
+      <div class="badge-coin" title="UGC CARE Listed" tabindex="0">
+        <div class="coin-inner">
+          <img src="badge_ugccare.png" alt="UGC CARE Listed" class="badge-img">
+        </div>
+      </div>
+      <div class="badge-coin" title="Institution's Innovation Council (IIC)" tabindex="0">
+        <div class="coin-inner">
+          <img src="badge_iic.png" alt="Institution's Innovation Council" class="badge-img">
+        </div>
+      </div>
+      <div class="badge-coin" title="ABET Accredited" tabindex="0">
+        <div class="coin-inner">
+          <img src="badge_abet.png" alt="ABET Accredited" class="badge-img">
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Large Floating Vignan Crest Overlay -->
+  <div class="crest-overlay" id="vignanCrestOverlay">
+    <img src="vignan_crest_large.png?v=2" alt="VIGNAN'S University Shield Crest" class="vignan-crest-large">
+  </div>
+
+  <!-- Fullscreen Background Video -->
+  <div class="video-container">
+    <video autoplay loop muted playsinline id="bg-video">
+      <source src="login_page_bg.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+    </video>
+    <div class="video-overlay"></div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="login-wrapper">
+    <div class="login-card vims-card">
+
+      <!-- VIMS Portal Logo Area -->
+      <!-- <div class="vims-logo-area">
+        <img src="vignan_shield.png" alt="Vignan's University Shield" class="vims-shield-logo">
+        <div class="vims-title-block">
+          <div class="vims-brand-name">
+            <span class="vims-red">VIGNAN'S</span>
+          </div>
+          <div class="vims-brand-sub">Foundation for Science, Technology &amp; Research</div>
+          <div class="vims-portal-label">VIMS PORTAL</div>
+        </div>
+        <div class="vims-badge-group">
+          <img src="badge_abet.png" alt="ABET" class="vims-top-badge">
+          <div class="vims-badge-col">
+            <img src="badge_naac.png" alt="NAAC A+" class="vims-top-badge">
+            <img src="badge_nirf.png" alt="NIRF 70" class="vims-top-badge">
+          </div>
+        </div>
+      </div> -->
+
+      <!-- Form Section -->
+      <form id="loginForm" class="login-form vims-form" novalidate>
+
+        <!-- Row 1: EMPCODE & PASSWORD -->
+        <div class="vims-row-two">
+          <!-- EMPCODE -->
+          <div class="vims-field-group">
+            <label for="usernameInput" class="vims-label">EMPCODE</label>
+            <div class="vims-input-wrapper">
+              <svg class="vims-input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                <line x1="2" y1="10" x2="22" y2="10"></line>
+              </svg>
+              <input type="text" id="usernameInput" name="username" placeholder="Enter Employee ID" required
+                autocomplete="username" class="vims-input">
+            </div>
+            <span class="error-msg" id="usernameError">Please enter a valid Employee ID</span>
+          </div>
+
+          <!-- PASSWORD -->
+          <div class="vims-field-group">
+            <label for="passwordInput" class="vims-label">PASSWORD</label>
+            <div class="vims-input-wrapper">
+              <svg class="vims-input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <input type="password" id="passwordInput" name="password" placeholder="Enter Password" required
+                autocomplete="current-password" class="vims-input">
+              <button type="button" class="toggle-password-btn" id="togglePassword"
+                aria-label="Toggle password visibility">
+                <svg class="eye-icon eye-show" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                <svg class="eye-icon eye-hide hidden" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                  </path>
+                  <line x1="1" y1="1" x2="23" y2="23"></line>
+                </svg>
+              </button>
+            </div>
+            <span class="error-msg" id="passwordError">Please enter your password</span>
+          </div>
+        </div>
+
+        <!-- Row 2: GRID VALUES -->
+        <div class="vims-field-group vims-grid-group" id="gridGroup">
+          <div class="vims-grid-header">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+            </svg>
+            <span class="vims-label">GRID VALUES</span>
+          </div>
+          <div class="vims-grid-row">
+            <div class="vims-grid-cell">
+              <span class="vims-grid-key" id="gridKey1">A1</span>
+              <input type="text" class="vims-grid-input" id="gridVal1" maxlength="3" placeholder="_ _ _"
+                autocomplete="off">
+            </div>
+            <div class="vims-grid-cell">
+              <span class="vims-grid-key" id="gridKey2">B3</span>
+              <input type="text" class="vims-grid-input" id="gridVal2" maxlength="3" placeholder="_ _ _"
+                autocomplete="off">
+            </div>
+          </div>
+          <span class="error-msg" id="gridError">Please enter valid 3-digit grid values</span>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="submit-btn vims-submit-btn" id="submitBtn">
+          <span class="btn-text">SIGN IN TO WORKSPACE</span>
+          <svg class="btn-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+            <polyline points="10 17 15 12 10 7"></polyline>
+            <line x1="15" y1="12" x2="3" y2="12"></line>
+          </svg>
+          <div class="btn-spinner hidden" aria-label="Loading..."></div>
+        </button>
+
+        <!-- Footer Links -->
+        <div class="vims-footer-links">
+          <a href="#" class="forgot-link vims-forgot" id="forgotPasswordTrigger">Forgot Password?</a>
+          <span class="vims-divider-dot">|</span>
+          <a href="#" class="forgot-link vims-forgot" id="resetGridBtn">Reset Grid Values</a>
+        </div>
+
+        <!-- Manual Links -->
+        <div class="vims-manual-links">
+          <a href="#" class="vims-manual-link" id="deoManualLink">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+            </svg>
+            DEO MANUAL
+          </a>
+          <a href="#" class="vims-manual-link" id="facultyManualLink">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+            </svg>
+            FACULTY MANUAL
+          </a>
+        </div>
+      </form>
+    </div>
+
+    <!-- Dashboard Card (hidden, shown after login) -->
+    <div class="dashboard-card hidden" id="dashboardCard">
+      <div class="dashboard-header">
+        <div class="dash-user-info">
+          <div class="dash-avatar">
+            <span class="avatar-initials" id="dashAvatarInitials">AR</span>
+            <span class="online-indicator"></span>
+          </div>
+          <div>
+            <div class="dash-badge-row">
+              <span class="dash-pill-secure">Active Session</span>
+              <span class="dash-pill-reg">Regulation 54 Compliant</span>
+            </div>
+            <h2 class="dash-title" id="dashGreeting">Welcome, Dr. Astitwaa Roy</h2>
+            <p class="dash-subtitle" id="dashRole">Chief Regulatory Compliance Officer • VFSTR Vignan University</p>
+          </div>
+        </div>
+        <button type="button" class="btn-logout" id="logoutBtn" title="Sign out of Agent 54">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          <span>Sign Out</span>
+        </button>
+      </div>
+      <div class="dash-stats-grid">
+        <div class="dash-stat-card highlight">
+          <div class="stat-top">
+            <span class="stat-label">Compliance Index</span>
+            <span class="stat-badge green">98.6%</span>
+          </div>
+          <div class="stat-bar">
+            <div class="stat-fill" style="width: 98.6%;"></div>
+          </div>
+          <span class="stat-note">Agent 54 Realtime Regulation Check: <strong>PASSED</strong></span>
+        </div>
+        <div class="dash-stat-card">
+          <div class="stat-top">
+            <span class="stat-label">Accreditations Sync</span>
+            <span class="stat-badge blue">7/7 Active</span>
+          </div>
+          <div class="badge-mini-pills">
+            <span>NAAC A+</span><span>NIRF</span><span>NBA</span><span>AICTE</span><span>ABET</span>
+          </div>
+          <span class="stat-note">All government accreditation bodies verified</span>
+        </div>
+        <div class="dash-stat-card">
+          <div class="stat-top">
+            <span class="stat-label">Audit Engine</span>
+            <span class="stat-badge purple">1,420 Checks</span>
+          </div>
+          <p class="stat-value">0 Critical Violations</p>
+          <span class="stat-note">Automated cycle status: Clean</span>
+        </div>
+      </div>
+      <div class="dash-actions-row">
+        <button type="button" class="dash-btn primary" id="btnRunAudit">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          <span>Run Instant Compliance Audit</span>
+        </button>
+        <button type="button" class="dash-btn secondary" id="btnExportReport">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>Export Audit Certificate</span>
+        </button>
+        <button type="button" class="dash-btn secondary" id="btnViewLogs">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <span>View Regulation 54 Logs</span>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Universal Modal System -->
+  <div id="modalOverlay" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-container" id="modalContainer">
+      <button type="button" class="modal-close-btn" id="modalCloseBtn" aria-label="Close modal">&times;</button>
+      <div id="modalBody" class="modal-body">
+        <!-- Injected dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- Post-Login Welcome Video Overlay -->
+  <div class="postlogin-video-overlay hidden" id="postLoginVideoOverlay" role="dialog" aria-label="Welcome video">
+    <video id="postLoginVideo" class="postlogin-video" src="video.mp4" muted playsinline preload="auto"></video>
+
+    <!-- Progress bar -->
+    <div class="video-progress-bar">
+      <div class="video-progress-fill" id="videoProgressFill"></div>
+    </div>
+
+    <!-- Skip Button -->
+    <button type="button" class="postlogin-skip-btn" id="skipVideoBtn" aria-label="Skip welcome video">
+      <span>Skip</span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+        stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="5 12 12 5 19 12"></polyline>
+        <polyline points="5 19 12 12 19 19"></polyline>
+      </svg>
+    </button>
+  </div>
+
+  <script src="script.js?v=2"></script>
+</body>
+
+</html>
