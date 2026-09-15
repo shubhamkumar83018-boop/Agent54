@@ -11,11 +11,7 @@ import {
   Home, FileText, CheckCircle, AlertTriangle, Settings, RotateCw,
   Clock, Activity, BarChart2, Shield, PlayCircle,
   Cpu, Database, ShieldCheck, Check, Search, Filter,
-<<<<<<< HEAD
-  ExternalLink, Sparkles
-=======
   ExternalLink, Sparkles, Bot, ChevronRight, LogOut
->>>>>>> db81771e10c5fd8361462266966be508cca4780e
 } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
@@ -132,9 +128,6 @@ function buildInitialComplianceData() {
 }
 
 export default function App() {
-<<<<<<< HEAD
-  const [activeTab, setActiveTab] = useState('Home');
-=======
   const [currentView, setCurrentView] = useState<'dashboard' | 'login'>(() => {
     const isAuth = sessionStorage.getItem('is_authenticated');
     return isAuth === 'true' ? 'dashboard' : 'login';
@@ -159,7 +152,6 @@ export default function App() {
     setCurrentView('login');
   };
   const [chatbotOpen, setChatbotOpen] = useState(false);
->>>>>>> db81771e10c5fd8361462266966be508cca4780e
   const [dashboardData, setDashboardData] = useState<any>(() => buildInitialComplianceData());
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
   const [sweepRunning, setSweepRunning] = useState(false);
