@@ -3,52 +3,134 @@
 @theme {
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
+
 html {
-  font-size: 125%; /* Increases base font size from 16px to 20px. All rem values scale up significantly. */
+  font-size: 55%;
+  /* Standard 16px base — fits the browser viewport correctly */
 }
+
 body {
-  background-color: #111827; /* gray-900 */
+  background-color: #111827;
+  /* gray-900 */
   font-family: 'Plus Jakarta Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #1e293b; /* slate-800 for crisp text */
+  color: #1e293b;
+  /* slate-800 for crisp text */
 }
 
 @keyframes antiGravity {
-  0%, 100% { transform: translateY(0) rotate(-1deg); }
-  50% { transform: translateY(-22px) rotate(1deg); }
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+
+  50% {
+    transform: translateY(-22px) rotate(1deg);
+  }
 }
 
 @keyframes floatPulse {
-  0%, 100% { transform: scale(1); opacity: 0.8; }
-  50% { transform: scale(1.1); opacity: 0.4; }
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+
+  50% {
+    transform: scale(1.1);
+    opacity: 0.4;
+  }
 }
 
 
 @keyframes wave {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(20deg); }
-  75% { transform: rotate(-15deg); }
+
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(20deg);
+  }
+
+  75% {
+    transform: rotate(-15deg);
+  }
 }
-.animate-wave { display: inline-block; animation: wave 2s ease-in-out infinite; transform-origin: 70% 70%; }
+
+.animate-wave {
+  display: inline-block;
+  animation: wave 2s ease-in-out infinite;
+  transform-origin: 70% 70%;
+}
 
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-.animate-fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
 
 
 @keyframes robotTilt {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(4deg); }
-  75% { transform: rotate(-2deg); }
+
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(4deg);
+  }
+
+  75% {
+    transform: rotate(-2deg);
+  }
 }
-.animate-robot-tilt { animation: robotTilt 3s ease-in-out infinite; }
+
+.animate-robot-tilt {
+  animation: robotTilt 3s ease-in-out infinite;
+}
 
 @keyframes logoFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
-}
-.animate-logo-float { animation: logoFloat 4s ease-in-out infinite; }
 
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.animate-logo-float {
+  animation: logoFloat 4s ease-in-out infinite;
+}
+
+@keyframes coinFlip {
+  0% {
+    transform: rotateY(0deg);
+  }
+
+  100% {
+    transform: rotateY(360deg);
+  }
+}
+
+.animate-coin-flip {
+  animation: coinFlip 2s linear infinite;
+}

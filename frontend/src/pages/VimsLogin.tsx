@@ -31,7 +31,7 @@ const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
-  
+
   // Modal & PDF state
   const [manualModal, setManualModal] = useState<'DEO' | 'FACULTY' | null>(null);
   const [activeModalTab, setActiveModalTab] = useState<'view' | 'upload'>('view');
@@ -44,7 +44,7 @@ const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
       try {
         const parsed = JSON.parse(saved);
         return { ...parsed, url: '' };
-      } catch (e) {}
+      } catch (e) { }
     }
     return {
       name: 'VFSTR_DEO_Standard_Operating_Manual_v2.6.pdf',
@@ -61,7 +61,7 @@ const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
       try {
         const parsed = JSON.parse(saved);
         return { ...parsed, url: '' };
-      } catch (e) {}
+      } catch (e) { }
     }
     return {
       name: 'VFSTR_Faculty_Handbook_&_Manual_v2.6.pdf',
@@ -207,8 +207,8 @@ const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
   };
 
   return (
-    <div className="relative w-full min-h-screen md:h-screen overflow-x-hidden overflow-y-auto md:overflow-hidden flex flex-col font-sans select-none bg-slate-950">
-      
+    <div className="relative w-full min-h-screen md:h-screen overflow-x-auto overflow-y-auto md:overflow-auto flex flex-col font-sans select-none bg-slate-950">
+
       {/* Hidden File Input for PDF Uploads */}
       <input
         type="file"
@@ -304,250 +304,248 @@ const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
 
       {/* ── MAIN LOGIN SECTION (RIGHT MIDDLE ALIGNED & WHITE BACKGROUND) ── */}
       {showLoginForm && (
-      <main className="relative z-10 flex-1 flex items-end md:items-center justify-center md:justify-end px-3 md:pr-12 lg:pr-20 xl:pr-28 md:p-4 overflow-y-auto md:overflow-visible mt-[85svh] md:mt-16 pb-6 w-full">
-        <div className="w-full max-w-[560px] bg-white/95 backdrop-blur-xl border border-slate-200/90 rounded-t-3xl md:rounded-3xl p-7 pb-10 md:p-7 lg:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.3)] hover:shadow-[0_30px_70px_rgba(37,99,235,0.35)] hover:border-blue-400 md:hover:scale-[1.02] md:hover:-translate-y-2 transition-all duration-500 text-slate-800 relative group/card min-h-[90vh] md:min-h-0">
-          
-          {/* Mode Switcher Tabs */}
-          <div className="flex items-center justify-center gap-2 p-2 bg-slate-100 rounded-2xl mb-5 border border-slate-200 shadow-inner">
-            <button
-              type="button"
-              onClick={() => { setIsCreatingAccount(false); setErrorMsg(null); setSuccessMsg(null); }}
-              className={`flex-1 py-3.5 px-4 rounded-xl text-sm md:text-sm font-black transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer ${
-                !isCreatingAccount
+        <main className="relative z-10 flex-1 flex items-end md:items-center justify-center md:justify-end px-3 md:pr-12 lg:pr-20 xl:pr-28 md:p-4 overflow-y-auto md:overflow-visible mt-[85svh] md:mt-16 pb-6 w-full">
+          <div className="w-full max-w-[560px] bg-white/95 backdrop-blur-xl border border-slate-200/90 rounded-t-3xl md:rounded-3xl p-7 pb-10 md:p-7 lg:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.3)] hover:shadow-[0_30px_70px_rgba(37,99,235,0.35)] hover:border-blue-400 md:hover:scale-[1.02] md:hover:-translate-y-2 transition-all duration-500 text-slate-800 relative group/card min-h-[90vh] md:min-h-0">
+
+            {/* Mode Switcher Tabs */}
+            <div className="flex items-center justify-center gap-2 p-2 bg-slate-100 rounded-2xl mb-5 border border-slate-200 shadow-inner">
+              <button
+                type="button"
+                onClick={() => { setIsCreatingAccount(false); setErrorMsg(null); setSuccessMsg(null); }}
+                className={`flex-1 py-3.5 px-4 rounded-xl text-sm md:text-sm font-black transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer ${!isCreatingAccount
                   ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white shadow-md scale-105'
                   : 'text-slate-600 hover:text-blue-700 hover:bg-white/80 hover:scale-102'
-              }`}
-            >
-              <LogIn className="w-5 h-5" />
-              <span>Sign In</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => { setIsCreatingAccount(true); setErrorMsg(null); setSuccessMsg(null); }}
-              className={`flex-1 py-3.5 px-4 rounded-xl text-sm md:text-sm font-black transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer ${
-                isCreatingAccount
+                  }`}
+              >
+                <LogIn className="w-5 h-5" />
+                <span>Sign In</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => { setIsCreatingAccount(true); setErrorMsg(null); setSuccessMsg(null); }}
+                className={`flex-1 py-3.5 px-4 rounded-xl text-sm md:text-sm font-black transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer ${isCreatingAccount
                   ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white shadow-md scale-105'
                   : 'text-slate-600 hover:text-blue-700 hover:bg-white/80 hover:scale-102'
-              }`}
-            >
-              <UserPlus className="w-5 h-5" />
-              <span>Create Account</span>
-            </button>
-          </div>
-
-          {/* Header text */}
-          <div className="mb-5 text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs md:text-xs font-black tracking-wider uppercase mb-3 shadow-2xs hover:scale-105 hover:bg-blue-100 hover:border-blue-300 transition-all duration-300 cursor-pointer">
-              <ShieldCheck className="w-4 h-4 text-blue-600" /> VFSTR Portal Authentication
+                  }`}
+              >
+                <UserPlus className="w-5 h-5" />
+                <span>Create Account</span>
+              </button>
             </div>
-            <h2 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight transition-all">
-              {isCreatingAccount ? 'Create Workspace Account' : 'Sign In To Workspace'}
-            </h2>
-            <p className="text-sm md:text-sm text-slate-500 font-semibold mt-2">
-              {isCreatingAccount
-                ? 'Register your employee credentials & 3-digit security grid.'
-                : 'Enter your credentials and security grid values to proceed.'}
-            </p>
-          </div>
 
-          {/* Feedback messages */}
-          {errorMsg && (
-            <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-bold text-center animate-in fade-in shadow-xs">
-              {errorMsg}
+            {/* Header text */}
+            <div className="mb-5 text-center">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs md:text-xs font-black tracking-wider uppercase mb-3 shadow-2xs hover:scale-105 hover:bg-blue-100 hover:border-blue-300 transition-all duration-300 cursor-pointer">
+                <ShieldCheck className="w-4 h-4 text-blue-600" /> VFSTR Portal Authentication
+              </div>
+              <h2 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight transition-all">
+                {isCreatingAccount ? 'Create Workspace Account' : 'Sign In To Workspace'}
+              </h2>
+              <p className="text-sm md:text-sm text-slate-500 font-semibold mt-2">
+                {isCreatingAccount
+                  ? 'Register your employee credentials & 3-digit security grid.'
+                  : 'Enter your credentials and security grid values to proceed.'}
+              </p>
             </div>
-          )}
-          {successMsg && (
-            <div className="mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold text-center flex items-center justify-center gap-2 animate-in fade-in shadow-xs">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" /> {successMsg}
-            </div>
-          )}
 
-          <form onSubmit={handleLoginSubmit} className="space-y-5">
-            
-            {/* If Creating Account */}
-            {isCreatingAccount && (
-              <div className="group/input">
-                <label className="block text-xs font-extrabold tracking-widest text-slate-800 uppercase mb-2">
-                  FULL NAME
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-2.5 text-slate-400 group-hover/input:text-blue-600 group-hover/input:scale-110 transition-all duration-300">
-                    <User className="w-4 h-4" />
-                  </span>
-                  <input
-                    type="text"
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    placeholder="Enter Employee Name"
-                    className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-10 pr-3 py-3 text-sm font-bold text-slate-900 placeholder-slate-400 hover:bg-white hover:border-blue-500 hover:shadow-md hover:scale-[1.02] focus:scale-[1.02] focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300"
-                  />
-                </div>
+            {/* Feedback messages */}
+            {errorMsg && (
+              <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-bold text-center animate-in fade-in shadow-xs">
+                {errorMsg}
+              </div>
+            )}
+            {successMsg && (
+              <div className="mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold text-center flex items-center justify-center gap-2 animate-in fade-in shadow-xs">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" /> {successMsg}
               </div>
             )}
 
-            {/* EMPCODE & PASSWORD */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="group/input">
-                <label className="block text-xs font-extrabold tracking-widest text-slate-800 uppercase mb-2">
-                  EMPCODE
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3.5 top-3.5 text-slate-400 group-hover/input:text-blue-600 group-hover/input:scale-110 transition-all duration-300">
-                    <CreditCard className="w-5 h-5" />
+            <form onSubmit={handleLoginSubmit} className="space-y-5">
+
+              {/* If Creating Account */}
+              {isCreatingAccount && (
+                <div className="group/input">
+                  <label className="block text-xs font-extrabold tracking-widest text-slate-800 uppercase mb-2">
+                    FULL NAME
+                  </label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-2.5 text-slate-400 group-hover/input:text-blue-600 group-hover/input:scale-110 transition-all duration-300">
+                      <User className="w-4 h-4" />
+                    </span>
+                    <input
+                      type="text"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      placeholder="Enter Employee Name"
+                      className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-10 pr-3 py-3 text-sm font-bold text-slate-900 placeholder-slate-400 hover:bg-white hover:border-blue-500 hover:shadow-md hover:scale-[1.02] focus:scale-[1.02] focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* EMPCODE & PASSWORD */}
+              <div className="grid grid-cols-2 gap-3">
+                <div className="group/input">
+                  <label className="block text-xs font-extrabold tracking-widest text-slate-800 uppercase mb-2">
+                    EMPCODE
+                  </label>
+                  <div className="relative">
+                    <span className="absolute left-3.5 top-3.5 text-slate-400 group-hover/input:text-blue-600 group-hover/input:scale-110 transition-all duration-300">
+                      <CreditCard className="w-5 h-5" />
+                    </span>
+                    <input
+                      type="text"
+                      value={empCode}
+                      onChange={(e) => setEmpCode(e.target.value)}
+                      placeholder="Employee ID"
+                      className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-11 pr-3 py-3.5 text-base font-bold text-slate-900 placeholder-slate-400 hover:bg-white hover:border-blue-500 hover:shadow-md focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300"
+                    />
+                  </div>
+                </div>
+
+                <div className="group/input">
+                  <label className="block text-xs font-extrabold tracking-widest text-slate-800 uppercase mb-2">
+                    PASSWORD
+                  </label>
+                  <div className="relative">
+                    <span className="absolute left-3.5 top-3.5 text-slate-400 group-hover/input:text-blue-600 group-hover/input:scale-110 transition-all duration-300">
+                      <Lock className="w-5 h-5" />
+                    </span>
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Password"
+                      className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-11 pr-3 py-3.5 text-base font-bold text-slate-900 placeholder-slate-400 hover:bg-white hover:border-blue-500 hover:shadow-md focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* GRID VALUES Card (3 Digits Only Rule) */}
+              <div className="bg-slate-50/90 border border-slate-200 rounded-2xl p-5 hover:border-blue-400 hover:bg-blue-50/40 hover:shadow-lg transition-all duration-300 group/grid">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <Grid className="w-5 h-5 text-blue-600 group-hover/grid:rotate-90 group-hover/grid:scale-110 transition-all duration-500" />
+                    <span className="text-sm font-black tracking-widest text-slate-800 uppercase">
+                      GRID VALUES
+                    </span>
+                  </div>
+                  <span className="text-[11px] font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md border border-blue-200 hover:scale-105 transition-transform cursor-default">
+                    Exact 3 Digits Each
                   </span>
+                </div>
+                <div className="flex items-center justify-center gap-4">
                   <input
                     type="text"
-                    value={empCode}
-                    onChange={(e) => setEmpCode(e.target.value)}
-                    placeholder="Employee ID"
-                    className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-11 pr-3 py-3.5 text-base font-bold text-slate-900 placeholder-slate-400 hover:bg-white hover:border-blue-500 hover:shadow-md focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300"
+                    maxLength={3}
+                    value={gridVal1}
+                    onChange={(e) => setGridVal1(e.target.value.replace(/\D/g, ''))}
+                    placeholder="123"
+                    className="w-28 md:w-32 text-center bg-white border border-slate-300 rounded-xl py-3.5 text-xl font-black text-slate-900 placeholder-slate-400 shadow-xs hover:scale-110 hover:border-blue-600 hover:shadow-lg focus:scale-110 focus:border-blue-600 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300"
                   />
-                </div>
-              </div>
-
-              <div className="group/input">
-                <label className="block text-xs font-extrabold tracking-widest text-slate-800 uppercase mb-2">
-                  PASSWORD
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3.5 top-3.5 text-slate-400 group-hover/input:text-blue-600 group-hover/input:scale-110 transition-all duration-300">
-                    <Lock className="w-5 h-5" />
-                  </span>
+                  <span className="w-6 h-0.5 bg-slate-400 rounded-full flex-shrink-0"></span>
                   <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Password"
-                    className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-11 pr-3 py-3.5 text-base font-bold text-slate-900 placeholder-slate-400 hover:bg-white hover:border-blue-500 hover:shadow-md focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300"
+                    type="text"
+                    maxLength={3}
+                    value={gridVal2}
+                    onChange={(e) => setGridVal2(e.target.value.replace(/\D/g, ''))}
+                    placeholder="456"
+                    className="w-28 md:w-32 text-center bg-white border border-slate-300 rounded-xl py-3.5 text-xl font-black text-slate-900 placeholder-slate-400 shadow-xs hover:scale-110 hover:border-blue-600 hover:shadow-lg focus:scale-110 focus:border-blue-600 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300"
                   />
                 </div>
               </div>
-            </div>
 
-            {/* GRID VALUES Card (3 Digits Only Rule) */}
-            <div className="bg-slate-50/90 border border-slate-200 rounded-2xl p-5 hover:border-blue-400 hover:bg-blue-50/40 hover:shadow-lg transition-all duration-300 group/grid">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <Grid className="w-5 h-5 text-blue-600 group-hover/grid:rotate-90 group-hover/grid:scale-110 transition-all duration-500" />
-                  <span className="text-sm font-black tracking-widest text-slate-800 uppercase">
-                    GRID VALUES
-                  </span>
-                </div>
-                <span className="text-[11px] font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md border border-blue-200 hover:scale-105 transition-transform cursor-default">
-                  Exact 3 Digits Each
-                </span>
+              {/* ACTION BUTTON */}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-4.5 px-4 bg-gradient-to-r from-slate-950 via-blue-950 to-indigo-950 hover:from-blue-600 hover:via-indigo-600 hover:to-blue-700 text-white font-black text-sm md:text-sm uppercase tracking-widest rounded-2xl shadow-xl hover:shadow-[0_15px_35px_rgba(37,99,235,0.5)] border border-slate-800 hover:border-blue-400 flex items-center justify-center gap-2.5 hover:scale-[1.03] active:scale-95 transition-all duration-300 cursor-pointer group/btn"
+              >
+                <span>{loading ? 'PROCESSING...' : isCreatingAccount ? 'CREATE WORKSPACE ACCOUNT' : 'SIGN IN TO WORKSPACE'}</span>
+                <ArrowRight className="w-5 h-5 text-blue-400 group-hover/btn:translate-x-2 group-hover/btn:scale-125 transition-transform duration-300" />
+              </button>
+
+              {/* Sub-links */}
+              <div className="flex flex-wrap items-center justify-center gap-3 text-sm font-extrabold text-slate-600 pt-2">
+                <button
+                  type="button"
+                  onClick={() => { setIsCreatingAccount(!isCreatingAccount); setErrorMsg(null); setSuccessMsg(null); }}
+                  className="text-blue-600 hover:text-blue-800 hover:scale-110 transition-all duration-200 cursor-pointer"
+                >
+                  {isCreatingAccount ? 'Sign In Instead' : 'Create Account'}
+                </button>
+                <span className="w-1 h-3.5 bg-slate-300 rounded-full"></span>
+                <button
+                  type="button"
+                  onClick={handleForgotPassword}
+                  className="hover:text-blue-600 hover:scale-110 transition-all duration-200 cursor-pointer"
+                >
+                  Forgot Password?
+                </button>
+                <span className="w-1 h-3.5 bg-slate-300 rounded-full"></span>
+                <button
+                  type="button"
+                  onClick={handleResetGrid}
+                  className="hover:text-blue-600 hover:scale-110 transition-all duration-200 cursor-pointer"
+                >
+                  Reset Grid Values
+                </button>
               </div>
-              <div className="flex items-center justify-center gap-4">
-                <input
-                  type="text"
-                  maxLength={3}
-                  value={gridVal1}
-                  onChange={(e) => setGridVal1(e.target.value.replace(/\D/g, ''))}
-                  placeholder="123"
-                  className="w-28 md:w-32 text-center bg-white border border-slate-300 rounded-xl py-3.5 text-xl font-black text-slate-900 placeholder-slate-400 shadow-xs hover:scale-110 hover:border-blue-600 hover:shadow-lg focus:scale-110 focus:border-blue-600 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300"
-                />
-                <span className="w-6 h-0.5 bg-slate-400 rounded-full flex-shrink-0"></span>
-                <input
-                  type="text"
-                  maxLength={3}
-                  value={gridVal2}
-                  onChange={(e) => setGridVal2(e.target.value.replace(/\D/g, ''))}
-                  placeholder="456"
-                  className="w-28 md:w-32 text-center bg-white border border-slate-300 rounded-xl py-3.5 text-xl font-black text-slate-900 placeholder-slate-400 shadow-xs hover:scale-110 hover:border-blue-600 hover:shadow-lg focus:scale-110 focus:border-blue-600 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300"
-                />
+
+              {/* Quick Demo Fill */}
+              <div className="p-4 bg-blue-50/80 border border-blue-100 rounded-xl text-center hover:border-blue-300 hover:bg-blue-100/60 hover:shadow-md transition-all duration-300">
+                <p className="text-xs font-black text-blue-800 uppercase tracking-widest mb-2">Quick Demo Fill</p>
+                <button
+                  type="button"
+                  onClick={() => { setEmpCode('VIGNAN_ADMIN'); setPassword('vignan123'); setGridVal1('123'); setGridVal2('456'); }}
+                  className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white border border-blue-500 rounded-xl text-sm font-extrabold shadow-md hover:shadow-xl hover:scale-108 active:scale-95 transition-all duration-300 cursor-pointer inline-flex items-center gap-2 group/demo"
+                >
+                  <Sparkles className="w-4 h-4 text-amber-300 group-hover/demo:rotate-45 group-hover/demo:scale-125 transition-transform duration-300" /> Auto-Fill Admin (VIGNAN_ADMIN)
+                </button>
               </div>
-            </div>
 
-            {/* ACTION BUTTON */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-4.5 px-4 bg-gradient-to-r from-slate-950 via-blue-950 to-indigo-950 hover:from-blue-600 hover:via-indigo-600 hover:to-blue-700 text-white font-black text-sm md:text-sm uppercase tracking-widest rounded-2xl shadow-xl hover:shadow-[0_15px_35px_rgba(37,99,235,0.5)] border border-slate-800 hover:border-blue-400 flex items-center justify-center gap-2.5 hover:scale-[1.03] active:scale-95 transition-all duration-300 cursor-pointer group/btn"
-            >
-              <span>{loading ? 'PROCESSING...' : isCreatingAccount ? 'CREATE WORKSPACE ACCOUNT' : 'SIGN IN TO WORKSPACE'}</span>
-              <ArrowRight className="w-5 h-5 text-blue-400 group-hover/btn:translate-x-2 group-hover/btn:scale-125 transition-transform duration-300" />
-            </button>
+              {/* Bottom Manual Buttons: DEO MANUAL & FACULTY MANUAL */}
+              <div className="grid grid-cols-2 gap-3 pt-4 border-t border-slate-200 text-sm font-black text-slate-700">
+                <button
+                  type="button"
+                  onClick={() => { setManualModal('DEO'); setActiveModalTab('view'); setPdfSuccessMsg(null); }}
+                  className="flex items-center justify-center gap-2.5 py-3.5 px-4 bg-slate-100 hover:bg-white border border-slate-300/80 hover:border-blue-500 hover:text-blue-700 rounded-xl shadow-xs hover:shadow-xl hover:scale-105 hover:-translate-y-1 transition-all duration-300 cursor-pointer group/deo relative"
+                >
+                  <BookOpen className="w-5 h-5 text-blue-600 group-hover/deo:scale-120 group-hover/deo:rotate-6 transition-all duration-300" />
+                  <span>DEO MANUAL</span>
+                  {deoPdf.isCustom && (
+                    <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-blue-600 text-white rounded-full flex items-center justify-center text-[10px] font-bold shadow-md">
+                      ✓
+                    </span>
+                  )}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setManualModal('FACULTY'); setActiveModalTab('view'); setPdfSuccessMsg(null); }}
+                  className="flex items-center justify-center gap-2.5 py-3.5 px-4 bg-slate-100 hover:bg-white border border-slate-300/80 hover:border-emerald-500 hover:text-emerald-700 rounded-xl shadow-xs hover:shadow-xl hover:scale-105 hover:-translate-y-1 transition-all duration-300 cursor-pointer group/faculty relative"
+                >
+                  <GraduationCap className="w-5 h-5 text-emerald-600 group-hover/faculty:scale-120 group-hover/faculty:-rotate-6 transition-all duration-300" />
+                  <span>FACULTY MANUAL</span>
+                  {facultyPdf.isCustom && (
+                    <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-emerald-600 text-white rounded-full flex items-center justify-center text-[10px] font-bold shadow-md">
+                      ✓
+                    </span>
+                  )}
+                </button>
+              </div>
 
-            {/* Sub-links */}
-            <div className="flex flex-wrap items-center justify-center gap-3 text-sm font-extrabold text-slate-600 pt-2">
-              <button
-                type="button"
-                onClick={() => { setIsCreatingAccount(!isCreatingAccount); setErrorMsg(null); setSuccessMsg(null); }}
-                className="text-blue-600 hover:text-blue-800 hover:scale-110 transition-all duration-200 cursor-pointer"
-              >
-                {isCreatingAccount ? 'Sign In Instead' : 'Create Account'}
-              </button>
-              <span className="w-1 h-3.5 bg-slate-300 rounded-full"></span>
-              <button
-                type="button"
-                onClick={handleForgotPassword}
-                className="hover:text-blue-600 hover:scale-110 transition-all duration-200 cursor-pointer"
-              >
-                Forgot Password?
-              </button>
-              <span className="w-1 h-3.5 bg-slate-300 rounded-full"></span>
-              <button
-                type="button"
-                onClick={handleResetGrid}
-                className="hover:text-blue-600 hover:scale-110 transition-all duration-200 cursor-pointer"
-              >
-                Reset Grid Values
-              </button>
-            </div>
+            </form>
 
-            {/* Quick Demo Fill */}
-            <div className="p-4 bg-blue-50/80 border border-blue-100 rounded-xl text-center hover:border-blue-300 hover:bg-blue-100/60 hover:shadow-md transition-all duration-300">
-              <p className="text-xs font-black text-blue-800 uppercase tracking-widest mb-2">Quick Demo Fill</p>
-              <button
-                type="button"
-                onClick={() => { setEmpCode('VIGNAN_ADMIN'); setPassword('vignan123'); setGridVal1('123'); setGridVal2('456'); }}
-                className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white border border-blue-500 rounded-xl text-sm font-extrabold shadow-md hover:shadow-xl hover:scale-108 active:scale-95 transition-all duration-300 cursor-pointer inline-flex items-center gap-2 group/demo"
-              >
-                <Sparkles className="w-4 h-4 text-amber-300 group-hover/demo:rotate-45 group-hover/demo:scale-125 transition-transform duration-300" /> Auto-Fill Admin (VIGNAN_ADMIN)
-              </button>
-            </div>
-
-            {/* Bottom Manual Buttons: DEO MANUAL & FACULTY MANUAL */}
-            <div className="grid grid-cols-2 gap-3 pt-4 border-t border-slate-200 text-sm font-black text-slate-700">
-              <button
-                type="button"
-                onClick={() => { setManualModal('DEO'); setActiveModalTab('view'); setPdfSuccessMsg(null); }}
-                className="flex items-center justify-center gap-2.5 py-3.5 px-4 bg-slate-100 hover:bg-white border border-slate-300/80 hover:border-blue-500 hover:text-blue-700 rounded-xl shadow-xs hover:shadow-xl hover:scale-105 hover:-translate-y-1 transition-all duration-300 cursor-pointer group/deo relative"
-              >
-                <BookOpen className="w-5 h-5 text-blue-600 group-hover/deo:scale-120 group-hover/deo:rotate-6 transition-all duration-300" />
-                <span>DEO MANUAL</span>
-                {deoPdf.isCustom && (
-                  <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-blue-600 text-white rounded-full flex items-center justify-center text-[10px] font-bold shadow-md">
-                    ✓
-                  </span>
-                )}
-              </button>
-              <button
-                type="button"
-                onClick={() => { setManualModal('FACULTY'); setActiveModalTab('view'); setPdfSuccessMsg(null); }}
-                className="flex items-center justify-center gap-2.5 py-3.5 px-4 bg-slate-100 hover:bg-white border border-slate-300/80 hover:border-emerald-500 hover:text-emerald-700 rounded-xl shadow-xs hover:shadow-xl hover:scale-105 hover:-translate-y-1 transition-all duration-300 cursor-pointer group/faculty relative"
-              >
-                <GraduationCap className="w-5 h-5 text-emerald-600 group-hover/faculty:scale-120 group-hover/faculty:-rotate-6 transition-all duration-300" />
-                <span>FACULTY MANUAL</span>
-                {facultyPdf.isCustom && (
-                  <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-emerald-600 text-white rounded-full flex items-center justify-center text-[10px] font-bold shadow-md">
-                    ✓
-                  </span>
-                )}
-              </button>
-            </div>
-
-          </form>
-
-        </div>
-      </main>
+          </div>
+        </main>
       )}
 
       {/* ── INTERACTIVE PDF USER MANUAL MODAL (WITH FULL UPLOAD & PREVIEW SUPPORT) ── */}
       {manualModal && currentPdf && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/75 backdrop-blur-md p-4 animate-in fade-in">
           <div className="w-full max-w-[620px] bg-white rounded-3xl p-6 shadow-2xl border border-slate-200 text-slate-800 space-y-4">
-            
+
             {/* Modal Header */}
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div className="flex items-center gap-3">
@@ -589,22 +587,20 @@ const VimsLogin: React.FC<VimsLoginProps> = ({ onLoginSuccess }) => {
               <button
                 type="button"
                 onClick={() => setActiveModalTab('view')}
-                className={`flex-1 py-2 px-3 rounded-lg text-xs font-extrabold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
-                  activeModalTab === 'view'
-                    ? 'bg-white text-slate-900 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
+                className={`flex-1 py-2 px-3 rounded-lg text-xs font-extrabold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${activeModalTab === 'view'
+                  ? 'bg-white text-slate-900 shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900'
+                  }`}
               >
                 <Eye className="w-3.5 h-3.5 text-blue-600" /> View & Read Manual
               </button>
               <button
                 type="button"
                 onClick={() => setActiveModalTab('upload')}
-                className={`flex-1 py-2 px-3 rounded-lg text-xs font-extrabold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
-                  activeModalTab === 'upload'
-                    ? 'bg-white text-slate-900 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
+                className={`flex-1 py-2 px-3 rounded-lg text-xs font-extrabold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${activeModalTab === 'upload'
+                  ? 'bg-white text-slate-900 shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900'
+                  }`}
               >
                 <Upload className="w-3.5 h-3.5 text-indigo-600" /> Upload / Add Custom PDF
               </button>
